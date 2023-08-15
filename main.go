@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/RaymondCode/simple-demo/service"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	go service.RunMessageServer()
-
+  dao.Init()
 	r := gin.Default()
 
 	initRouter(r)

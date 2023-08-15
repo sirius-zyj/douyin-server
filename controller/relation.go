@@ -10,7 +10,7 @@ type UserListResponse struct {
 	UserList []User `json:"user_list"`
 }
 
-// RelationAction no practical effect, just check if token is valid
+// RelationAction 处理关注和取消关注
 func RelationAction(c *gin.Context) {
 	token := c.Query("token")
 
@@ -21,7 +21,7 @@ func RelationAction(c *gin.Context) {
 	}
 }
 
-// FollowList all users have same follow list
+// FollowList 获取关注列表
 func FollowList(c *gin.Context) {
 	c.JSON(http.StatusOK, UserListResponse{
 		Response: Response{
@@ -31,7 +31,7 @@ func FollowList(c *gin.Context) {
 	})
 }
 
-// FollowerList all users have same follower list
+// FollowerList 获取粉丝列表
 func FollowerList(c *gin.Context) {
 	c.JSON(http.StatusOK, UserListResponse{
 		Response: Response{
@@ -41,7 +41,7 @@ func FollowerList(c *gin.Context) {
 	})
 }
 
-// FriendList all users have same friend list
+// FriendList 获取朋友列表
 func FriendList(c *gin.Context) {
 	c.JSON(http.StatusOK, UserListResponse{
 		Response: Response{

@@ -1,9 +1,13 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
+	// "strconv"
 	"sync/atomic"
+
+	"github.com/RaymondCode/simple-demo/dao"
+	"github.com/gin-gonic/gin"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -18,7 +22,6 @@ var usersLoginInfo = map[string]User{
 		IsFollow:      true,
 	},
 }
-
 var userIdSequence = int64(1)
 
 type UserLoginResponse struct {
@@ -32,49 +35,94 @@ type UserResponse struct {
 	User User `json:"user"`
 }
 
+//用户注册
 func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
 	token := username + password
 
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
+  //验证用户名是否已存在
+  if _, err := dao.GetUsersByUserName(username); err == nil {
+    //该用户名已存在
+    c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "User already exist1111"},
 		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
-		newUser := User{
+  }else {
+    //成功注册
+    log.Println("开始注册1")
+    atomic.AddInt64(&userIdSequence, 1)
+    log.Println("开始注册2")
+    newUser := dao.Duser{
 			Id:   userIdSequence,
 			Name: username,
+      Password: password,
 		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
+    err := dao.CreateUser(newUser)
+    log.Println("开始注册3")
+    if err == false {
+      log.Println("注册失败")
+      c.JSON(http.StatusOK, UserLoginResponse{
+		  	Response: Response{StatusCode: 1, StatusMsg: "User register failed1"},
+		  })
+      return 
+    }
+    c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
 			UserId:   userIdSequence,
-			Token:    username + password,
+			Token:    token,
 		})
-	}
+  }
 }
 
+//用户登录
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
-
 	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
+  
+  if user , err := dao.GetUsersByUserName(username); err == nil {
+    //找到了用户信息
+    if(token == (user.Name + user.Password)) {
+      c.JSON(http.StatusOK, UserLoginResponse{
+  			Response: Response{StatusCode: 0},
+  			UserId:   user.Id,
+  			Token:    token,
+		  })
+    }else{
+      c.JSON(http.StatusOK, UserLoginResponse{
+  			Response: Response{StatusCode: 1 , StatusMsg: "Password error"},
+		  })
+    }
+  }else{
+    c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
-	}
+  }
 }
+
+//用户信息
+// func UserInfo(c *gin.Context) {
+	// token := c.Query("token")
+ //  Id := c.Query("user_id")
+ //  id , _ := strconv.ParseInt(Id , 10 , 64)
+	// if user , err := dao.GetUserById(id); err == nil {
+ //    //找到了用户信息
+ //    var resq User
+ //    resq.Id = user.Id
+ //    resq.Name = user.Name
+ //    resq.FollowCount = user.FollowCount
+ //    resq.FollowerCount = user.FollowerCount
+ //    c.JSON(http.StatusOK, UserResponse{
+ //      Response: Response{StatusCode: 0},
+ //      User: ,
+ //    })
+ //  }else{
+ //    c.JSON(http.StatusOK, UserLoginResponse{
+	// 		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	// 	})
+ //  }
+// }
 
 func UserInfo(c *gin.Context) {
 	token := c.Query("token")
