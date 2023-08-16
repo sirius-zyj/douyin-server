@@ -11,21 +11,7 @@ type FeedServiceImpl struct{}
 // ListFeed implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) ListFeed(ctx context.Context, req *feed.FeedRequest) (resp *feed.FeedResponse, err error) {
 	// TODO: Your code here...
-	return &feed.ListFeedResponse{
-		StatusCode: 200,
-		VideosList: []*feed.Video{
-			{
-				Id:            1,
-				AuthorId:      1,
-				PlayUrl:       "https://www.w3schools.com/html/movie.mp4",
-				CoverUrl:      "",
-				UploadTime:    "",
-				Title:         "",
-				FavoriteCount: 0,
-				CommentCount:  0,
-			},
-		},
-	}, nil
+	return
 }
 
 // Echo implements the FeedServiceImpl interface.
