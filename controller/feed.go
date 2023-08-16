@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"douyin-server/dao"
+	"douyin-server/rpc/client"
 	"log"
 	"net/http"
 	"strconv"
@@ -35,6 +35,7 @@ func Feed(c *gin.Context) {
 	userId, _ := strconv.ParseInt(c.Query("userId"), 10, 64)
 	log.Printf("获取到用户ID %v", userId)
 	VideoQueue := GetVideo(userId, lastTime)
+	log.Printf("获取到视频 %v", VideoQueue)
 	// VideoQueue := DemoVideos
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  Response{StatusCode: 0},
@@ -45,7 +46,8 @@ func Feed(c *gin.Context) {
 
 // 获取查询到的视频切片
 func GetVideo(userId int64, lastTime time.Time) []Video {
-	resp, err := dao.GetVideoByTime(lastTime)
+	resp, err := client.GetVideoByUserId(userId)
+	// resp, err := dao.GetVideoByTime(lastTime)
 	var ans VideoSlice
 	if err != nil {
 		return ans

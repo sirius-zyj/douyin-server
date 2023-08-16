@@ -11,8 +11,8 @@ type FeedServiceImpl struct{}
 
 // GetVideo implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *feed.FeedRequest) (resp *feed.FeedResponse, err error) {
-	// TODO: Your code here...
-	if *req.AuthorId != 0 {
+	resp = new(feed.FeedResponse) // 分配内存
+	if req.AuthorId != nil {
 		respVideo, err := dao.GetVideoByUserId(*req.AuthorId)
 		if err != nil {
 			resp.StatusCode = 404
