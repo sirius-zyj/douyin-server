@@ -20,13 +20,10 @@ struct FeedRequest {
 
 struct FeedResponse {
     1: int64 Status_code;
-    2: optional string Status_msg;
-    3: optional string Next_time;
-    4: list<Video> Videos_list;
+    2: list<Video> Videos_list;
 }
 
 service FeedService {
-    FeedResponse ListFeed(1: FeedRequest req);
-    string Echo(); 
+    FeedResponse GetVideo(1: FeedRequest req);
 }
 

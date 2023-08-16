@@ -1,9 +1,12 @@
 package main
 
-import client "douyin-server/rpc/client"
+import (
+	"douyin-server/rpc/client"
+)
 
 func main() {
-	client.Test()
+	client.InitRpcClient()
+	client.GetVideoByUserId(1)
 	// go service.RunMessageServer()
 	// dao.Init()
 	// r := gin.Default()
