@@ -10,9 +10,9 @@
 
 mkdir -p idl
 mkdir -p kitex_gen
-kitex -module "douyin-server-rpc" -I idl/ idl/"$1".thrift
+kitex -module "douyin-server" -I idl/ idl/"$1".thrift
 
 mkdir -p service/"$1"
-cd service/"$1" && kitex -module "douyin-server-rpc" -service "$1" -use douyin-server-rpc/kitex_gen/ -I ../../idl/ ../../idl/"$1".thrift
+cd service/"$1" && kitex -module "douyin-server" -service "$1" -use douyin-server/rpc/kitex_gen/ -I ../../idl/ ../../idl/"$1".thrift
 
 go mod tidy

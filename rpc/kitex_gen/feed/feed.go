@@ -845,9 +845,7 @@ func (p *FeedRequest) Field2DeepEqual(src *Int64) bool {
 
 type FeedResponse struct {
 	StatusCode Int64    `thrift:"Status_code,1" frugal:"1,default,i64" json:"Status_code"`
-	StatusMsg  *string  `thrift:"Status_msg,2,optional" frugal:"2,optional,string" json:"Status_msg,omitempty"`
-	NextTime   *string  `thrift:"Next_time,3,optional" frugal:"3,optional,string" json:"Next_time,omitempty"`
-	VideosList []*Video `thrift:"Videos_list,4" frugal:"4,default,list<Video>" json:"Videos_list"`
+	VideosList []*Video `thrift:"Videos_list,2" frugal:"2,default,list<Video>" json:"Videos_list"`
 }
 
 func NewFeedResponse() *FeedResponse {
@@ -862,35 +860,11 @@ func (p *FeedResponse) GetStatusCode() (v Int64) {
 	return p.StatusCode
 }
 
-var FeedResponse_StatusMsg_DEFAULT string
-
-func (p *FeedResponse) GetStatusMsg() (v string) {
-	if !p.IsSetStatusMsg() {
-		return FeedResponse_StatusMsg_DEFAULT
-	}
-	return *p.StatusMsg
-}
-
-var FeedResponse_NextTime_DEFAULT string
-
-func (p *FeedResponse) GetNextTime() (v string) {
-	if !p.IsSetNextTime() {
-		return FeedResponse_NextTime_DEFAULT
-	}
-	return *p.NextTime
-}
-
 func (p *FeedResponse) GetVideosList() (v []*Video) {
 	return p.VideosList
 }
 func (p *FeedResponse) SetStatusCode(val Int64) {
 	p.StatusCode = val
-}
-func (p *FeedResponse) SetStatusMsg(val *string) {
-	p.StatusMsg = val
-}
-func (p *FeedResponse) SetNextTime(val *string) {
-	p.NextTime = val
 }
 func (p *FeedResponse) SetVideosList(val []*Video) {
 	p.VideosList = val
@@ -898,17 +872,7 @@ func (p *FeedResponse) SetVideosList(val []*Video) {
 
 var fieldIDToName_FeedResponse = map[int16]string{
 	1: "Status_code",
-	2: "Status_msg",
-	3: "Next_time",
-	4: "Videos_list",
-}
-
-func (p *FeedResponse) IsSetStatusMsg() bool {
-	return p.StatusMsg != nil
-}
-
-func (p *FeedResponse) IsSetNextTime() bool {
-	return p.NextTime != nil
+	2: "Videos_list",
 }
 
 func (p *FeedResponse) Read(iprot thrift.TProtocol) (err error) {
@@ -941,28 +905,8 @@ func (p *FeedResponse) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 3:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 4:
 			if fieldTypeId == thrift.LIST {
-				if err = p.ReadField4(iprot); err != nil {
+				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -1010,24 +954,6 @@ func (p *FeedResponse) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *FeedResponse) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.StatusMsg = &v
-	}
-	return nil
-}
-
-func (p *FeedResponse) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.NextTime = &v
-	}
-	return nil
-}
-
-func (p *FeedResponse) ReadField4(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return err
@@ -1059,14 +985,6 @@ func (p *FeedResponse) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField2(oprot); err != nil {
 			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
 			goto WriteFieldError
 		}
 
@@ -1106,45 +1024,7 @@ WriteFieldEndError:
 }
 
 func (p *FeedResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetStatusMsg() {
-		if err = oprot.WriteFieldBegin("Status_msg", thrift.STRING, 2); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.StatusMsg); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *FeedResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.IsSetNextTime() {
-		if err = oprot.WriteFieldBegin("Next_time", thrift.STRING, 3); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.NextTime); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *FeedResponse) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("Videos_list", thrift.LIST, 4); err != nil {
+	if err = oprot.WriteFieldBegin("Videos_list", thrift.LIST, 2); err != nil {
 		goto WriteFieldBeginError
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.VideosList)); err != nil {
@@ -1163,9 +1043,9 @@ func (p *FeedResponse) writeField4(oprot thrift.TProtocol) (err error) {
 	}
 	return nil
 WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
 WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
 func (p *FeedResponse) String() string {
@@ -1184,13 +1064,7 @@ func (p *FeedResponse) DeepEqual(ano *FeedResponse) bool {
 	if !p.Field1DeepEqual(ano.StatusCode) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.StatusMsg) {
-		return false
-	}
-	if !p.Field3DeepEqual(ano.NextTime) {
-		return false
-	}
-	if !p.Field4DeepEqual(ano.VideosList) {
+	if !p.Field2DeepEqual(ano.VideosList) {
 		return false
 	}
 	return true
@@ -1203,31 +1077,7 @@ func (p *FeedResponse) Field1DeepEqual(src Int64) bool {
 	}
 	return true
 }
-func (p *FeedResponse) Field2DeepEqual(src *string) bool {
-
-	if p.StatusMsg == src {
-		return true
-	} else if p.StatusMsg == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.StatusMsg, *src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *FeedResponse) Field3DeepEqual(src *string) bool {
-
-	if p.NextTime == src {
-		return true
-	} else if p.NextTime == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.NextTime, *src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *FeedResponse) Field4DeepEqual(src []*Video) bool {
+func (p *FeedResponse) Field2DeepEqual(src []*Video) bool {
 
 	if len(p.VideosList) != len(src) {
 		return false
@@ -1242,9 +1092,7 @@ func (p *FeedResponse) Field4DeepEqual(src []*Video) bool {
 }
 
 type FeedService interface {
-	ListFeed(ctx context.Context, req *FeedRequest) (r *FeedResponse, err error)
-
-	Echo(ctx context.Context) (r string, err error)
+	GetVideo(ctx context.Context, req *FeedRequest) (r *FeedResponse, err error)
 }
 
 type FeedServiceClient struct {
@@ -1273,19 +1121,11 @@ func (p *FeedServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *FeedServiceClient) ListFeed(ctx context.Context, req *FeedRequest) (r *FeedResponse, err error) {
-	var _args FeedServiceListFeedArgs
+func (p *FeedServiceClient) GetVideo(ctx context.Context, req *FeedRequest) (r *FeedResponse, err error) {
+	var _args FeedServiceGetVideoArgs
 	_args.Req = req
-	var _result FeedServiceListFeedResult
-	if err = p.Client_().Call(ctx, "ListFeed", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-func (p *FeedServiceClient) Echo(ctx context.Context) (r string, err error) {
-	var _args FeedServiceEchoArgs
-	var _result FeedServiceEchoResult
-	if err = p.Client_().Call(ctx, "Echo", &_args, &_result); err != nil {
+	var _result FeedServiceGetVideoResult
+	if err = p.Client_().Call(ctx, "GetVideo", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -1311,8 +1151,7 @@ func (p *FeedServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFuncti
 
 func NewFeedServiceProcessor(handler FeedService) *FeedServiceProcessor {
 	self := &FeedServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self.AddToProcessorMap("ListFeed", &feedServiceProcessorListFeed{handler: handler})
-	self.AddToProcessorMap("Echo", &feedServiceProcessorEcho{handler: handler})
+	self.AddToProcessorMap("GetVideo", &feedServiceProcessorGetVideo{handler: handler})
 	return self
 }
 func (p *FeedServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -1333,16 +1172,16 @@ func (p *FeedServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.
 	return false, x
 }
 
-type feedServiceProcessorListFeed struct {
+type feedServiceProcessorGetVideo struct {
 	handler FeedService
 }
 
-func (p *feedServiceProcessorListFeed) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := FeedServiceListFeedArgs{}
+func (p *feedServiceProcessorGetVideo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := FeedServiceGetVideoArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("ListFeed", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("GetVideo", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1351,11 +1190,11 @@ func (p *feedServiceProcessorListFeed) Process(ctx context.Context, seqId int32,
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := FeedServiceListFeedResult{}
+	result := FeedServiceGetVideoResult{}
 	var retval *FeedResponse
-	if retval, err2 = p.handler.ListFeed(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ListFeed: "+err2.Error())
-		oprot.WriteMessageBegin("ListFeed", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.GetVideo(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetVideo: "+err2.Error())
+		oprot.WriteMessageBegin("GetVideo", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -1363,7 +1202,7 @@ func (p *feedServiceProcessorListFeed) Process(ctx context.Context, seqId int32,
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("ListFeed", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("GetVideo", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -1381,87 +1220,39 @@ func (p *feedServiceProcessorListFeed) Process(ctx context.Context, seqId int32,
 	return true, err
 }
 
-type feedServiceProcessorEcho struct {
-	handler FeedService
-}
-
-func (p *feedServiceProcessorEcho) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := FeedServiceEchoArgs{}
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("Echo", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return false, err
-	}
-
-	iprot.ReadMessageEnd()
-	var err2 error
-	result := FeedServiceEchoResult{}
-	var retval string
-	if retval, err2 = p.handler.Echo(ctx); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Echo: "+err2.Error())
-		oprot.WriteMessageBegin("Echo", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush(ctx)
-		return true, err2
-	} else {
-		result.Success = &retval
-	}
-	if err2 = oprot.WriteMessageBegin("Echo", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 = result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type FeedServiceListFeedArgs struct {
+type FeedServiceGetVideoArgs struct {
 	Req *FeedRequest `thrift:"req,1" frugal:"1,default,FeedRequest" json:"req"`
 }
 
-func NewFeedServiceListFeedArgs() *FeedServiceListFeedArgs {
-	return &FeedServiceListFeedArgs{}
+func NewFeedServiceGetVideoArgs() *FeedServiceGetVideoArgs {
+	return &FeedServiceGetVideoArgs{}
 }
 
-func (p *FeedServiceListFeedArgs) InitDefault() {
-	*p = FeedServiceListFeedArgs{}
+func (p *FeedServiceGetVideoArgs) InitDefault() {
+	*p = FeedServiceGetVideoArgs{}
 }
 
-var FeedServiceListFeedArgs_Req_DEFAULT *FeedRequest
+var FeedServiceGetVideoArgs_Req_DEFAULT *FeedRequest
 
-func (p *FeedServiceListFeedArgs) GetReq() (v *FeedRequest) {
+func (p *FeedServiceGetVideoArgs) GetReq() (v *FeedRequest) {
 	if !p.IsSetReq() {
-		return FeedServiceListFeedArgs_Req_DEFAULT
+		return FeedServiceGetVideoArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *FeedServiceListFeedArgs) SetReq(val *FeedRequest) {
+func (p *FeedServiceGetVideoArgs) SetReq(val *FeedRequest) {
 	p.Req = val
 }
 
-var fieldIDToName_FeedServiceListFeedArgs = map[int16]string{
+var fieldIDToName_FeedServiceGetVideoArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *FeedServiceListFeedArgs) IsSetReq() bool {
+func (p *FeedServiceGetVideoArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *FeedServiceListFeedArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *FeedServiceGetVideoArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -1510,7 +1301,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceListFeedArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceGetVideoArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -1520,7 +1311,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *FeedServiceListFeedArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *FeedServiceGetVideoArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.Req = NewFeedRequest()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
@@ -1528,9 +1319,9 @@ func (p *FeedServiceListFeedArgs) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *FeedServiceListFeedArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceGetVideoArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ListFeed_args"); err != nil {
+	if err = oprot.WriteStructBegin("GetVideo_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -1557,7 +1348,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *FeedServiceListFeedArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceGetVideoArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -1574,14 +1365,14 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *FeedServiceListFeedArgs) String() string {
+func (p *FeedServiceGetVideoArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("FeedServiceListFeedArgs(%+v)", *p)
+	return fmt.Sprintf("FeedServiceGetVideoArgs(%+v)", *p)
 }
 
-func (p *FeedServiceListFeedArgs) DeepEqual(ano *FeedServiceListFeedArgs) bool {
+func (p *FeedServiceGetVideoArgs) DeepEqual(ano *FeedServiceGetVideoArgs) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -1593,7 +1384,7 @@ func (p *FeedServiceListFeedArgs) DeepEqual(ano *FeedServiceListFeedArgs) bool {
 	return true
 }
 
-func (p *FeedServiceListFeedArgs) Field1DeepEqual(src *FeedRequest) bool {
+func (p *FeedServiceGetVideoArgs) Field1DeepEqual(src *FeedRequest) bool {
 
 	if !p.Req.DeepEqual(src) {
 		return false
@@ -1601,39 +1392,39 @@ func (p *FeedServiceListFeedArgs) Field1DeepEqual(src *FeedRequest) bool {
 	return true
 }
 
-type FeedServiceListFeedResult struct {
+type FeedServiceGetVideoResult struct {
 	Success *FeedResponse `thrift:"success,0,optional" frugal:"0,optional,FeedResponse" json:"success,omitempty"`
 }
 
-func NewFeedServiceListFeedResult() *FeedServiceListFeedResult {
-	return &FeedServiceListFeedResult{}
+func NewFeedServiceGetVideoResult() *FeedServiceGetVideoResult {
+	return &FeedServiceGetVideoResult{}
 }
 
-func (p *FeedServiceListFeedResult) InitDefault() {
-	*p = FeedServiceListFeedResult{}
+func (p *FeedServiceGetVideoResult) InitDefault() {
+	*p = FeedServiceGetVideoResult{}
 }
 
-var FeedServiceListFeedResult_Success_DEFAULT *FeedResponse
+var FeedServiceGetVideoResult_Success_DEFAULT *FeedResponse
 
-func (p *FeedServiceListFeedResult) GetSuccess() (v *FeedResponse) {
+func (p *FeedServiceGetVideoResult) GetSuccess() (v *FeedResponse) {
 	if !p.IsSetSuccess() {
-		return FeedServiceListFeedResult_Success_DEFAULT
+		return FeedServiceGetVideoResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *FeedServiceListFeedResult) SetSuccess(x interface{}) {
+func (p *FeedServiceGetVideoResult) SetSuccess(x interface{}) {
 	p.Success = x.(*FeedResponse)
 }
 
-var fieldIDToName_FeedServiceListFeedResult = map[int16]string{
+var fieldIDToName_FeedServiceGetVideoResult = map[int16]string{
 	0: "success",
 }
 
-func (p *FeedServiceListFeedResult) IsSetSuccess() bool {
+func (p *FeedServiceGetVideoResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *FeedServiceListFeedResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *FeedServiceGetVideoResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -1682,7 +1473,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceListFeedResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceGetVideoResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -1692,7 +1483,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *FeedServiceListFeedResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *FeedServiceGetVideoResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = NewFeedResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -1700,9 +1491,9 @@ func (p *FeedServiceListFeedResult) ReadField0(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *FeedServiceListFeedResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceGetVideoResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("ListFeed_result"); err != nil {
+	if err = oprot.WriteStructBegin("GetVideo_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -1729,7 +1520,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *FeedServiceListFeedResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceGetVideoResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -1748,14 +1539,14 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *FeedServiceListFeedResult) String() string {
+func (p *FeedServiceGetVideoResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("FeedServiceListFeedResult(%+v)", *p)
+	return fmt.Sprintf("FeedServiceGetVideoResult(%+v)", *p)
 }
 
-func (p *FeedServiceListFeedResult) DeepEqual(ano *FeedServiceListFeedResult) bool {
+func (p *FeedServiceGetVideoResult) DeepEqual(ano *FeedServiceGetVideoResult) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -1767,283 +1558,9 @@ func (p *FeedServiceListFeedResult) DeepEqual(ano *FeedServiceListFeedResult) bo
 	return true
 }
 
-func (p *FeedServiceListFeedResult) Field0DeepEqual(src *FeedResponse) bool {
+func (p *FeedServiceGetVideoResult) Field0DeepEqual(src *FeedResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
-		return false
-	}
-	return true
-}
-
-type FeedServiceEchoArgs struct {
-}
-
-func NewFeedServiceEchoArgs() *FeedServiceEchoArgs {
-	return &FeedServiceEchoArgs{}
-}
-
-func (p *FeedServiceEchoArgs) InitDefault() {
-	*p = FeedServiceEchoArgs{}
-}
-
-var fieldIDToName_FeedServiceEchoArgs = map[int16]string{}
-
-func (p *FeedServiceEchoArgs) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		if err = iprot.Skip(fieldTypeId); err != nil {
-			goto SkipFieldTypeError
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-SkipFieldTypeError:
-	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *FeedServiceEchoArgs) Write(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteStructBegin("Echo_args"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *FeedServiceEchoArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("FeedServiceEchoArgs(%+v)", *p)
-}
-
-func (p *FeedServiceEchoArgs) DeepEqual(ano *FeedServiceEchoArgs) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	return true
-}
-
-type FeedServiceEchoResult struct {
-	Success *string `thrift:"success,0,optional" frugal:"0,optional,string" json:"success,omitempty"`
-}
-
-func NewFeedServiceEchoResult() *FeedServiceEchoResult {
-	return &FeedServiceEchoResult{}
-}
-
-func (p *FeedServiceEchoResult) InitDefault() {
-	*p = FeedServiceEchoResult{}
-}
-
-var FeedServiceEchoResult_Success_DEFAULT string
-
-func (p *FeedServiceEchoResult) GetSuccess() (v string) {
-	if !p.IsSetSuccess() {
-		return FeedServiceEchoResult_Success_DEFAULT
-	}
-	return *p.Success
-}
-func (p *FeedServiceEchoResult) SetSuccess(x interface{}) {
-	p.Success = x.(*string)
-}
-
-var fieldIDToName_FeedServiceEchoResult = map[int16]string{
-	0: "success",
-}
-
-func (p *FeedServiceEchoResult) IsSetSuccess() bool {
-	return p.Success != nil
-}
-
-func (p *FeedServiceEchoResult) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 0:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField0(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceEchoResult[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-}
-
-func (p *FeedServiceEchoResult) ReadField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Success = &v
-	}
-	return nil
-}
-
-func (p *FeedServiceEchoResult) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("Echo_result"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField0(oprot); err != nil {
-			fieldId = 0
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *FeedServiceEchoResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSuccess() {
-		if err = oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.Success); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
-}
-
-func (p *FeedServiceEchoResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("FeedServiceEchoResult(%+v)", *p)
-}
-
-func (p *FeedServiceEchoResult) DeepEqual(ano *FeedServiceEchoResult) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field0DeepEqual(ano.Success) {
-		return false
-	}
-	return true
-}
-
-func (p *FeedServiceEchoResult) Field0DeepEqual(src *string) bool {
-
-	if p.Success == src {
-		return true
-	} else if p.Success == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.Success, *src) != 0 {
 		return false
 	}
 	return true

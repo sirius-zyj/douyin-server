@@ -4,15 +4,14 @@ package feedservice
 
 import (
 	"context"
-	feed "douyin-server-rpc/kitex_gen/feed"
+	feed "douyin-server/rpc/kitex_gen/feed"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	ListFeed(ctx context.Context, req *feed.FeedRequest, callOptions ...callopt.Option) (r *feed.FeedResponse, err error)
-	Echo(ctx context.Context, callOptions ...callopt.Option) (r string, err error)
+	GetVideo(ctx context.Context, req *feed.FeedRequest, callOptions ...callopt.Option) (r *feed.FeedResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -44,12 +43,7 @@ type kFeedServiceClient struct {
 	*kClient
 }
 
-func (p *kFeedServiceClient) ListFeed(ctx context.Context, req *feed.FeedRequest, callOptions ...callopt.Option) (r *feed.FeedResponse, err error) {
+func (p *kFeedServiceClient) GetVideo(ctx context.Context, req *feed.FeedRequest, callOptions ...callopt.Option) (r *feed.FeedResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.ListFeed(ctx, req)
-}
-
-func (p *kFeedServiceClient) Echo(ctx context.Context, callOptions ...callopt.Option) (r string, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.Echo(ctx)
+	return p.kClient.GetVideo(ctx, req)
 }

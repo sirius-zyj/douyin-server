@@ -4,7 +4,7 @@ package feedservice
 
 import (
 	"context"
-	feed "douyin-server-rpc/kitex_gen/feed"
+	feed "douyin-server/rpc/kitex_gen/feed"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 )
@@ -19,8 +19,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "FeedService"
 	handlerType := (*feed.FeedService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"ListFeed": kitex.NewMethodInfo(listFeedHandler, newFeedServiceListFeedArgs, newFeedServiceListFeedResult, false),
-		"Echo":     kitex.NewMethodInfo(echoHandler, newFeedServiceEchoArgs, newFeedServiceEchoResult, false),
+		"GetVideo": kitex.NewMethodInfo(getVideoHandler, newFeedServiceGetVideoArgs, newFeedServiceGetVideoResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName":     "feed",
@@ -37,40 +36,22 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	return svcInfo
 }
 
-func listFeedHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*feed.FeedServiceListFeedArgs)
-	realResult := result.(*feed.FeedServiceListFeedResult)
-	success, err := handler.(feed.FeedService).ListFeed(ctx, realArg.Req)
+func getVideoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*feed.FeedServiceGetVideoArgs)
+	realResult := result.(*feed.FeedServiceGetVideoResult)
+	success, err := handler.(feed.FeedService).GetVideo(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newFeedServiceListFeedArgs() interface{} {
-	return feed.NewFeedServiceListFeedArgs()
+func newFeedServiceGetVideoArgs() interface{} {
+	return feed.NewFeedServiceGetVideoArgs()
 }
 
-func newFeedServiceListFeedResult() interface{} {
-	return feed.NewFeedServiceListFeedResult()
-}
-
-func echoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-
-	realResult := result.(*feed.FeedServiceEchoResult)
-	success, err := handler.(feed.FeedService).Echo(ctx)
-	if err != nil {
-		return err
-	}
-	realResult.Success = &success
-	return nil
-}
-func newFeedServiceEchoArgs() interface{} {
-	return feed.NewFeedServiceEchoArgs()
-}
-
-func newFeedServiceEchoResult() interface{} {
-	return feed.NewFeedServiceEchoResult()
+func newFeedServiceGetVideoResult() interface{} {
+	return feed.NewFeedServiceGetVideoResult()
 }
 
 type kClient struct {
@@ -83,20 +64,11 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) ListFeed(ctx context.Context, req *feed.FeedRequest) (r *feed.FeedResponse, err error) {
-	var _args feed.FeedServiceListFeedArgs
+func (p *kClient) GetVideo(ctx context.Context, req *feed.FeedRequest) (r *feed.FeedResponse, err error) {
+	var _args feed.FeedServiceGetVideoArgs
 	_args.Req = req
-	var _result feed.FeedServiceListFeedResult
-	if err = p.c.Call(ctx, "ListFeed", &_args, &_result); err != nil {
-		return
-	}
-	return _result.GetSuccess(), nil
-}
-
-func (p *kClient) Echo(ctx context.Context) (r string, err error) {
-	var _args feed.FeedServiceEchoArgs
-	var _result feed.FeedServiceEchoResult
-	if err = p.c.Call(ctx, "Echo", &_args, &_result); err != nil {
+	var _result feed.FeedServiceGetVideoResult
+	if err = p.c.Call(ctx, "GetVideo", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

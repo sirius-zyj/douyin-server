@@ -1,7 +1,7 @@
 package main
 
 import (
-	feed "douyin-server-rpc/kitex_gen/feed/feedservice"
+	feed "douyin-server/rpc/kitex_gen/feed/feedservice"
 	"log"
 )
 
