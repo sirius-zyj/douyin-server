@@ -21,32 +21,22 @@ func initFeedClient() {
 }
 
 func GetVideoByUserId(userId int64) (resp []dao.Dvideo, err error) {
-	var respClient *feed.FeedResponse
+	var respClient *feed.FeedResponse = new(feed.FeedResponse)
 	respClient, err = feedClient.GetVideo(context.Background(), &feed.FeedRequest{
 		AuthorId: &userId,
 	})
 
-	if err != nil || respClient.StatusCode != 200 {
+	if err != nil {
 		return nil, err
 	}
-
-	log.Println(resp)
-
-	return nil, nil
-}
-
-func Test() {
-	c, err := feedservice.NewClient("feed", client.WithHostPorts("0.0.0.0:8888"))
-	if err != nil {
-		log.Fatal(err)
+	if respClient.StatusCode != 200 {
+		return nil, nil
 	}
-	feedClient = c
 
-	// resp, err := feedClient.Echo(context.Background())
-	// resp, err := feedClient.ListFeed(context.Background(), &feed.FeedRequest{})
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// log.Println(resp)
-
+	for _, v := range respClient.VideosList {
+		resp = append(resp, dao.Dvideo{
+			Play_url: v.PlayUrl,
+		})
+	}
+	return resp, nil
 }

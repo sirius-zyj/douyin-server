@@ -2,16 +2,20 @@ package main
 
 import (
 	"douyin-server/rpc/client"
+	"douyin-server/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	go service.RunMessageServer()
+
 	client.InitRpcClient()
-	client.GetVideoByUserId(1)
-	// go service.RunMessageServer()
-	// dao.Init()
-	// r := gin.Default()
 
-	// initRouter(r)
+	r := gin.Default()
 
-	// r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	initRouter(r)
+
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
 }
