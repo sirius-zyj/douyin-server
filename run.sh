@@ -1,1 +1,1 @@
-go build && ./simple-demo
+go build && ./douyin-server
