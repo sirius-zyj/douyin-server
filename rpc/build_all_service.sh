@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit if any error occured
-set -euxo pipefail
+# set -euxo pipefail
 
 SERVICE_DIR=$(pwd)/service
 
@@ -55,6 +55,7 @@ for d in */ ; do
     # Rename the bootstrap.sh file and copy it to the output directory
     mv output/bootstrap.sh ../../output/bootstrap-"$(basename "$d")".sh
   fi
+  rm -rf output
 
   # Navigate back to the service directory
   echo "Finished building $d"

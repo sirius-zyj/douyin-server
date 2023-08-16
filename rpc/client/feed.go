@@ -11,7 +11,7 @@ import (
 var feedClient feedservice.Client
 
 func main() {
-	c, err := feedservice.NewClient("feed", client.WithHostPorts("192.168.137.131:8888"))
+	c, err := feedservice.NewClient("feed", client.WithHostPorts("0.0.0.0:8888"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,4 +22,5 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println(resp)
+
 }
