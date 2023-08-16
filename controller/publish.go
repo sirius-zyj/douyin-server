@@ -7,7 +7,8 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/RaymondCode/simple-demo/dao"
+	"douyin-server/dao"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,7 +39,7 @@ func Publish(c *gin.Context) {
 	user := usersLoginInfo[token]
 	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
 	saveFile := filepath.Join("./public/", finalName)
-  //文件存储到的位置
+	//文件存储到的位置
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
@@ -53,27 +54,27 @@ func Publish(c *gin.Context) {
 	})
 }
 
-//查看他人的作品列表
+// 查看他人的作品列表
 func PublishList(c *gin.Context) {
-  user_ID , _ := c.GetQuery("user_id")
-  userID , _ := strconv.ParseInt(user_ID , 10 , 64)
-  log.Printf("获取到的目标用户id %v" , userID)
+	user_ID, _ := c.GetQuery("user_id")
+	userID, _ := strconv.ParseInt(user_ID, 10, 64)
+	log.Printf("获取到的目标用户id %v", userID)
 
-  //获取目标用户的所有作品将其传递给APP
-  if _ , err := dao.GetVideoByUserId(userID); err != nil {
-    c.JSON(http.StatusOK, VideoListResponse{
-		    Response: Response{
-			  StatusCode: 1,
-        StatusMsg: "查询出错",
-		  },
-	  })
-  }else {
-    
-    c.JSON(http.StatusOK, VideoListResponse{
-    	Response: Response{
-    			StatusCode: 0,
-    	},
-  		VideoList: DemoVideos,
-	  })
-  }
+	//获取目标用户的所有作品将其传递给APP
+	if _, err := dao.GetVideoByUserId(userID); err != nil {
+		c.JSON(http.StatusOK, VideoListResponse{
+			Response: Response{
+				StatusCode: 1,
+				StatusMsg:  "查询出错",
+			},
+		})
+	} else {
+
+		c.JSON(http.StatusOK, VideoListResponse{
+			Response: Response{
+				StatusCode: 0,
+			},
+			VideoList: DemoVideos,
+		})
+	}
 }

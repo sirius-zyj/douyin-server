@@ -1,4 +1,4 @@
-package client
+package main
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 
 var feedClient feedservice.Client
 
-func Test() {
+func main() {
 	c, err := feedservice.NewClient("feed", client.WithHostPorts("0.0.0.0:8888"))
 	if err != nil {
 		log.Fatal(err)

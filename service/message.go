@@ -1,9 +1,9 @@
 package service
 
 import (
+	"douyin-server/controller"
 	"encoding/json"
 	"fmt"
-	"github.com/RaymondCode/simple-demo/controller"
 	"io"
 	"net"
 	"sync"
@@ -24,7 +24,7 @@ func RunMessageServer() {
 			fmt.Printf("Accept conn failed: %v\n", err)
 			continue
 		}
-  
+
 		go process(conn)
 	}
 }

@@ -1,17 +1,14 @@
 package main
 
-import (
-	"github.com/RaymondCode/simple-demo/dao"
-	"github.com/RaymondCode/simple-demo/service"
-	"github.com/gin-gonic/gin"
-)
+import client "douyin-server/rpc/client"
 
 func main() {
-	go service.RunMessageServer()
-  dao.Init()
-	r := gin.Default()
+	client.Test()
+	// go service.RunMessageServer()
+	// dao.Init()
+	// r := gin.Default()
 
-	initRouter(r)
+	// initRouter(r)
 
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	// r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

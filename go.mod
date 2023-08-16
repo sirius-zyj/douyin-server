@@ -1,4 +1,4 @@
-module github.com/RaymondCode/simple-demo
+module douyin-server
 
 go 1.17
 
@@ -6,6 +6,8 @@ require (
 	github.com/gavv/httpexpect/v2 v2.8.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/stretchr/testify v1.7.0
+	gorm.io/driver/mysql v1.5.1
+	gorm.io/gorm v1.25.3
 )
 
 require (
@@ -50,7 +52,5 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
-	gorm.io/driver/mysql v1.5.1 // indirect
-	gorm.io/gorm v1.25.3 // indirect
 	moul.io/http2curl/v2 v2.3.0 // indirect
 )
