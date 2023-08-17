@@ -1,9 +1,17 @@
 package dao
 
 import (
-  // "gorm.io/gorm"
-  "time"
-  "log"
+	// "gorm.io/gorm"
+	"bytes"
+	// "errors"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"time"
+
+	uuid "github.com/satori/go.uuid"
+	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
 func(Dvideo) TableName() string {
@@ -11,7 +19,7 @@ func(Dvideo) TableName() string {
 }
 
 
-//GetVideoById 根据视频的ID获取一系列视频信息
+//GetVideoById 根据视频的ID获取视频信息
 func GetVideoById(id int64) (Dvideo , error) {
   var resp Dvideo
   err := db.Model(&Dvideo{}).Where("id = ?" , id).Find(&resp).Error
@@ -20,6 +28,17 @@ func GetVideoById(id int64) (Dvideo , error) {
     return resp , err
   }
   return resp , nil
+}
+
+//根据一组视频ID获取视频切片
+func GetVideosByIds(ids []int64) ([]Dvideo , error) {
+  var resq []Dvideo
+  err := db.Model(&Dvideo{}).Where("id in ?" , ids).Find(&resq).Error
+  if err != nil {
+    log.Println("查询失败")
+    return resq , err
+  }
+  return resq , nil
 }
 
 //根据作者的id查询他发布的所有视频
@@ -57,3 +76,50 @@ func GetVideoByTime(time time.Time) ([]Dvideo , error) {
 //将图片传给FTP服务器
 
 //保存视频的记录
+
+func UploadVideo(video *[]byte) (playUrl, coverUrl string, err error) {
+	videoName := uuid.NewV4().String() + ".mp4"
+	imageName := uuid.NewV4().String() + ".jpeg"
+
+	err = os.WriteFile(videoName, *video, 0o666)
+	if err != nil {
+		return "", "", err
+	}
+
+	imageData, _ := GetSnapshot(videoName, 1)
+	if err != nil {
+		return "", "", err
+	}
+	err = VideoBucket.PutObject(videoName, bytes.NewReader(*video))
+	if err != nil {
+		return "", "", err
+	}
+
+	err = ImageBucket.PutObject(imageName, imageData)
+	if err != nil {
+		return "", "", err
+	}
+
+	playUrl = VideoBucketLinkPrefix + videoName
+	coverUrl = ImageBucketLinkPrefix + imageName
+	return playUrl, coverUrl, nil
+}
+
+func GetSnapshot(videoPath string, frameNum int) (cover io.Reader, err error) {
+	buf := bytes.NewBuffer(nil)
+	err = ffmpeg.Input(videoPath).
+		Filter("select", ffmpeg.Args{fmt.Sprintf("gte(n,%d)", frameNum)}).
+		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
+		WithOutput(buf, os.Stdout).
+		Run()
+
+	if err != nil {
+		log.Fatal("Extract Frame Failed", err)
+		return nil, err
+	}
+	err = os.RemoveAll(videoPath)
+	if err != nil {
+		return nil, err
+	}
+	return bytes.NewReader(buf.Bytes()), nil
+}

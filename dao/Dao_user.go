@@ -52,12 +52,12 @@ func GetUsersByIds(userid []int64) ([]Duser , error) {
 }
 
 //创建用户
-func CreateUser(user Duser) bool{
+func CreateUser(user Duser) int64{
   log.Println("开始注册2.5 ")
   if err := db.Create(&user).Error ; err != nil {
     log.Println(err.Error())
-    return false
+    return -1
   }
-  return true
+  return user.Id
 }
 

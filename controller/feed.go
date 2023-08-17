@@ -16,8 +16,6 @@ type FeedResponse struct {
 	NextTime  int64   `json:"next_time,omitempty"`
 }
 
-type VideoSlice []Video
-
 // 获取视频
 func Feed(c *gin.Context) {
 	startTime := c.Query("latest_time")
