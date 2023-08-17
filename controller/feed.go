@@ -24,7 +24,7 @@ func Feed(c *gin.Context) {
 	log.Printf("请求的时间" + startTime)
 
 	var lastTime time.Time
-	if startTime != "0" {
+	if startTime != "" {
 		s, _ := strconv.ParseInt(startTime, 10, 64)
 		lastTime = time.Unix(s, 0)
 	} else {
@@ -33,7 +33,6 @@ func Feed(c *gin.Context) {
 	log.Printf("请求的时间戳 %v", lastTime)
 
 	userId, _ := strconv.ParseInt(c.Query("userId"), 10, 64)
-	log.Printf("获取到用户ID %v", userId)
 	VideoQueue := GetVideo(userId, lastTime)
 	log.Printf("获取到视频 %v", VideoQueue)
 	// VideoQueue := DemoVideos
@@ -46,7 +45,7 @@ func Feed(c *gin.Context) {
 
 // 获取查询到的视频切片
 func GetVideo(userId int64, lastTime time.Time) []Video {
-	resp, err := client.GetVideoByUserId(userId)
+	resp, err := client.GetVideoByTime(lastTime)
 	// resp, err := dao.GetVideoByTime(lastTime)
 	var ans VideoSlice
 	if err != nil {

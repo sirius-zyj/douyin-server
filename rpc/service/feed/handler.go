@@ -4,26 +4,30 @@ import (
 	"context"
 	"douyin-server/dao"
 	feed "douyin-server/rpc/kitex_gen/feed"
+	"log"
+	"time"
 )
 
 // FeedServiceImpl implements the last service interface defined in the IDL.
 type FeedServiceImpl struct{}
 
 // GetVideo implements the FeedServiceImpl interface.
-func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *feed.FeedRequest) (resp *feed.FeedResponse, err error) {
-	resp = new(feed.FeedResponse) // 分配内存
-	if req.AuthorId != nil {
-		respVideo, err := dao.GetVideoByUserId(*req.AuthorId)
+// GetVideo implements the FeedServiceImpl interface.
+func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
+	resp = new(feed.DouyinFeedResponse) // 分配内存
+	if req.LatestTime != nil {
+		respVideo, err := dao.GetVideoByTime(time.Unix(*req.LatestTime, 0))
 		if err != nil {
 			resp.StatusCode = 404
 			return resp, err
 		}
-		resp.StatusCode = 200
+		resp.StatusCode = 0
 		for _, v := range respVideo {
-			resp.VideosList = append(resp.VideosList, &feed.Video{
+			resp.VideoList = append(resp.VideoList, &feed.Video{
 				PlayUrl: v.Play_url,
 			})
 		}
 	}
+	log.Printf("resp is %v\n", resp)
 	return resp, nil
 }

@@ -10,6 +10,7 @@
 
 mkdir -p idl
 mkdir -p kitex_gen
+
 kitex -module "douyin-server" -I idl/ idl/"$1".thrift
 
 mkdir -p service/"$1"

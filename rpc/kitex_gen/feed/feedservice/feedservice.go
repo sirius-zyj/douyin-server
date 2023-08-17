@@ -64,7 +64,7 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) GetVideo(ctx context.Context, req *feed.FeedRequest) (r *feed.FeedResponse, err error) {
+func (p *kClient) GetVideo(ctx context.Context, req *feed.DouyinFeedRequest) (r *feed.DouyinFeedResponse, err error) {
 	var _args feed.FeedServiceGetVideoArgs
 	_args.Req = req
 	var _result feed.FeedServiceGetVideoResult
