@@ -27,3 +27,11 @@ type Dfavorite struct {
   Video_id        int64
   Cancel          bool
 }
+
+type Dcomments struct {
+  Id              int64 `gorm:"primaryKey;autoIncrement"`
+  User_id         int64
+  Video_id        int64
+  Comment_text    string
+  Create_time     time.Time
+}
