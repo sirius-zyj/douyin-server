@@ -3,6 +3,10 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+  "github.com/RaymondCode/simple-demo/dao"
+  "strconv"
+  "strings"
+  "time"
 )
 
 type CommentListResponse struct {
@@ -18,8 +22,19 @@ type CommentActionResponse struct {
 // CommentAction 发表或者删除评论
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
+  index := strings.Index(token , "*")
+  useid := token[index + 1:]
+  user_id , _ := strconv.ParseInt(useid , 10 , 64)
 	actionType := c.Query("action_type")
+  if actionType == "1" {
+    var comment dao.Dcomments
+    comment.Comment_text = c.Query("comment_text")
+    comment.User_id = user_id
+    comment.Video_id , _ = strconv.ParseInt(c.Query("video_id") , 10 , 64)
+    comment.Create_time = time.Now()
+  }
 
+  
 	if user, exist := usersLoginInfo[token]; exist {
 		if actionType == "1" {
 			text := c.Query("comment_text")
