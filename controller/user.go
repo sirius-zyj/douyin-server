@@ -3,8 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
-	// "strconv"
-	"sync/atomic"
+	"strconv"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
@@ -22,7 +21,7 @@ var usersLoginInfo = map[string]User{
 		IsFollow:      true,
 	},
 }
-var userIdSequence = int64(1)
+
 
 type UserLoginResponse struct {
 	Response
@@ -50,26 +49,25 @@ func Register(c *gin.Context) {
 		})
   }else {
     //成功注册
-    log.Println("开始注册1")
-    atomic.AddInt64(&userIdSequence, 1)
-    log.Println("开始注册2")
     newUser := dao.Duser{
-			Id:   userIdSequence,
 			Name: username,
       Password: password,
 		}
-    err := dao.CreateUser(newUser)
+    ID := dao.CreateUser(newUser)
     log.Println("开始注册3")
-    if err == false {
+    if ID == -1 {
       log.Println("注册失败")
       c.JSON(http.StatusOK, UserLoginResponse{
 		  	Response: Response{StatusCode: 1, StatusMsg: "User register failed1"},
 		  })
       return 
     }
+    newUser.Id = ID
+    log.Println(err)
+    token = token + "*" + strconv.FormatInt(ID , 10)
     c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
-			UserId:   userIdSequence,
+			UserId:   newUser.Id,
 			Token:    token,
 		})
   }
@@ -80,7 +78,7 @@ func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 	token := username + password
-  
+  log.Println(token)
   if user , err := dao.GetUsersByUserName(username); err == nil {
     //找到了用户信息
     if(token == (user.Name + user.Password)) {
@@ -102,39 +100,39 @@ func Login(c *gin.Context) {
 }
 
 //用户信息
-// func UserInfo(c *gin.Context) {
-	// token := c.Query("token")
- //  Id := c.Query("user_id")
- //  id , _ := strconv.ParseInt(Id , 10 , 64)
-	// if user , err := dao.GetUserById(id); err == nil {
- //    //找到了用户信息
- //    var resq User
- //    resq.Id = user.Id
- //    resq.Name = user.Name
- //    resq.FollowCount = user.FollowCount
- //    resq.FollowerCount = user.FollowerCount
- //    c.JSON(http.StatusOK, UserResponse{
- //      Response: Response{StatusCode: 0},
- //      User: ,
- //    })
- //  }else{
- //    c.JSON(http.StatusOK, UserLoginResponse{
-	// 		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-	// 	})
- //  }
-// }
-
 func UserInfo(c *gin.Context) {
-	token := c.Query("token")
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 0},
-			User:     user,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
+	// token := c.Query("token")
+  Id := c.Query("user_id")
+  id , _ := strconv.ParseInt(Id , 10 , 64)
+	if user , err := dao.GetUserById(id); err == nil {
+    //找到了用户信息
+    var resq User
+    resq.Id = user.Id
+    resq.Name = user.Name
+    resq.FollowCount = user.FollowCount
+    resq.FollowerCount = user.FollowerCount
+    c.JSON(http.StatusOK, UserResponse{
+      Response: Response{StatusCode: 0},
+      User: resq,
+    })
+  }else{
+    c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
-	}
+  }
 }
+
+// func UserInfo(c *gin.Context) {
+// 	token := c.Query("token")
+
+// 	if user, exist := usersLoginInfo[token]; exist {
+// 		c.JSON(http.StatusOK, UserResponse{
+// 			Response: Response{StatusCode: 0},
+// 			User:     user,
+// 		})
+// 	} else {
+// 		c.JSON(http.StatusOK, UserResponse{
+// 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+// 		})
+// 	}
+// }

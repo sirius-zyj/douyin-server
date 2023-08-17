@@ -53,14 +53,14 @@ func Publish(c *gin.Context) {
 	})
 }
 
-//查看他人的作品列表
+//根据用户ID查找该用户作品列表
 func PublishList(c *gin.Context) {
   user_ID , _ := c.GetQuery("user_id")
   userID , _ := strconv.ParseInt(user_ID , 10 , 64)
   log.Printf("获取到的目标用户id %v" , userID)
 
   //获取目标用户的所有作品将其传递给APP
-  if _ , err := dao.GetVideoByUserId(userID); err != nil {
+  if videoList , err := dao.GetVideoByUserId(userID); err != nil {
     c.JSON(http.StatusOK, VideoListResponse{
 		    Response: Response{
 			  StatusCode: 1,
@@ -68,12 +68,19 @@ func PublishList(c *gin.Context) {
 		  },
 	  })
   }else {
-    
+    var videolist VideoSlice
+    for _,tmp := range(videoList) {
+      var V Video
+      V.Dvideo = tmp
+      V.CommentCount = 10
+      V.FavoriteCount = 20
+      videolist.Append(V)
+    }
     c.JSON(http.StatusOK, VideoListResponse{
     	Response: Response{
     			StatusCode: 0,
     	},
-  		VideoList: DemoVideos,
+  		VideoList: videolist,
 	  })
   }
 }

@@ -3,6 +3,7 @@ package controller
 import(
   "github.com/RaymondCode/simple-demo/dao"
 )
+
 type Response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,omitempty"`
@@ -45,4 +46,10 @@ type MessageSendEvent struct {
 type MessagePushEvent struct {
 	FromUserId int64  `json:"user_id,omitempty"`
 	MsgContent string `json:"msg_content,omitempty"`
+}
+
+type VideoSlice []Video
+
+func (vs *VideoSlice) Append(video Video) {
+    *vs = append(*vs, video)
 }

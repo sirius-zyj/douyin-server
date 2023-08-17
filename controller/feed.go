@@ -15,7 +15,7 @@ type FeedResponse struct {
 	NextTime  int64   `json:"next_time,omitempty"`
 }
 
-type VideoSlice []Video
+
 // 获取视频
 func Feed(c *gin.Context) {
   startTime := c.Query("latest_time")
@@ -31,9 +31,7 @@ func Feed(c *gin.Context) {
   }
   log.Printf("请求的时间戳 %v" , lastTime)
 
-  userId , _ := strconv.ParseInt(c.Query("userId") , 10 , 64)
-  log.Printf("获取到用户ID %v" , userId)
-  VideoQueue := GetVideo(userId , lastTime)
+  VideoQueue := GetVideo(lastTime)
   // VideoQueue := DemoVideos
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  Response{StatusCode: 0},
@@ -42,7 +40,7 @@ func Feed(c *gin.Context) {
 	})
 }
 // 获取查询到的视频切片
-func GetVideo(userId int64 , lastTime time.Time) []Video{
+func GetVideo(lastTime time.Time) []Video{
   resp , err := dao.GetVideoByTime(lastTime)
   var ans VideoSlice
   if err != nil {
@@ -56,7 +54,5 @@ func GetVideo(userId int64 , lastTime time.Time) []Video{
   return ans
 }
 
-func (vs *VideoSlice) Append(video Video) {
-    *vs = append(*vs, video)
-}
+
 

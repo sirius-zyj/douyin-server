@@ -23,7 +23,7 @@ func Init() {
 		},
 	)
   
-  dsn := "root:SgIopgnq@tcp(172.16.32.4:50172)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn := "root:SgIopgnq@tcp(172.16.32.94:50396)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
   var err error
   db , _ = gorm.Open(mysql.Open(dsn) , &gorm.Config{
     Logger: newLogger,
@@ -33,4 +33,5 @@ func Init() {
   }
   db.AutoMigrate(&Dvideo{})
   db.AutoMigrate(&Duser{})
+  db.AutoMigrate(&Dfavorite{})
 }
