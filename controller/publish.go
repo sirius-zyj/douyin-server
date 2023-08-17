@@ -54,7 +54,7 @@ func Publish(c *gin.Context) {
 	})
 }
 
-//根据用户ID查找该用户作品列表
+// 根据用户ID查找该用户作品列表
 func PublishList(c *gin.Context) {
 	user_ID, _ := c.GetQuery("user_id")
 	userID, _ := strconv.ParseInt(user_ID, 10, 64)
@@ -70,28 +70,29 @@ func PublishList(c *gin.Context) {
 		})
 	} else {
 
-  //获取目标用户的所有作品将其传递给APP
-  if videoList , err := dao.GetVideoByUserId(userID); err != nil {
-    c.JSON(http.StatusOK, VideoListResponse{
-		    Response: Response{
-			  StatusCode: 1,
-        StatusMsg: "查询出错",
-		  },
-	  })
-  }else {
-    var videolist VideoSlice
-    for _,tmp := range(videoList) {
-      var V Video
-      V.Dvideo = tmp
-      V.CommentCount = 10
-      V.FavoriteCount = 20
-      videolist.Append(V)
-    }
-    c.JSON(http.StatusOK, VideoListResponse{
-    	Response: Response{
-    			StatusCode: 0,
-    	},
-  		VideoList: videolist,
-	  })
-  }
+		//获取目标用户的所有作品将其传递给APP
+		if videoList, err := dao.GetVideoByUserId(userID); err != nil {
+			c.JSON(http.StatusOK, VideoListResponse{
+				Response: Response{
+					StatusCode: 1,
+					StatusMsg:  "查询出错",
+				},
+			})
+		} else {
+			var videolist VideoSlice
+			for _, tmp := range videoList {
+				var V Video
+				V.Dvideo = tmp
+				V.CommentCount = 10
+				V.FavoriteCount = 20
+				videolist.Append(V)
+			}
+			c.JSON(http.StatusOK, VideoListResponse{
+				Response: Response{
+					StatusCode: 0,
+				},
+				VideoList: videolist,
+			})
+		}
+	}
 }

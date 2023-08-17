@@ -57,6 +57,6 @@ func GetVideo(userId int64, lastTime time.Time) []Video {
 	return ans
 }
 
-func (vs *VideoSlice) Append(video Video) {
-	*vs = append(*vs, video)
-}
+// func (vs *VideoSlice) Append(video Video) {
+// 	*vs = append(*vs, video)
+// }

@@ -14,61 +14,60 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-func(Dvideo) TableName() string {
-  return "videos";
+func (Dvideo) TableName() string {
+	return "videos"
 }
 
-
-//GetVideoById 根据视频的ID获取视频信息
-func GetVideoById(id int64) (Dvideo , error) {
-  var resp Dvideo
-  err := db.Model(&Dvideo{}).Where("id = ?" , id).Find(&resp).Error
-  if err != nil {
-    log.Println(err.Error())
-    return resp , err
-  }
-  return resp , nil
+// GetVideoById 根据视频的ID获取视频信息
+func GetVideoById(id int64) (Dvideo, error) {
+	var resp Dvideo
+	err := db.Model(&Dvideo{}).Where("id = ?", id).Find(&resp).Error
+	if err != nil {
+		log.Println(err.Error())
+		return resp, err
+	}
+	return resp, nil
 }
 
-//根据一组视频ID获取视频切片
-func GetVideosByIds(ids []int64) ([]Dvideo , error) {
-  var resq []Dvideo
-  err := db.Model(&Dvideo{}).Where("id in ?" , ids).Find(&resq).Error
-  if err != nil {
-    log.Println("查询失败")
-    return resq , err
-  }
-  return resq , nil
+// 根据一组视频ID获取视频切片
+func GetVideosByIds(ids []int64) ([]Dvideo, error) {
+	var resq []Dvideo
+	err := db.Model(&Dvideo{}).Where("id in ?", ids).Find(&resq).Error
+	if err != nil {
+		log.Println("查询失败")
+		return resq, err
+	}
+	return resq, nil
 }
 
-//根据作者的id查询他发布的所有视频
-func GetVideoByUserId(id int64) ([]Dvideo , error) {
-  var resp []Dvideo
-  err := db.Model(&Dvideo{}).Where("author_id = ?" , id).Find(&resp).Error
-  if err != nil {
-    log.Println(err.Error())
-    return resp , err
-  }
-  return resp , nil
+// 根据作者的id查询他发布的所有视频
+func GetVideoByUserId(id int64) ([]Dvideo, error) {
+	var resp []Dvideo
+	err := db.Model(&Dvideo{}).Where("author_id = ?", id).Find(&resp).Error
+	if err != nil {
+		log.Println(err.Error())
+		return resp, err
+	}
+	return resp, nil
 }
 
-//根据一个时间获取前面的视频
-func GetVideoByTime(time time.Time) ([]Dvideo , error) {
-  var resp []Dvideo
-  year := time.Year()
-  if year < 1 || year > 9999 {
-      // 处理年份超出范围的情况
-      log.Println("Invalid year:", year)
-  } else {
-      // 处理年份在有效范围内的情况
-      log.Println("Valid year:", year)
-  }
-  err := db.Model(&Dvideo{}).Where("upload_time <= ?" , time).Order("upload_time desc").Limit(30).Find(&resp).Error
-  if err != nil {
-    log.Println(err.Error())
-    return resp , err
-  }
-  return resp , nil
+// 根据一个时间获取前面的视频
+func GetVideoByTime(time time.Time) ([]Dvideo, error) {
+	var resp []Dvideo
+	year := time.Year()
+	if year < 1 || year > 9999 {
+		// 处理年份超出范围的情况
+		log.Println("Invalid year:", year)
+	} else {
+		// 处理年份在有效范围内的情况
+		log.Println("Valid year:", year)
+	}
+	err := db.Model(&Dvideo{}).Where("upload_time <= ?", time).Order("upload_time desc").Limit(30).Find(&resp).Error
+	if err != nil {
+		log.Println(err.Error())
+		return resp, err
+	}
+	return resp, nil
 }
 
 //通过ftp服务将视频传入服务器
