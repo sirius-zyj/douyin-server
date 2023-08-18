@@ -12,7 +12,6 @@ import (
 type FeedServiceImpl struct{}
 
 // GetVideo implements the FeedServiceImpl interface.
-// GetVideo implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
 	resp = new(feed.DouyinFeedResponse) // 分配内存
 	if req.LatestTime != nil {
@@ -22,12 +21,13 @@ func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *feed.DouyinFeedRequ
 			return resp, err
 		}
 		resp.StatusCode = 0
+		log.Printf("respVideo is %v\n", respVideo)
 		for _, v := range respVideo {
 			resp.VideoList = append(resp.VideoList, &feed.Video{
+				Id:      v.Id,
 				PlayUrl: v.Play_url,
 			})
 		}
 	}
-	log.Printf("resp is %v\n", resp)
 	return resp, nil
 }

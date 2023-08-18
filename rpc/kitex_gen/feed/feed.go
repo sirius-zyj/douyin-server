@@ -675,7 +675,7 @@ func (p *DouyinFeedResponse) Field4DeepEqual(src *Int64) bool {
 }
 
 type Video struct {
-	Id            *Int64  `thrift:"id,1,optional" frugal:"1,optional,i64" json:"id,omitempty"`
+	Id            Int64   `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
 	Author        *User   `thrift:"author,2,optional" frugal:"2,optional,User" json:"author,omitempty"`
 	PlayUrl       string  `thrift:"play_url,3,required" frugal:"3,required,string" json:"play_url"`
 	CoverUrl      *string `thrift:"cover_url,4,optional" frugal:"4,optional,string" json:"cover_url,omitempty"`
@@ -693,13 +693,8 @@ func (p *Video) InitDefault() {
 	*p = Video{}
 }
 
-var Video_Id_DEFAULT Int64
-
 func (p *Video) GetId() (v Int64) {
-	if !p.IsSetId() {
-		return Video_Id_DEFAULT
-	}
-	return *p.Id
+	return p.Id
 }
 
 var Video_Author_DEFAULT *User
@@ -759,7 +754,7 @@ func (p *Video) GetTitle() (v string) {
 	}
 	return *p.Title
 }
-func (p *Video) SetId(val *Int64) {
+func (p *Video) SetId(val Int64) {
 	p.Id = val
 }
 func (p *Video) SetAuthor(val *User) {
@@ -795,10 +790,6 @@ var fieldIDToName_Video = map[int16]string{
 	8: "title",
 }
 
-func (p *Video) IsSetId() bool {
-	return p.Id != nil
-}
-
 func (p *Video) IsSetAuthor() bool {
 	return p.Author != nil
 }
@@ -827,6 +818,7 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
+	var issetId bool = false
 	var issetPlayUrl bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
@@ -848,6 +840,7 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -938,6 +931,11 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
+	if !issetId {
+		fieldId = 1
+		goto RequiredFieldNotSetError
+	}
+
 	if !issetPlayUrl {
 		fieldId = 3
 		goto RequiredFieldNotSetError
@@ -964,7 +962,7 @@ func (p *Video) ReadField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.Id = &v
+		p.Id = v
 	}
 	return nil
 }
@@ -1089,16 +1087,14 @@ WriteStructEndError:
 }
 
 func (p *Video) writeField1(oprot thrift.TProtocol) (err error) {
-	if p.IsSetId() {
-		if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.Id); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.Id); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
@@ -1278,14 +1274,9 @@ func (p *Video) DeepEqual(ano *Video) bool {
 	return true
 }
 
-func (p *Video) Field1DeepEqual(src *Int64) bool {
+func (p *Video) Field1DeepEqual(src Int64) bool {
 
-	if p.Id == src {
-		return true
-	} else if p.Id == nil || src == nil {
-		return false
-	}
-	if *p.Id != *src {
+	if p.Id != src {
 		return false
 	}
 	return true

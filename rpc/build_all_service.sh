@@ -6,8 +6,8 @@
 SERVICE_DIR=$(pwd)/service
 
 # Remove the output directory
-echo "Removing previous output directory..."
-rm -rf output
+# echo "Removing previous output directory..."
+# rm -rf output
 
 # Create the output directory and binaries directory
 echo "Creating output directory..."
@@ -19,6 +19,14 @@ cd $SERVICE_DIR || exit
 
 # Loop through all directories in the service directory
 for d in */ ; do
+  if [ ! -z "$1" ]; then
+    if [ $d != "$1"/ ]; then
+      continue
+    fi
+  fi
+  rm -rf $(pwd)/output/bootstrap-"$(basename "$d")".sh
+  rm -rf $(pwd)/output/bin/"$(basename "$d")"
+
   echo "Building $d..."
   # Navigate into the current directory
   cd "$SERVICE_DIR/$d"

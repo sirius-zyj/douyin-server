@@ -33,4 +33,6 @@ func Init() {
 	}
 	db.AutoMigrate(&Dvideo{})
 	db.AutoMigrate(&Duser{})
+	db.AutoMigrate(&Dfavorite{})
+	db.AutoMigrate(&Dcomments{})
 }

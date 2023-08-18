@@ -1,9 +1,10 @@
 package test
 
 import (
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFavorite(t *testing.T) {
@@ -16,6 +17,7 @@ func TestFavorite(t *testing.T) {
 	videoId := firstVideo.Value("id").Number().Raw()
 
 	userId, token := getTestUserToken(testUserA, e)
+	// _, token := getTestUserToken(testUserA, e)
 
 	favoriteResp := e.POST("/douyin/favorite/action/").
 		WithQuery("token", token).WithQuery("video_id", videoId).WithQuery("action_type", 1).

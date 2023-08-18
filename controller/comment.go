@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"douyin-server/dao"
+	"log"
 	"net/http"
 	"strconv"
-	"strings"
-	"time"
+
+	"douyin-server/rpc/client"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,40 +23,54 @@ type CommentActionResponse struct {
 // CommentAction 发表或者删除评论
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
-	index := strings.Index(token, "*")
-	useid := token[index+1:]
-	user_id, _ := strconv.ParseInt(useid, 10, 64)
-	actionType := c.Query("action_type")
-	if actionType == "1" {
-		var comment dao.Dcomments
-		comment.Comment_text = c.Query("comment_text")
-		comment.User_id = user_id
-		comment.Video_id, _ = strconv.ParseInt(c.Query("video_id"), 10, 64)
-		comment.Create_time = time.Now()
-	}
+	videoId, _ := strconv.ParseInt(c.Query("video_id"), 10, 64)
+	actionType, _ := strconv.ParseInt(c.Query("action_type"), 10, 64)
+	commentText := c.Query("comment_text")
+	commentId, _ := strconv.ParseInt(c.Query("comment_id"), 10, 64)
 
-	if user, exist := usersLoginInfo[token]; exist {
-		if actionType == "1" {
-			text := c.Query("comment_text")
-			c.JSON(http.StatusOK, CommentActionResponse{Response: Response{StatusCode: 0},
+	if respClient, err := client.CommentAction(token, videoId, int32(actionType), &commentText, commentId); err == nil {
+		log.Println("CommentAction:  ", *respClient)
+		if respClient.Comment != nil {
+			c.JSON(http.StatusOK, CommentActionResponse{
+				Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 				Comment: Comment{
-					Id:         1,
-					User:       user,
-					Content:    text,
-					CreateDate: "05-01",
-				}})
-			return
+					Id:         respClient.Comment.Id,
+					User:       User{Id: respClient.Comment.User.Id, Name: respClient.Comment.User.Name},
+					Content:    respClient.Comment.Content,
+					CreateDate: respClient.Comment.CreateDate,
+				},
+			})
+		} else {
+			c.JSON(http.StatusOK, CommentActionResponse{
+				Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			})
 		}
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
 	} else {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+		c.JSON(http.StatusExpectationFailed, CommentActionResponse{})
 	}
 }
 
 // CommentList 查看评论列表
 func CommentList(c *gin.Context) {
-	c.JSON(http.StatusOK, CommentListResponse{
-		Response:    Response{StatusCode: 0},
-		CommentList: DemoComments,
-	})
+	videoid := c.Query("video_id")
+	videoId, _ := strconv.ParseInt(videoid, 10, 64)
+
+	if respClient, err := client.CommentList("", videoId); err == nil {
+		log.Println("CommentList:  ", *respClient)
+		var CommentResq []Comment
+		for _, tmp := range respClient.CommentList {
+			CommentResq = append(CommentResq, Comment{
+				Id:         tmp.Id,
+				User:       User{Id: tmp.User.Id, Name: tmp.User.Name},
+				Content:    tmp.Content,
+				CreateDate: tmp.CreateDate,
+			})
+		}
+		c.JSON(http.StatusOK, CommentListResponse{
+			Response:    Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			CommentList: CommentResq,
+		})
+	} else {
+		c.JSON(http.StatusExpectationFailed, CommentListResponse{})
+	}
 }

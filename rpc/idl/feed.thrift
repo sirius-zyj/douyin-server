@@ -1,3 +1,5 @@
+include "user.thrift"
+
 namespace go feed
 
 typedef i64 int64
@@ -16,28 +18,14 @@ struct douyin_feed_response {
 }
 
 struct Video {
-  1: optional int64 id; // 视频唯一标识
-  2: optional User author; // 视频作者信息
+  1: required int64 id; // 视频唯一标识
+  2: optional user.User author; // 视频作者信息
   3: required string play_url; // 视频播放地址
   4: optional string cover_url; // 视频封面地址
   5: optional int64 favorite_count; // 视频的点赞总数
   6: optional int64 comment_count; // 视频的评论总数
   7: optional bool is_favorite; // true-已点赞，false-未点赞
   8: optional string title; // 视频标题
-}
-
-struct User {
-  1: required int64 id; // 用户id
-  2: required string name; // 用户名称
-  3: optional int64 follow_count; // 关注总数
-  4: optional int64 follower_count; // 粉丝总数
-  5: required bool is_follow; // true-已关注，false-未关注
-  6: optional string avatar; //用户头像
-  7: optional string background_image; //用户个人页顶部大图
-  8: optional string signature; //个人简介
-  9: optional int64 total_favorited; //获赞数量
-  10: optional int64 work_count; //作品数量
-  11: optional int64 favorite_count; //点赞数量
 }
 
 service FeedService {

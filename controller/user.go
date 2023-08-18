@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"douyin-server/dao"
+	"douyin-server/rpc/client"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +23,6 @@ var usersLoginInfo = map[string]User{
 	},
 }
 
-
 type UserLoginResponse struct {
 	Response
 	UserId int64  `json:"user_id,omitempty"`
@@ -40,100 +39,53 @@ func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	token := username + password
-
-	//验证用户名是否已存在
-	if _, err := dao.GetUsersByUserName(username); err == nil {
-		//该用户名已存在
+	if respClient, err := client.Register(username, password); err == nil {
+		log.Println(*respClient)
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist1111"},
+			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			UserId:   respClient.UserId,
+			Token:    respClient.Token,
 		})
-  }else {
-    //成功注册
-    newUser := dao.Duser{
-			Name: username,
-      Password: password,
-		}
-    ID := dao.CreateUser(newUser)
-    log.Println("开始注册3")
-    if ID == -1 {
-      log.Println("注册失败")
-      c.JSON(http.StatusOK, UserLoginResponse{
-		  	Response: Response{StatusCode: 1, StatusMsg: "User register failed1"},
-		  })
-      return 
-    }
-    newUser.Id = ID
-    log.Println(err)
-    token = token + "*" + strconv.FormatInt(ID , 10)
-    c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   newUser.Id,
-			Token:    token,
-		})
+	} else {
+		c.JSON(http.StatusExpectationFailed, UserLoginResponse{})
 	}
+
 }
 
 // 用户登录
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
-	token := username + password
-  log.Println(token)
-  if user , err := dao.GetUsersByUserName(username); err == nil {
-    //找到了用户信息
-    if(token == (user.Name + user.Password)) {
-      c.JSON(http.StatusOK, UserLoginResponse{
-  			Response: Response{StatusCode: 0},
-  			UserId:   user.Id,
-  			Token:    token,
-		  })
-    }else{
-      c.JSON(http.StatusOK, UserLoginResponse{
-  			Response: Response{StatusCode: 1 , StatusMsg: "Password error"},
-		  })
-    }
-  }else{
-    c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+
+	if respClient, err := client.Login(username, password); err == nil {
+		log.Println(*respClient)
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			UserId:   respClient.UserId,
+			Token:    respClient.Token,
 		})
+	} else {
+		c.JSON(http.StatusExpectationFailed, UserLoginResponse{})
 	}
 }
 
-//用户信息
+// 用户信息
 func UserInfo(c *gin.Context) {
-	// token := c.Query("token")
-  Id := c.Query("user_id")
-  id , _ := strconv.ParseInt(Id , 10 , 64)
-	if user , err := dao.GetUserById(id); err == nil {
-    //找到了用户信息
-    var resq User
-    resq.Id = user.Id
-    resq.Name = user.Name
-    resq.FollowCount = user.FollowCount
-    resq.FollowerCount = user.FollowerCount
-    c.JSON(http.StatusOK, UserResponse{
-      Response: Response{StatusCode: 0},
-      User: resq,
-    })
-  }else{
-    c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	Id := c.Query("user_id")
+	id, _ := strconv.ParseInt(Id, 10, 64)
+
+	if respClient, err := client.UserInfo(id); err == nil {
+		log.Println(*respClient)
+		var resq User
+		resq.Id = respClient.Id
+		resq.Name = respClient.Name
+		resq.FollowCount = *respClient.FollowCount
+		resq.FollowerCount = *respClient.FollowerCount
+		c.JSON(http.StatusOK, UserResponse{
+			Response: Response{StatusCode: 0},
+			User:     resq,
 		})
-  }
+	} else {
+		c.JSON(http.StatusExpectationFailed, UserLoginResponse{})
+	}
 }
-
-// func UserInfo(c *gin.Context) {
-// 	token := c.Query("token")
-
-// 	if user, exist := usersLoginInfo[token]; exist {
-// 		c.JSON(http.StatusOK, UserResponse{
-// 			Response: Response{StatusCode: 0},
-// 			User:     user,
-// 		})
-// 	} else {
-// 		c.JSON(http.StatusOK, UserResponse{
-// 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-// 		})
-// 	}
-// }

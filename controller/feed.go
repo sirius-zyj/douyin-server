@@ -44,7 +44,6 @@ func Feed(c *gin.Context) {
 // 获取查询到的视频切片
 func GetVideo(userId int64, lastTime time.Time) []Video {
 	resp, err := client.GetVideoByTime(lastTime)
-	// resp, err := dao.GetVideoByTime(lastTime)
 	var ans VideoSlice
 	if err != nil {
 		return ans
@@ -56,7 +55,3 @@ func GetVideo(userId int64, lastTime time.Time) []Video {
 	}
 	return ans
 }
-
-// func (vs *VideoSlice) Append(video Video) {
-// 	*vs = append(*vs, video)
-// }

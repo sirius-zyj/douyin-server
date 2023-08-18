@@ -51,5 +51,12 @@ type MessagePushEvent struct {
 type VideoSlice []Video
 
 func (vs *VideoSlice) Append(video Video) {
-    *vs = append(*vs, video)
+	*vs = append(*vs, video)
+}
+
+func StatusMsg(str *string) string {
+	if str != nil {
+		return *str
+	}
+	return ""
 }

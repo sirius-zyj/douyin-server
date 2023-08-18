@@ -14,7 +14,7 @@ import (
 var feedClient feedservice.Client
 
 func initFeedClient() {
-	c, err := feedservice.NewClient("feed", client.WithHostPorts("0.0.0.0:8888"))
+	c, err := feedservice.NewClient("feed", client.WithHostPorts("0.0.0.0:8880"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,6 +59,7 @@ func GetVideoByTime(time time.Time) (resp []dao.Dvideo, err error) {
 
 	for _, v := range respClient.VideoList {
 		resp = append(resp, dao.Dvideo{
+			Id:       v.Id,
 			Play_url: v.PlayUrl,
 		})
 	}

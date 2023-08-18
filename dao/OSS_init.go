@@ -9,13 +9,14 @@ import (
 )
 
 const (
-	OSSAK          = "LTAI5tPgCbMia8qwAy2xesdP"
-	OSSSK          = "5F3lX57hEguOpYXtM2C9fEGuyUQ4VP"
-	OSSEndPoint    = "oss-cn-beijing.aliyuncs.com"
-	OSSVideoBucket = "bytecampvideo"
-	OSSImageBucket = "bytecampimage"
+	// OSSAK = "LTAI5tKty7PbiUxqY6RMbugh"
+	// OSSSK = "0FYePpFBCYasm0EN14bzJADJaxU9EY"
+	OSSAK          = "LTAI5t5uqtTbKX5dUkmZJzfH"
+	OSSSK          = "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
+	OSSEndPoint    = "oss-cn-hangzhou.aliyuncs.com"
+	OSSVideoBucket = "douyin-server-hust"
+	OSSImageBucket = "douyin-server-hust-image"
 )
-
 
 var (
 	VideoBucket           *oss.Bucket
@@ -24,8 +25,8 @@ var (
 	ImageBucketLinkPrefix string
 )
 
-func oss_init() {
-  ossClient, err := oss.New(OSSEndPoint, OSSAK, OSSSK)
+func Oss_init() {
+	ossClient, err := oss.New(OSSEndPoint, OSSAK, OSSSK)
 	if err != nil {
 		log.Fatalf("OSS Init Failed")
 		panic(err)

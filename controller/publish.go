@@ -1,13 +1,13 @@
 package controller
 
 import (
-	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"path/filepath"
 	"strconv"
 
 	"douyin-server/dao"
+	"douyin-server/rpc/client"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,80 +19,46 @@ type VideoListResponse struct {
 
 // Publish 视频投稿
 func Publish(c *gin.Context) {
-	token := c.PostForm("token")
+	token, video_title := c.PostForm("token"), c.Query("title")
 
-	if _, exist := usersLoginInfo[token]; !exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-		return
+	file, _ := c.FormFile("data")
+	// 打开上传的文件
+	src, _ := file.Open()
+	defer src.Close()
+	// 读取文件内容
+	video_Data, _ := ioutil.ReadAll(src)
+
+	if respClient, err := client.Publish(token, video_Data, video_title); err == nil {
+		c.JSON(http.StatusOK, Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)})
+	} else {
+		c.JSON(http.StatusExpectationFailed, Response{})
 	}
-
-	data, err := c.FormFile("data")
-	if err != nil {
-		c.JSON(http.StatusOK, Response{
-			StatusCode: 1,
-			StatusMsg:  err.Error(),
-		})
-		return
-	}
-
-	filename := filepath.Base(data.Filename)
-	user := usersLoginInfo[token]
-	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-	saveFile := filepath.Join("./public/", finalName)
-	//文件存储到的位置
-	if err := c.SaveUploadedFile(data, saveFile); err != nil {
-		c.JSON(http.StatusOK, Response{
-			StatusCode: 1,
-			StatusMsg:  err.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, Response{
-		StatusCode: 0,
-		StatusMsg:  finalName + " uploaded successfully",
-	})
 }
 
 // 根据用户ID查找该用户作品列表
 func PublishList(c *gin.Context) {
 	user_ID, _ := c.GetQuery("user_id")
 	userID, _ := strconv.ParseInt(user_ID, 10, 64)
-	log.Printf("获取到的目标用户id %v", userID)
+	token := c.PostForm("token")
 
-	//获取目标用户的所有作品将其传递给APP
-	if _, err := dao.GetVideoByUserId(userID); err != nil {
+	if respClient, err := client.PublishList(userID, token); err == nil {
+		log.Println("PublishList: ", *respClient)
+		var videoList VideoSlice
+		for _, video := range respClient.VideoList {
+			V := dao.Dvideo{
+				Id:        video.Id,
+				Play_url:  video.PlayUrl,
+				Cover_url: *video.CoverUrl,
+				Title:     *video.Title,
+			}
+			videoList.Append(Video{V, 0, 0, false})
+		}
 		c.JSON(http.StatusOK, VideoListResponse{
-			Response: Response{
-				StatusCode: 1,
-				StatusMsg:  "查询出错",
-			},
+			Response:  Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			VideoList: videoList,
 		})
 	} else {
-
-		//获取目标用户的所有作品将其传递给APP
-		if videoList, err := dao.GetVideoByUserId(userID); err != nil {
-			c.JSON(http.StatusOK, VideoListResponse{
-				Response: Response{
-					StatusCode: 1,
-					StatusMsg:  "查询出错",
-				},
-			})
-		} else {
-			var videolist VideoSlice
-			for _, tmp := range videoList {
-				var V Video
-				V.Dvideo = tmp
-				V.CommentCount = 10
-				V.FavoriteCount = 20
-				videolist.Append(V)
-			}
-			c.JSON(http.StatusOK, VideoListResponse{
-				Response: Response{
-					StatusCode: 0,
-				},
-				VideoList: videolist,
-			})
-		}
+		c.JSON(http.StatusExpectationFailed, VideoListResponse{})
 	}
+
 }
