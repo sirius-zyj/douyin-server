@@ -27,6 +27,11 @@ struct douyin_user_login_response {
   4: required string token; // 用户鉴权token
 }
 
+struct douyin_user_info_request {
+  1: required int64 user_id; // 用户id
+  2: optional string token; // 用户鉴权token
+}
+
 struct User {
   1: required int64 id; // 用户id
   2: required string name; // 用户名称
@@ -44,5 +49,5 @@ struct User {
 service UserService {
     douyin_user_register_response Register(1: douyin_user_register_request req);
     douyin_user_login_response Login(1: douyin_user_login_request req);
-    User UserInfo(1: int64 user_id);
+    User UserInfo(1: douyin_user_info_request req);
 }

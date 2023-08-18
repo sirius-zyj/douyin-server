@@ -19,17 +19,18 @@ struct douyin_feed_response {
 
 struct Video {
   1: required int64 id; // 视频唯一标识
-  2: optional user.User author; // 视频作者信息
+  2: required int64 author_id; // 视频作者信息
   3: required string play_url; // 视频播放地址
-  4: optional string cover_url; // 视频封面地址
-  5: optional int64 favorite_count; // 视频的点赞总数
-  6: optional int64 comment_count; // 视频的评论总数
-  7: optional bool is_favorite; // true-已点赞，false-未点赞
-  8: optional string title; // 视频标题
+  4: required string cover_url; // 视频封面地址
+  5: required int64 upload_time; // 视频上传时间，精确到秒
+  6: required int64 favorite_count; // 视频的点赞总数
+  7: required int64 comment_count; // 视频的评论总数
+  8: required bool is_favorite; // true-已点赞，false-未点赞
+  9: required string title; // 视频标题
 }
 
 service FeedService {
-    douyin_feed_response GetVideo(1: douyin_feed_request req);
+  douyin_feed_response Feed(1: douyin_feed_request req);
 }
 
 

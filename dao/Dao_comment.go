@@ -18,8 +18,8 @@ func InsertComment(comment Dcomments) error {
 	return nil
 }
 
-func EraseComment(id int64) error {
-	err := db.Model(&Dcomments{}).Where("user_id = ?", id).Delete(&Dcomments{}).Error
+func EraseComment(user_id, video_id int64) error {
+	err := db.Model(&Dcomments{}).Where("user_id = ? AND video_id = ?", user_id, video_id).Delete(&Dcomments{}).Error
 	if err != nil {
 		log.Println("评论删除失败")
 		return err

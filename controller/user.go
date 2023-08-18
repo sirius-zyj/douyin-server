@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -15,7 +14,7 @@ import (
 // test data: username=zhanglei, password=douyin
 var usersLoginInfo = map[string]User{
 	"zhangleidouyin": {
-		Id:            1,
+		ID:            1,
 		Name:          "zhanglei",
 		FollowCount:   10,
 		FollowerCount: 5,
@@ -40,7 +39,6 @@ func Register(c *gin.Context) {
 	password := c.Query("password")
 
 	if respClient, err := client.Register(username, password); err == nil {
-		log.Println(*respClient)
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 			UserId:   respClient.UserId,
@@ -58,7 +56,6 @@ func Login(c *gin.Context) {
 	password := c.Query("password")
 
 	if respClient, err := client.Login(username, password); err == nil {
-		log.Println(*respClient)
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 			UserId:   respClient.UserId,
@@ -75,15 +72,9 @@ func UserInfo(c *gin.Context) {
 	id, _ := strconv.ParseInt(Id, 10, 64)
 
 	if respClient, err := client.UserInfo(id); err == nil {
-		log.Println(*respClient)
-		var resq User
-		resq.Id = respClient.Id
-		resq.Name = respClient.Name
-		resq.FollowCount = *respClient.FollowCount
-		resq.FollowerCount = *respClient.FollowerCount
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
-			User:     resq,
+			User:     *RPCUser2ControlUser(respClient),
 		})
 	} else {
 		c.JSON(http.StatusExpectationFailed, UserLoginResponse{})

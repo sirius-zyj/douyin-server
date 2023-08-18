@@ -4,30 +4,36 @@ import (
 	"context"
 	"douyin-server/dao"
 	feed "douyin-server/rpc/kitex_gen/feed"
-	"log"
 	"time"
 )
 
 // FeedServiceImpl implements the last service interface defined in the IDL.
 type FeedServiceImpl struct{}
 
-// GetVideo implements the FeedServiceImpl interface.
-func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
+// Feed implements the FeedServiceImpl interface.
+func (s *FeedServiceImpl) Feed(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
 	resp = new(feed.DouyinFeedResponse) // 分配内存
-	if req.LatestTime != nil {
-		respVideo, err := dao.GetVideoByTime(time.Unix(*req.LatestTime, 0))
-		if err != nil {
-			resp.StatusCode = 404
-			return resp, err
-		}
+	if respVideo, err := dao.GetVideoByTime(time.Unix(*req.LatestTime, 0)); err != nil {
+		resp.StatusCode = 404
+		resp.StatusMsg = new(string)
+		*resp.StatusMsg = err.Error()
+		return resp, err
+	} else {
 		resp.StatusCode = 0
-		log.Printf("respVideo is %v\n", respVideo)
 		for _, v := range respVideo {
 			resp.VideoList = append(resp.VideoList, &feed.Video{
-				Id:      v.Id,
-				PlayUrl: v.Play_url,
+				Id:            v.Id,
+				AuthorId:      v.Author_id,
+				PlayUrl:       v.Play_url,
+				CoverUrl:      v.Cover_url,
+				UploadTime:    v.Upload_time.Unix(),
+				FavoriteCount: v.Favorite_count,
+				CommentCount:  v.Comment_count,
+				Title:         v.Title,
+				//TODO is Favorite
 			})
 		}
 	}
+
 	return resp, nil
 }

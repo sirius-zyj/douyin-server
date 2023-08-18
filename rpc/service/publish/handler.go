@@ -14,18 +14,21 @@ import (
 // PublishServiceImpl implements the last service interface defined in the IDL.
 type PublishServiceImpl struct{}
 
+func setPublishActionResp(resp *publish.DouyinPublishActionResponse, statusCode int32, statusMsg string) {
+	resp.StatusCode = statusCode
+	resp.StatusMsg = new(string)
+	*resp.StatusMsg = statusMsg
+}
+
 // Publish implements the PublishServiceImpl interface.
 func (s *PublishServiceImpl) Publish(ctx context.Context, req *publish.DouyinPublishActionRequest) (resp *publish.DouyinPublishActionResponse, err error) {
 	resp = new(publish.DouyinPublishActionResponse)
 
-	video_Data := []byte(req.Data)
 	token, video_title := req.Token, req.Title
-	playUrl, coverUrl, err := dao.UploadVideo(&video_Data)
+	playUrl, coverUrl, err := dao.UploadVideo(&req.Data)
 	if err != nil {
 		log.Println("上传视频失败")
-		resp.StatusCode = 404
-		resp.StatusMsg = new(string)
-		*resp.StatusMsg = "视频上传失败"
+		setPublishActionResp(resp, 404, "上传视频失败")
 		return
 	}
 	//------创建视频--------
@@ -40,16 +43,18 @@ func (s *PublishServiceImpl) Publish(ctx context.Context, req *publish.DouyinPub
 	}
 	if Insert_error := dao.InsertVideo(video); Insert_error != nil {
 		log.Println("Insert_error: ", Insert_error)
-		resp.StatusCode = 404
-		resp.StatusMsg = new(string)
-		*resp.StatusMsg = err.Error()
+		setPublishActionResp(resp, 404, Insert_error.Error())
 		return
 	}
 	//---------------------------
-	resp.StatusCode = 0
-	resp.StatusMsg = new(string)
-	*resp.StatusMsg = " uploaded successfully"
+	setPublishActionResp(resp, 0, "上传成功")
 	return
+}
+
+func setPublishListResp(resp *publish.DouyinPublishListResponse, statusCode int32, statusMsg string) {
+	resp.StatusCode = statusCode
+	resp.StatusMsg = new(string)
+	*resp.StatusMsg = statusMsg
 }
 
 // PublishList implements the PublishServiceImpl interface.
@@ -59,20 +64,16 @@ func (s *PublishServiceImpl) PublishList(ctx context.Context, req *publish.Douyi
 	userID := req.UserId
 	//获取目标用户的所有作品将其传递给APP
 	if videoList, err := dao.GetVideoByUserId(userID); err != nil {
-		resp.StatusCode = 404
-		resp.StatusMsg = new(string)
-		*resp.StatusMsg = err.Error()
+		setPublishListResp(resp, 404, err.Error())
 		return resp, err
 	} else {
-		resp.StatusCode = 0
-		resp.StatusMsg = new(string)
-		*resp.StatusMsg = "success"
+		setPublishListResp(resp, 0, "success")
 		for _, tmp := range videoList {
 			resp.VideoList = append(resp.VideoList, &feed.Video{
 				Id:       tmp.Id,
 				PlayUrl:  tmp.Play_url,
-				CoverUrl: &tmp.Cover_url,
-				Title:    &tmp.Title,
+				CoverUrl: tmp.Cover_url,
+				Title:    tmp.Title,
 			})
 		}
 	}

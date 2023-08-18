@@ -68,13 +68,16 @@ CREATE TABLE `messages`  (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) NULL DEFAULT NULL,
-  `updated_at` datetime(3) NULL DEFAULT NULL,
-  `deleted_at` datetime(3) NULL DEFAULT NULL,
   `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `password` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `following_count` int(20) NULL DEFAULT NULL,
+  `follow_count` int(20) NULL DEFAULT NULL,
   `follower_count` int(20) NULL DEFAULT NULL,
+  `favorite_count` int(20) NULL DEFAULT NULL,
+  `avatar` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  'background_image'longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  'background_image' longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  'work_count' int(20) NULL DEFAULT NULL,
+  'total_favorited' int(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 

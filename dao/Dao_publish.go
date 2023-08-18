@@ -12,7 +12,6 @@ import (
 )
 
 func UploadVideo(video *[]byte) (playUrl, coverUrl string, err error) {
-	log.Println("byte size: ", len(*video))
 	videoName := uuid.NewV4().String() + ".mp4"
 	imageName := uuid.NewV4().String() + ".jpeg"
 
@@ -27,7 +26,7 @@ func UploadVideo(video *[]byte) (playUrl, coverUrl string, err error) {
 		return "", "", err
 	}
 	//delete local video
-	os.RemoveAll(videoName)
+	// os.Remove(videoName)
 
 	err = VideoBucket.PutObject(videoName, bytes.NewReader(*video))
 	if err != nil {

@@ -18,40 +18,33 @@ type FeedResponse struct {
 
 // 获取视频
 func Feed(c *gin.Context) {
+	var latestTime time.Time
 	startTime := c.Query("latest_time")
-	log.Printf("请求的时间" + startTime)
-
-	var lastTime time.Time
-	if startTime != "" {
+	if startTime != "0" && startTime != "" {
 		s, _ := strconv.ParseInt(startTime, 10, 64)
-		lastTime = time.Unix(s, 0)
+		latestTime = time.Unix(s, 0)
 	} else {
-		lastTime = time.Now()
+		latestTime = time.Now()
 	}
-	log.Printf("请求的时间戳 %v", lastTime)
+	token := c.PostForm("token")
 
-	userId, _ := strconv.ParseInt(c.Query("userId"), 10, 64)
-	VideoQueue := GetVideo(userId, lastTime)
-	log.Printf("获取到视频 %v", VideoQueue)
-	// VideoQueue := DemoVideos
-	c.JSON(http.StatusOK, FeedResponse{
-		Response:  Response{StatusCode: 0},
-		VideoList: VideoQueue,
-		NextTime:  time.Now().Unix(),
-	})
-}
-
-// 获取查询到的视频切片
-func GetVideo(userId int64, lastTime time.Time) []Video {
-	resp, err := client.GetVideoByTime(lastTime)
-	var ans VideoSlice
-	if err != nil {
-		return ans
+	if respClient, err := client.Feed(latestTime, token); err == nil {
+		var videoList []Video
+		for _, tmp := range respClient.VideoList {
+			if video, err := RPCVideo2ControllerVideo(tmp); err == nil {
+				videoList = append(videoList, *video)
+			} else {
+				c.JSON(http.StatusExpectationFailed, FeedResponse{})
+				return
+			}
+		}
+		log.Println(videoList)
+		c.JSON(http.StatusOK, FeedResponse{
+			Response:  Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			VideoList: videoList,
+			NextTime:  time.Now().Unix(),
+		})
+	} else {
+		c.JSON(http.StatusExpectationFailed, FeedResponse{})
 	}
-	for _, temp := range resp {
-		var video Video
-		video.Dvideo = temp
-		ans.Append(video)
-	}
-	return ans
 }

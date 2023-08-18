@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"douyin-server/dao"
 	"douyin-server/rpc/client"
 
 	"github.com/gin-gonic/gin"
@@ -42,22 +41,25 @@ func FavoriteList(c *gin.Context) {
 
 	if respClient, err := client.FavoriteList(userID); err == nil {
 		log.Println(*respClient.StatusMsg)
-		var videolist VideoSlice
+		var videoList []Video
 		for _, tmp := range respClient.VideoList {
-			var v Video
-			v.Dvideo = dao.Dvideo{
-				Id:       tmp.Id,
-				Play_url: tmp.PlayUrl,
-			}
 			//------还有获取点赞数，获取评论数
-			videolist.Append(v)
+			videoList = append(videoList, Video{
+				ID:            tmp.Id,
+				PlayURL:       tmp.PlayUrl,
+				CoverURL:      tmp.CoverUrl,
+				FavoriteCount: tmp.FavoriteCount,
+				CommentCount:  tmp.CommentCount,
+				Title:         tmp.Title,
+				// TODO is Favorite and Author
+			})
 		}
 		c.JSON(http.StatusOK, VideoListResponse{
 			Response: Response{
 				StatusCode: respClient.StatusCode,
 				StatusMsg:  StatusMsg(respClient.StatusMsg),
 			},
-			VideoList: videolist,
+			VideoList: videoList,
 		})
 
 	} else {

@@ -675,14 +675,15 @@ func (p *DouyinFeedResponse) Field4DeepEqual(src *Int64) bool {
 }
 
 type Video struct {
-	Id            Int64   `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
-	Author        *User   `thrift:"author,2,optional" frugal:"2,optional,User" json:"author,omitempty"`
-	PlayUrl       string  `thrift:"play_url,3,required" frugal:"3,required,string" json:"play_url"`
-	CoverUrl      *string `thrift:"cover_url,4,optional" frugal:"4,optional,string" json:"cover_url,omitempty"`
-	FavoriteCount *Int64  `thrift:"favorite_count,5,optional" frugal:"5,optional,i64" json:"favorite_count,omitempty"`
-	CommentCount  *Int64  `thrift:"comment_count,6,optional" frugal:"6,optional,i64" json:"comment_count,omitempty"`
-	IsFavorite    *bool   `thrift:"is_favorite,7,optional" frugal:"7,optional,bool" json:"is_favorite,omitempty"`
-	Title         *string `thrift:"title,8,optional" frugal:"8,optional,string" json:"title,omitempty"`
+	Id            Int64  `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
+	AuthorId      Int64  `thrift:"author_id,2,required" frugal:"2,required,i64" json:"author_id"`
+	PlayUrl       string `thrift:"play_url,3,required" frugal:"3,required,string" json:"play_url"`
+	CoverUrl      string `thrift:"cover_url,4,required" frugal:"4,required,string" json:"cover_url"`
+	UploadTime    Int64  `thrift:"upload_time,5,required" frugal:"5,required,i64" json:"upload_time"`
+	FavoriteCount Int64  `thrift:"favorite_count,6,required" frugal:"6,required,i64" json:"favorite_count"`
+	CommentCount  Int64  `thrift:"comment_count,7,required" frugal:"7,required,i64" json:"comment_count"`
+	IsFavorite    bool   `thrift:"is_favorite,8,required" frugal:"8,required,bool" json:"is_favorite"`
+	Title         string `thrift:"title,9,required" frugal:"9,required,string" json:"title"`
 }
 
 func NewVideo() *Video {
@@ -697,121 +698,75 @@ func (p *Video) GetId() (v Int64) {
 	return p.Id
 }
 
-var Video_Author_DEFAULT *User
-
-func (p *Video) GetAuthor() (v *User) {
-	if !p.IsSetAuthor() {
-		return Video_Author_DEFAULT
-	}
-	return p.Author
+func (p *Video) GetAuthorId() (v Int64) {
+	return p.AuthorId
 }
 
 func (p *Video) GetPlayUrl() (v string) {
 	return p.PlayUrl
 }
 
-var Video_CoverUrl_DEFAULT string
-
 func (p *Video) GetCoverUrl() (v string) {
-	if !p.IsSetCoverUrl() {
-		return Video_CoverUrl_DEFAULT
-	}
-	return *p.CoverUrl
+	return p.CoverUrl
 }
 
-var Video_FavoriteCount_DEFAULT Int64
+func (p *Video) GetUploadTime() (v Int64) {
+	return p.UploadTime
+}
 
 func (p *Video) GetFavoriteCount() (v Int64) {
-	if !p.IsSetFavoriteCount() {
-		return Video_FavoriteCount_DEFAULT
-	}
-	return *p.FavoriteCount
+	return p.FavoriteCount
 }
-
-var Video_CommentCount_DEFAULT Int64
 
 func (p *Video) GetCommentCount() (v Int64) {
-	if !p.IsSetCommentCount() {
-		return Video_CommentCount_DEFAULT
-	}
-	return *p.CommentCount
+	return p.CommentCount
 }
-
-var Video_IsFavorite_DEFAULT bool
 
 func (p *Video) GetIsFavorite() (v bool) {
-	if !p.IsSetIsFavorite() {
-		return Video_IsFavorite_DEFAULT
-	}
-	return *p.IsFavorite
+	return p.IsFavorite
 }
 
-var Video_Title_DEFAULT string
-
 func (p *Video) GetTitle() (v string) {
-	if !p.IsSetTitle() {
-		return Video_Title_DEFAULT
-	}
-	return *p.Title
+	return p.Title
 }
 func (p *Video) SetId(val Int64) {
 	p.Id = val
 }
-func (p *Video) SetAuthor(val *User) {
-	p.Author = val
+func (p *Video) SetAuthorId(val Int64) {
+	p.AuthorId = val
 }
 func (p *Video) SetPlayUrl(val string) {
 	p.PlayUrl = val
 }
-func (p *Video) SetCoverUrl(val *string) {
+func (p *Video) SetCoverUrl(val string) {
 	p.CoverUrl = val
 }
-func (p *Video) SetFavoriteCount(val *Int64) {
+func (p *Video) SetUploadTime(val Int64) {
+	p.UploadTime = val
+}
+func (p *Video) SetFavoriteCount(val Int64) {
 	p.FavoriteCount = val
 }
-func (p *Video) SetCommentCount(val *Int64) {
+func (p *Video) SetCommentCount(val Int64) {
 	p.CommentCount = val
 }
-func (p *Video) SetIsFavorite(val *bool) {
+func (p *Video) SetIsFavorite(val bool) {
 	p.IsFavorite = val
 }
-func (p *Video) SetTitle(val *string) {
+func (p *Video) SetTitle(val string) {
 	p.Title = val
 }
 
 var fieldIDToName_Video = map[int16]string{
 	1: "id",
-	2: "author",
+	2: "author_id",
 	3: "play_url",
 	4: "cover_url",
-	5: "favorite_count",
-	6: "comment_count",
-	7: "is_favorite",
-	8: "title",
-}
-
-func (p *Video) IsSetAuthor() bool {
-	return p.Author != nil
-}
-
-func (p *Video) IsSetCoverUrl() bool {
-	return p.CoverUrl != nil
-}
-
-func (p *Video) IsSetFavoriteCount() bool {
-	return p.FavoriteCount != nil
-}
-
-func (p *Video) IsSetCommentCount() bool {
-	return p.CommentCount != nil
-}
-
-func (p *Video) IsSetIsFavorite() bool {
-	return p.IsFavorite != nil
-}
-
-func (p *Video) IsSetTitle() bool {
-	return p.Title != nil
+	5: "upload_time",
+	6: "favorite_count",
+	7: "comment_count",
+	8: "is_favorite",
+	9: "title",
 }
 
 func (p *Video) Read(iprot thrift.TProtocol) (err error) {
@@ -819,7 +774,14 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetId bool = false
+	var issetAuthorId bool = false
 	var issetPlayUrl bool = false
+	var issetCoverUrl bool = false
+	var issetUploadTime bool = false
+	var issetFavoriteCount bool = false
+	var issetCommentCount bool = false
+	var issetIsFavorite bool = false
+	var issetTitle bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -847,10 +809,11 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRUCT {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetAuthorId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -872,6 +835,7 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCoverUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -882,6 +846,7 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetUploadTime = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -892,26 +857,40 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetFavoriteCount = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
 				}
 			}
 		case 7:
-			if fieldTypeId == thrift.BOOL {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField7(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetCommentCount = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
 				}
 			}
 		case 8:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.BOOL {
 				if err = p.ReadField8(iprot); err != nil {
 					goto ReadFieldError
 				}
+				issetIsFavorite = true
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 9:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField9(iprot); err != nil {
+					goto ReadFieldError
+				}
+				issetTitle = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -936,8 +915,43 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
+	if !issetAuthorId {
+		fieldId = 2
+		goto RequiredFieldNotSetError
+	}
+
 	if !issetPlayUrl {
 		fieldId = 3
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCoverUrl {
+		fieldId = 4
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetUploadTime {
+		fieldId = 5
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetFavoriteCount {
+		fieldId = 6
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetCommentCount {
+		fieldId = 7
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetIsFavorite {
+		fieldId = 8
+		goto RequiredFieldNotSetError
+	}
+
+	if !issetTitle {
+		fieldId = 9
 		goto RequiredFieldNotSetError
 	}
 	return nil
@@ -968,9 +982,10 @@ func (p *Video) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *Video) ReadField2(iprot thrift.TProtocol) error {
-	p.Author = NewUser()
-	if err := p.Author.Read(iprot); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
+	} else {
+		p.AuthorId = v
 	}
 	return nil
 }
@@ -988,7 +1003,7 @@ func (p *Video) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.CoverUrl = &v
+		p.CoverUrl = v
 	}
 	return nil
 }
@@ -997,7 +1012,7 @@ func (p *Video) ReadField5(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.FavoriteCount = &v
+		p.UploadTime = v
 	}
 	return nil
 }
@@ -1006,25 +1021,34 @@ func (p *Video) ReadField6(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.CommentCount = &v
+		p.FavoriteCount = v
 	}
 	return nil
 }
 
 func (p *Video) ReadField7(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBool(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.IsFavorite = &v
+		p.CommentCount = v
 	}
 	return nil
 }
 
 func (p *Video) ReadField8(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBool(); err != nil {
+		return err
+	} else {
+		p.IsFavorite = v
+	}
+	return nil
+}
+
+func (p *Video) ReadField9(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Title = &v
+		p.Title = v
 	}
 	return nil
 }
@@ -1067,6 +1091,10 @@ func (p *Video) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 8
 			goto WriteFieldError
 		}
+		if err = p.writeField9(oprot); err != nil {
+			fieldId = 9
+			goto WriteFieldError
+		}
 
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
@@ -1104,16 +1132,14 @@ WriteFieldEndError:
 }
 
 func (p *Video) writeField2(oprot thrift.TProtocol) (err error) {
-	if p.IsSetAuthor() {
-		if err = oprot.WriteFieldBegin("author", thrift.STRUCT, 2); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := p.Author.Write(oprot); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("author_id", thrift.I64, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.AuthorId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
@@ -1140,16 +1166,14 @@ WriteFieldEndError:
 }
 
 func (p *Video) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetCoverUrl() {
-		if err = oprot.WriteFieldBegin("cover_url", thrift.STRING, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.CoverUrl); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("cover_url", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.CoverUrl); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
@@ -1159,16 +1183,14 @@ WriteFieldEndError:
 }
 
 func (p *Video) writeField5(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFavoriteCount() {
-		if err = oprot.WriteFieldBegin("favorite_count", thrift.I64, 5); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.FavoriteCount); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("upload_time", thrift.I64, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.UploadTime); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
@@ -1178,16 +1200,14 @@ WriteFieldEndError:
 }
 
 func (p *Video) writeField6(oprot thrift.TProtocol) (err error) {
-	if p.IsSetCommentCount() {
-		if err = oprot.WriteFieldBegin("comment_count", thrift.I64, 6); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.CommentCount); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("favorite_count", thrift.I64, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.FavoriteCount); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
@@ -1197,16 +1217,14 @@ WriteFieldEndError:
 }
 
 func (p *Video) writeField7(oprot thrift.TProtocol) (err error) {
-	if p.IsSetIsFavorite() {
-		if err = oprot.WriteFieldBegin("is_favorite", thrift.BOOL, 7); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteBool(*p.IsFavorite); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("comment_count", thrift.I64, 7); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.CommentCount); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
@@ -1216,22 +1234,37 @@ WriteFieldEndError:
 }
 
 func (p *Video) writeField8(oprot thrift.TProtocol) (err error) {
-	if p.IsSetTitle() {
-		if err = oprot.WriteFieldBegin("title", thrift.STRING, 8); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.Title); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
+	if err = oprot.WriteFieldBegin("is_favorite", thrift.BOOL, 8); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteBool(p.IsFavorite); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
 	}
 	return nil
 WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *Video) writeField9(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("title", thrift.STRING, 9); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Title); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
 }
 
 func (p *Video) String() string {
@@ -1250,7 +1283,7 @@ func (p *Video) DeepEqual(ano *Video) bool {
 	if !p.Field1DeepEqual(ano.Id) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.Author) {
+	if !p.Field2DeepEqual(ano.AuthorId) {
 		return false
 	}
 	if !p.Field3DeepEqual(ano.PlayUrl) {
@@ -1259,16 +1292,19 @@ func (p *Video) DeepEqual(ano *Video) bool {
 	if !p.Field4DeepEqual(ano.CoverUrl) {
 		return false
 	}
-	if !p.Field5DeepEqual(ano.FavoriteCount) {
+	if !p.Field5DeepEqual(ano.UploadTime) {
 		return false
 	}
-	if !p.Field6DeepEqual(ano.CommentCount) {
+	if !p.Field6DeepEqual(ano.FavoriteCount) {
 		return false
 	}
-	if !p.Field7DeepEqual(ano.IsFavorite) {
+	if !p.Field7DeepEqual(ano.CommentCount) {
 		return false
 	}
-	if !p.Field8DeepEqual(ano.Title) {
+	if !p.Field8DeepEqual(ano.IsFavorite) {
+		return false
+	}
+	if !p.Field9DeepEqual(ano.Title) {
 		return false
 	}
 	return true
@@ -1281,9 +1317,9 @@ func (p *Video) Field1DeepEqual(src Int64) bool {
 	}
 	return true
 }
-func (p *Video) Field2DeepEqual(src *User) bool {
+func (p *Video) Field2DeepEqual(src Int64) bool {
 
-	if !p.Author.DeepEqual(src) {
+	if p.AuthorId != src {
 		return false
 	}
 	return true
@@ -1295,973 +1331,51 @@ func (p *Video) Field3DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *Video) Field4DeepEqual(src *string) bool {
+func (p *Video) Field4DeepEqual(src string) bool {
 
-	if p.CoverUrl == src {
-		return true
-	} else if p.CoverUrl == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.CoverUrl, *src) != 0 {
+	if strings.Compare(p.CoverUrl, src) != 0 {
 		return false
 	}
 	return true
 }
-func (p *Video) Field5DeepEqual(src *Int64) bool {
+func (p *Video) Field5DeepEqual(src Int64) bool {
 
-	if p.FavoriteCount == src {
-		return true
-	} else if p.FavoriteCount == nil || src == nil {
-		return false
-	}
-	if *p.FavoriteCount != *src {
+	if p.UploadTime != src {
 		return false
 	}
 	return true
 }
-func (p *Video) Field6DeepEqual(src *Int64) bool {
+func (p *Video) Field6DeepEqual(src Int64) bool {
 
-	if p.CommentCount == src {
-		return true
-	} else if p.CommentCount == nil || src == nil {
-		return false
-	}
-	if *p.CommentCount != *src {
+	if p.FavoriteCount != src {
 		return false
 	}
 	return true
 }
-func (p *Video) Field7DeepEqual(src *bool) bool {
+func (p *Video) Field7DeepEqual(src Int64) bool {
 
-	if p.IsFavorite == src {
-		return true
-	} else if p.IsFavorite == nil || src == nil {
-		return false
-	}
-	if *p.IsFavorite != *src {
+	if p.CommentCount != src {
 		return false
 	}
 	return true
 }
-func (p *Video) Field8DeepEqual(src *string) bool {
+func (p *Video) Field8DeepEqual(src bool) bool {
 
-	if p.Title == src {
-		return true
-	} else if p.Title == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.Title, *src) != 0 {
+	if p.IsFavorite != src {
 		return false
 	}
 	return true
 }
+func (p *Video) Field9DeepEqual(src string) bool {
 
-type User struct {
-	Id              Int64   `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
-	Name            string  `thrift:"name,2,required" frugal:"2,required,string" json:"name"`
-	FollowCount     *Int64  `thrift:"follow_count,3,optional" frugal:"3,optional,i64" json:"follow_count,omitempty"`
-	FollowerCount   *Int64  `thrift:"follower_count,4,optional" frugal:"4,optional,i64" json:"follower_count,omitempty"`
-	IsFollow        bool    `thrift:"is_follow,5,required" frugal:"5,required,bool" json:"is_follow"`
-	Avatar          *string `thrift:"avatar,6,optional" frugal:"6,optional,string" json:"avatar,omitempty"`
-	BackgroundImage *string `thrift:"background_image,7,optional" frugal:"7,optional,string" json:"background_image,omitempty"`
-	Signature       *string `thrift:"signature,8,optional" frugal:"8,optional,string" json:"signature,omitempty"`
-	TotalFavorited  *Int64  `thrift:"total_favorited,9,optional" frugal:"9,optional,i64" json:"total_favorited,omitempty"`
-	WorkCount       *Int64  `thrift:"work_count,10,optional" frugal:"10,optional,i64" json:"work_count,omitempty"`
-	FavoriteCount   *Int64  `thrift:"favorite_count,11,optional" frugal:"11,optional,i64" json:"favorite_count,omitempty"`
-}
-
-func NewUser() *User {
-	return &User{}
-}
-
-func (p *User) InitDefault() {
-	*p = User{}
-}
-
-func (p *User) GetId() (v Int64) {
-	return p.Id
-}
-
-func (p *User) GetName() (v string) {
-	return p.Name
-}
-
-var User_FollowCount_DEFAULT Int64
-
-func (p *User) GetFollowCount() (v Int64) {
-	if !p.IsSetFollowCount() {
-		return User_FollowCount_DEFAULT
-	}
-	return *p.FollowCount
-}
-
-var User_FollowerCount_DEFAULT Int64
-
-func (p *User) GetFollowerCount() (v Int64) {
-	if !p.IsSetFollowerCount() {
-		return User_FollowerCount_DEFAULT
-	}
-	return *p.FollowerCount
-}
-
-func (p *User) GetIsFollow() (v bool) {
-	return p.IsFollow
-}
-
-var User_Avatar_DEFAULT string
-
-func (p *User) GetAvatar() (v string) {
-	if !p.IsSetAvatar() {
-		return User_Avatar_DEFAULT
-	}
-	return *p.Avatar
-}
-
-var User_BackgroundImage_DEFAULT string
-
-func (p *User) GetBackgroundImage() (v string) {
-	if !p.IsSetBackgroundImage() {
-		return User_BackgroundImage_DEFAULT
-	}
-	return *p.BackgroundImage
-}
-
-var User_Signature_DEFAULT string
-
-func (p *User) GetSignature() (v string) {
-	if !p.IsSetSignature() {
-		return User_Signature_DEFAULT
-	}
-	return *p.Signature
-}
-
-var User_TotalFavorited_DEFAULT Int64
-
-func (p *User) GetTotalFavorited() (v Int64) {
-	if !p.IsSetTotalFavorited() {
-		return User_TotalFavorited_DEFAULT
-	}
-	return *p.TotalFavorited
-}
-
-var User_WorkCount_DEFAULT Int64
-
-func (p *User) GetWorkCount() (v Int64) {
-	if !p.IsSetWorkCount() {
-		return User_WorkCount_DEFAULT
-	}
-	return *p.WorkCount
-}
-
-var User_FavoriteCount_DEFAULT Int64
-
-func (p *User) GetFavoriteCount() (v Int64) {
-	if !p.IsSetFavoriteCount() {
-		return User_FavoriteCount_DEFAULT
-	}
-	return *p.FavoriteCount
-}
-func (p *User) SetId(val Int64) {
-	p.Id = val
-}
-func (p *User) SetName(val string) {
-	p.Name = val
-}
-func (p *User) SetFollowCount(val *Int64) {
-	p.FollowCount = val
-}
-func (p *User) SetFollowerCount(val *Int64) {
-	p.FollowerCount = val
-}
-func (p *User) SetIsFollow(val bool) {
-	p.IsFollow = val
-}
-func (p *User) SetAvatar(val *string) {
-	p.Avatar = val
-}
-func (p *User) SetBackgroundImage(val *string) {
-	p.BackgroundImage = val
-}
-func (p *User) SetSignature(val *string) {
-	p.Signature = val
-}
-func (p *User) SetTotalFavorited(val *Int64) {
-	p.TotalFavorited = val
-}
-func (p *User) SetWorkCount(val *Int64) {
-	p.WorkCount = val
-}
-func (p *User) SetFavoriteCount(val *Int64) {
-	p.FavoriteCount = val
-}
-
-var fieldIDToName_User = map[int16]string{
-	1:  "id",
-	2:  "name",
-	3:  "follow_count",
-	4:  "follower_count",
-	5:  "is_follow",
-	6:  "avatar",
-	7:  "background_image",
-	8:  "signature",
-	9:  "total_favorited",
-	10: "work_count",
-	11: "favorite_count",
-}
-
-func (p *User) IsSetFollowCount() bool {
-	return p.FollowCount != nil
-}
-
-func (p *User) IsSetFollowerCount() bool {
-	return p.FollowerCount != nil
-}
-
-func (p *User) IsSetAvatar() bool {
-	return p.Avatar != nil
-}
-
-func (p *User) IsSetBackgroundImage() bool {
-	return p.BackgroundImage != nil
-}
-
-func (p *User) IsSetSignature() bool {
-	return p.Signature != nil
-}
-
-func (p *User) IsSetTotalFavorited() bool {
-	return p.TotalFavorited != nil
-}
-
-func (p *User) IsSetWorkCount() bool {
-	return p.WorkCount != nil
-}
-
-func (p *User) IsSetFavoriteCount() bool {
-	return p.FavoriteCount != nil
-}
-
-func (p *User) Read(iprot thrift.TProtocol) (err error) {
-
-	var fieldTypeId thrift.TType
-	var fieldId int16
-	var issetId bool = false
-	var issetName bool = false
-	var issetIsFollow bool = false
-
-	if _, err = iprot.ReadStructBegin(); err != nil {
-		goto ReadStructBeginError
-	}
-
-	for {
-		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
-		if err != nil {
-			goto ReadFieldBeginError
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-
-		switch fieldId {
-		case 1:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField1(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetId = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 2:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField2(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetName = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 3:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField3(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 4:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField4(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 5:
-			if fieldTypeId == thrift.BOOL {
-				if err = p.ReadField5(iprot); err != nil {
-					goto ReadFieldError
-				}
-				issetIsFollow = true
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 6:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField6(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 7:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField7(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 8:
-			if fieldTypeId == thrift.STRING {
-				if err = p.ReadField8(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 9:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField9(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 10:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField10(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		case 11:
-			if fieldTypeId == thrift.I64 {
-				if err = p.ReadField11(iprot); err != nil {
-					goto ReadFieldError
-				}
-			} else {
-				if err = iprot.Skip(fieldTypeId); err != nil {
-					goto SkipFieldError
-				}
-			}
-		default:
-			if err = iprot.Skip(fieldTypeId); err != nil {
-				goto SkipFieldError
-			}
-		}
-
-		if err = iprot.ReadFieldEnd(); err != nil {
-			goto ReadFieldEndError
-		}
-	}
-	if err = iprot.ReadStructEnd(); err != nil {
-		goto ReadStructEndError
-	}
-
-	if !issetId {
-		fieldId = 1
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetName {
-		fieldId = 2
-		goto RequiredFieldNotSetError
-	}
-
-	if !issetIsFollow {
-		fieldId = 5
-		goto RequiredFieldNotSetError
-	}
-	return nil
-ReadStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
-ReadFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
-ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_User[fieldId]), err)
-SkipFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
-
-ReadFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
-ReadStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
-RequiredFieldNotSetError:
-	return thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_User[fieldId]))
-}
-
-func (p *User) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.Id = v
-	}
-	return nil
-}
-
-func (p *User) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Name = v
-	}
-	return nil
-}
-
-func (p *User) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.FollowCount = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.FollowerCount = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBool(); err != nil {
-		return err
-	} else {
-		p.IsFollow = v
-	}
-	return nil
-}
-
-func (p *User) ReadField6(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Avatar = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField7(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.BackgroundImage = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField8(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return err
-	} else {
-		p.Signature = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField9(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.TotalFavorited = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField10(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.WorkCount = &v
-	}
-	return nil
-}
-
-func (p *User) ReadField11(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
-		return err
-	} else {
-		p.FavoriteCount = &v
-	}
-	return nil
-}
-
-func (p *User) Write(oprot thrift.TProtocol) (err error) {
-	var fieldId int16
-	if err = oprot.WriteStructBegin("User"); err != nil {
-		goto WriteStructBeginError
-	}
-	if p != nil {
-		if err = p.writeField1(oprot); err != nil {
-			fieldId = 1
-			goto WriteFieldError
-		}
-		if err = p.writeField2(oprot); err != nil {
-			fieldId = 2
-			goto WriteFieldError
-		}
-		if err = p.writeField3(oprot); err != nil {
-			fieldId = 3
-			goto WriteFieldError
-		}
-		if err = p.writeField4(oprot); err != nil {
-			fieldId = 4
-			goto WriteFieldError
-		}
-		if err = p.writeField5(oprot); err != nil {
-			fieldId = 5
-			goto WriteFieldError
-		}
-		if err = p.writeField6(oprot); err != nil {
-			fieldId = 6
-			goto WriteFieldError
-		}
-		if err = p.writeField7(oprot); err != nil {
-			fieldId = 7
-			goto WriteFieldError
-		}
-		if err = p.writeField8(oprot); err != nil {
-			fieldId = 8
-			goto WriteFieldError
-		}
-		if err = p.writeField9(oprot); err != nil {
-			fieldId = 9
-			goto WriteFieldError
-		}
-		if err = p.writeField10(oprot); err != nil {
-			fieldId = 10
-			goto WriteFieldError
-		}
-		if err = p.writeField11(oprot); err != nil {
-			fieldId = 11
-			goto WriteFieldError
-		}
-
-	}
-	if err = oprot.WriteFieldStop(); err != nil {
-		goto WriteFieldStopError
-	}
-	if err = oprot.WriteStructEnd(); err != nil {
-		goto WriteStructEndError
-	}
-	return nil
-WriteStructBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
-WriteFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
-WriteFieldStopError:
-	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
-WriteStructEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
-}
-
-func (p *User) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteI64(p.Id); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
-}
-
-func (p *User) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("name", thrift.STRING, 2); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteString(p.Name); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
-}
-
-func (p *User) writeField3(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFollowCount() {
-		if err = oprot.WriteFieldBegin("follow_count", thrift.I64, 3); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.FollowCount); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
-}
-
-func (p *User) writeField4(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFollowerCount() {
-		if err = oprot.WriteFieldBegin("follower_count", thrift.I64, 4); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.FollowerCount); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
-}
-
-func (p *User) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("is_follow", thrift.BOOL, 5); err != nil {
-		goto WriteFieldBeginError
-	}
-	if err := oprot.WriteBool(p.IsFollow); err != nil {
-		return err
-	}
-	if err = oprot.WriteFieldEnd(); err != nil {
-		goto WriteFieldEndError
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
-}
-
-func (p *User) writeField6(oprot thrift.TProtocol) (err error) {
-	if p.IsSetAvatar() {
-		if err = oprot.WriteFieldBegin("avatar", thrift.STRING, 6); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.Avatar); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
-}
-
-func (p *User) writeField7(oprot thrift.TProtocol) (err error) {
-	if p.IsSetBackgroundImage() {
-		if err = oprot.WriteFieldBegin("background_image", thrift.STRING, 7); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.BackgroundImage); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 7 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
-}
-
-func (p *User) writeField8(oprot thrift.TProtocol) (err error) {
-	if p.IsSetSignature() {
-		if err = oprot.WriteFieldBegin("signature", thrift.STRING, 8); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteString(*p.Signature); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
-}
-
-func (p *User) writeField9(oprot thrift.TProtocol) (err error) {
-	if p.IsSetTotalFavorited() {
-		if err = oprot.WriteFieldBegin("total_favorited", thrift.I64, 9); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.TotalFavorited); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 9 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 9 end error: ", p), err)
-}
-
-func (p *User) writeField10(oprot thrift.TProtocol) (err error) {
-	if p.IsSetWorkCount() {
-		if err = oprot.WriteFieldBegin("work_count", thrift.I64, 10); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.WorkCount); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 10 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 10 end error: ", p), err)
-}
-
-func (p *User) writeField11(oprot thrift.TProtocol) (err error) {
-	if p.IsSetFavoriteCount() {
-		if err = oprot.WriteFieldBegin("favorite_count", thrift.I64, 11); err != nil {
-			goto WriteFieldBeginError
-		}
-		if err := oprot.WriteI64(*p.FavoriteCount); err != nil {
-			return err
-		}
-		if err = oprot.WriteFieldEnd(); err != nil {
-			goto WriteFieldEndError
-		}
-	}
-	return nil
-WriteFieldBeginError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 11 begin error: ", p), err)
-WriteFieldEndError:
-	return thrift.PrependError(fmt.Sprintf("%T write field 11 end error: ", p), err)
-}
-
-func (p *User) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("User(%+v)", *p)
-}
-
-func (p *User) DeepEqual(ano *User) bool {
-	if p == ano {
-		return true
-	} else if p == nil || ano == nil {
-		return false
-	}
-	if !p.Field1DeepEqual(ano.Id) {
-		return false
-	}
-	if !p.Field2DeepEqual(ano.Name) {
-		return false
-	}
-	if !p.Field3DeepEqual(ano.FollowCount) {
-		return false
-	}
-	if !p.Field4DeepEqual(ano.FollowerCount) {
-		return false
-	}
-	if !p.Field5DeepEqual(ano.IsFollow) {
-		return false
-	}
-	if !p.Field6DeepEqual(ano.Avatar) {
-		return false
-	}
-	if !p.Field7DeepEqual(ano.BackgroundImage) {
-		return false
-	}
-	if !p.Field8DeepEqual(ano.Signature) {
-		return false
-	}
-	if !p.Field9DeepEqual(ano.TotalFavorited) {
-		return false
-	}
-	if !p.Field10DeepEqual(ano.WorkCount) {
-		return false
-	}
-	if !p.Field11DeepEqual(ano.FavoriteCount) {
-		return false
-	}
-	return true
-}
-
-func (p *User) Field1DeepEqual(src Int64) bool {
-
-	if p.Id != src {
-		return false
-	}
-	return true
-}
-func (p *User) Field2DeepEqual(src string) bool {
-
-	if strings.Compare(p.Name, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *User) Field3DeepEqual(src *Int64) bool {
-
-	if p.FollowCount == src {
-		return true
-	} else if p.FollowCount == nil || src == nil {
-		return false
-	}
-	if *p.FollowCount != *src {
-		return false
-	}
-	return true
-}
-func (p *User) Field4DeepEqual(src *Int64) bool {
-
-	if p.FollowerCount == src {
-		return true
-	} else if p.FollowerCount == nil || src == nil {
-		return false
-	}
-	if *p.FollowerCount != *src {
-		return false
-	}
-	return true
-}
-func (p *User) Field5DeepEqual(src bool) bool {
-
-	if p.IsFollow != src {
-		return false
-	}
-	return true
-}
-func (p *User) Field6DeepEqual(src *string) bool {
-
-	if p.Avatar == src {
-		return true
-	} else if p.Avatar == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.Avatar, *src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *User) Field7DeepEqual(src *string) bool {
-
-	if p.BackgroundImage == src {
-		return true
-	} else if p.BackgroundImage == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.BackgroundImage, *src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *User) Field8DeepEqual(src *string) bool {
-
-	if p.Signature == src {
-		return true
-	} else if p.Signature == nil || src == nil {
-		return false
-	}
-	if strings.Compare(*p.Signature, *src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *User) Field9DeepEqual(src *Int64) bool {
-
-	if p.TotalFavorited == src {
-		return true
-	} else if p.TotalFavorited == nil || src == nil {
-		return false
-	}
-	if *p.TotalFavorited != *src {
-		return false
-	}
-	return true
-}
-func (p *User) Field10DeepEqual(src *Int64) bool {
-
-	if p.WorkCount == src {
-		return true
-	} else if p.WorkCount == nil || src == nil {
-		return false
-	}
-	if *p.WorkCount != *src {
-		return false
-	}
-	return true
-}
-func (p *User) Field11DeepEqual(src *Int64) bool {
-
-	if p.FavoriteCount == src {
-		return true
-	} else if p.FavoriteCount == nil || src == nil {
-		return false
-	}
-	if *p.FavoriteCount != *src {
+	if strings.Compare(p.Title, src) != 0 {
 		return false
 	}
 	return true
 }
 
 type FeedService interface {
-	GetVideo(ctx context.Context, req *DouyinFeedRequest) (r *DouyinFeedResponse, err error)
+	Feed(ctx context.Context, req *DouyinFeedRequest) (r *DouyinFeedResponse, err error)
 }
 
 type FeedServiceClient struct {
@@ -2290,11 +1404,11 @@ func (p *FeedServiceClient) Client_() thrift.TClient {
 	return p.c
 }
 
-func (p *FeedServiceClient) GetVideo(ctx context.Context, req *DouyinFeedRequest) (r *DouyinFeedResponse, err error) {
-	var _args FeedServiceGetVideoArgs
+func (p *FeedServiceClient) Feed(ctx context.Context, req *DouyinFeedRequest) (r *DouyinFeedResponse, err error) {
+	var _args FeedServiceFeedArgs
 	_args.Req = req
-	var _result FeedServiceGetVideoResult
-	if err = p.Client_().Call(ctx, "GetVideo", &_args, &_result); err != nil {
+	var _result FeedServiceFeedResult
+	if err = p.Client_().Call(ctx, "Feed", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -2320,7 +1434,7 @@ func (p *FeedServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFuncti
 
 func NewFeedServiceProcessor(handler FeedService) *FeedServiceProcessor {
 	self := &FeedServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self.AddToProcessorMap("GetVideo", &feedServiceProcessorGetVideo{handler: handler})
+	self.AddToProcessorMap("Feed", &feedServiceProcessorFeed{handler: handler})
 	return self
 }
 func (p *FeedServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -2341,16 +1455,16 @@ func (p *FeedServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.
 	return false, x
 }
 
-type feedServiceProcessorGetVideo struct {
+type feedServiceProcessorFeed struct {
 	handler FeedService
 }
 
-func (p *feedServiceProcessorGetVideo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := FeedServiceGetVideoArgs{}
+func (p *feedServiceProcessorFeed) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := FeedServiceFeedArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("GetVideo", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("Feed", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2359,11 +1473,11 @@ func (p *feedServiceProcessorGetVideo) Process(ctx context.Context, seqId int32,
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := FeedServiceGetVideoResult{}
+	result := FeedServiceFeedResult{}
 	var retval *DouyinFeedResponse
-	if retval, err2 = p.handler.GetVideo(ctx, args.Req); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetVideo: "+err2.Error())
-		oprot.WriteMessageBegin("GetVideo", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.Feed(ctx, args.Req); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Feed: "+err2.Error())
+		oprot.WriteMessageBegin("Feed", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -2371,7 +1485,7 @@ func (p *feedServiceProcessorGetVideo) Process(ctx context.Context, seqId int32,
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("GetVideo", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("Feed", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -2389,39 +1503,39 @@ func (p *feedServiceProcessorGetVideo) Process(ctx context.Context, seqId int32,
 	return true, err
 }
 
-type FeedServiceGetVideoArgs struct {
+type FeedServiceFeedArgs struct {
 	Req *DouyinFeedRequest `thrift:"req,1" frugal:"1,default,DouyinFeedRequest" json:"req"`
 }
 
-func NewFeedServiceGetVideoArgs() *FeedServiceGetVideoArgs {
-	return &FeedServiceGetVideoArgs{}
+func NewFeedServiceFeedArgs() *FeedServiceFeedArgs {
+	return &FeedServiceFeedArgs{}
 }
 
-func (p *FeedServiceGetVideoArgs) InitDefault() {
-	*p = FeedServiceGetVideoArgs{}
+func (p *FeedServiceFeedArgs) InitDefault() {
+	*p = FeedServiceFeedArgs{}
 }
 
-var FeedServiceGetVideoArgs_Req_DEFAULT *DouyinFeedRequest
+var FeedServiceFeedArgs_Req_DEFAULT *DouyinFeedRequest
 
-func (p *FeedServiceGetVideoArgs) GetReq() (v *DouyinFeedRequest) {
+func (p *FeedServiceFeedArgs) GetReq() (v *DouyinFeedRequest) {
 	if !p.IsSetReq() {
-		return FeedServiceGetVideoArgs_Req_DEFAULT
+		return FeedServiceFeedArgs_Req_DEFAULT
 	}
 	return p.Req
 }
-func (p *FeedServiceGetVideoArgs) SetReq(val *DouyinFeedRequest) {
+func (p *FeedServiceFeedArgs) SetReq(val *DouyinFeedRequest) {
 	p.Req = val
 }
 
-var fieldIDToName_FeedServiceGetVideoArgs = map[int16]string{
+var fieldIDToName_FeedServiceFeedArgs = map[int16]string{
 	1: "req",
 }
 
-func (p *FeedServiceGetVideoArgs) IsSetReq() bool {
+func (p *FeedServiceFeedArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *FeedServiceGetVideoArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *FeedServiceFeedArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2470,7 +1584,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceGetVideoArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceFeedArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2480,7 +1594,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *FeedServiceGetVideoArgs) ReadField1(iprot thrift.TProtocol) error {
+func (p *FeedServiceFeedArgs) ReadField1(iprot thrift.TProtocol) error {
 	p.Req = NewDouyinFeedRequest()
 	if err := p.Req.Read(iprot); err != nil {
 		return err
@@ -2488,9 +1602,9 @@ func (p *FeedServiceGetVideoArgs) ReadField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *FeedServiceGetVideoArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceFeedArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("GetVideo_args"); err != nil {
+	if err = oprot.WriteStructBegin("Feed_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2517,7 +1631,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *FeedServiceGetVideoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceFeedArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("req", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -2534,14 +1648,14 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *FeedServiceGetVideoArgs) String() string {
+func (p *FeedServiceFeedArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("FeedServiceGetVideoArgs(%+v)", *p)
+	return fmt.Sprintf("FeedServiceFeedArgs(%+v)", *p)
 }
 
-func (p *FeedServiceGetVideoArgs) DeepEqual(ano *FeedServiceGetVideoArgs) bool {
+func (p *FeedServiceFeedArgs) DeepEqual(ano *FeedServiceFeedArgs) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -2553,7 +1667,7 @@ func (p *FeedServiceGetVideoArgs) DeepEqual(ano *FeedServiceGetVideoArgs) bool {
 	return true
 }
 
-func (p *FeedServiceGetVideoArgs) Field1DeepEqual(src *DouyinFeedRequest) bool {
+func (p *FeedServiceFeedArgs) Field1DeepEqual(src *DouyinFeedRequest) bool {
 
 	if !p.Req.DeepEqual(src) {
 		return false
@@ -2561,39 +1675,39 @@ func (p *FeedServiceGetVideoArgs) Field1DeepEqual(src *DouyinFeedRequest) bool {
 	return true
 }
 
-type FeedServiceGetVideoResult struct {
+type FeedServiceFeedResult struct {
 	Success *DouyinFeedResponse `thrift:"success,0,optional" frugal:"0,optional,DouyinFeedResponse" json:"success,omitempty"`
 }
 
-func NewFeedServiceGetVideoResult() *FeedServiceGetVideoResult {
-	return &FeedServiceGetVideoResult{}
+func NewFeedServiceFeedResult() *FeedServiceFeedResult {
+	return &FeedServiceFeedResult{}
 }
 
-func (p *FeedServiceGetVideoResult) InitDefault() {
-	*p = FeedServiceGetVideoResult{}
+func (p *FeedServiceFeedResult) InitDefault() {
+	*p = FeedServiceFeedResult{}
 }
 
-var FeedServiceGetVideoResult_Success_DEFAULT *DouyinFeedResponse
+var FeedServiceFeedResult_Success_DEFAULT *DouyinFeedResponse
 
-func (p *FeedServiceGetVideoResult) GetSuccess() (v *DouyinFeedResponse) {
+func (p *FeedServiceFeedResult) GetSuccess() (v *DouyinFeedResponse) {
 	if !p.IsSetSuccess() {
-		return FeedServiceGetVideoResult_Success_DEFAULT
+		return FeedServiceFeedResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *FeedServiceGetVideoResult) SetSuccess(x interface{}) {
+func (p *FeedServiceFeedResult) SetSuccess(x interface{}) {
 	p.Success = x.(*DouyinFeedResponse)
 }
 
-var fieldIDToName_FeedServiceGetVideoResult = map[int16]string{
+var fieldIDToName_FeedServiceFeedResult = map[int16]string{
 	0: "success",
 }
 
-func (p *FeedServiceGetVideoResult) IsSetSuccess() bool {
+func (p *FeedServiceFeedResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *FeedServiceGetVideoResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *FeedServiceFeedResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -2642,7 +1756,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceGetVideoResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_FeedServiceFeedResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -2652,7 +1766,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *FeedServiceGetVideoResult) ReadField0(iprot thrift.TProtocol) error {
+func (p *FeedServiceFeedResult) ReadField0(iprot thrift.TProtocol) error {
 	p.Success = NewDouyinFeedResponse()
 	if err := p.Success.Read(iprot); err != nil {
 		return err
@@ -2660,9 +1774,9 @@ func (p *FeedServiceGetVideoResult) ReadField0(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *FeedServiceGetVideoResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceFeedResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("GetVideo_result"); err != nil {
+	if err = oprot.WriteStructBegin("Feed_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -2689,7 +1803,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *FeedServiceGetVideoResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *FeedServiceFeedResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -2708,14 +1822,14 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *FeedServiceGetVideoResult) String() string {
+func (p *FeedServiceFeedResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("FeedServiceGetVideoResult(%+v)", *p)
+	return fmt.Sprintf("FeedServiceFeedResult(%+v)", *p)
 }
 
-func (p *FeedServiceGetVideoResult) DeepEqual(ano *FeedServiceGetVideoResult) bool {
+func (p *FeedServiceFeedResult) DeepEqual(ano *FeedServiceFeedResult) bool {
 	if p == ano {
 		return true
 	} else if p == nil || ano == nil {
@@ -2727,7 +1841,7 @@ func (p *FeedServiceGetVideoResult) DeepEqual(ano *FeedServiceGetVideoResult) bo
 	return true
 }
 
-func (p *FeedServiceGetVideoResult) Field0DeepEqual(src *DouyinFeedResponse) bool {
+func (p *FeedServiceFeedResult) Field0DeepEqual(src *DouyinFeedResponse) bool {
 
 	if !p.Success.DeepEqual(src) {
 		return false

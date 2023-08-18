@@ -77,7 +77,7 @@ func newUserServiceLoginResult() interface{} {
 func userInfoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	realArg := arg.(*user.UserServiceUserInfoArgs)
 	realResult := result.(*user.UserServiceUserInfoResult)
-	success, err := handler.(user.UserService).UserInfo(ctx, realArg.UserId)
+	success, err := handler.(user.UserService).UserInfo(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
@@ -122,9 +122,9 @@ func (p *kClient) Login(ctx context.Context, req *user.DouyinUserLoginRequest) (
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) UserInfo(ctx context.Context, userId user.Int64) (r *user.User, err error) {
+func (p *kClient) UserInfo(ctx context.Context, req *user.DouyinUserInfoRequest) (r *user.User, err error) {
 	var _args user.UserServiceUserInfoArgs
-	_args.UserId = userId
+	_args.Req = req
 	var _result user.UserServiceUserInfoResult
 	if err = p.c.Call(ctx, "UserInfo", &_args, &_result); err != nil {
 		return

@@ -19,7 +19,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "FeedService"
 	handlerType := (*feed.FeedService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"GetVideo": kitex.NewMethodInfo(getVideoHandler, newFeedServiceGetVideoArgs, newFeedServiceGetVideoResult, false),
+		"Feed": kitex.NewMethodInfo(feedHandler, newFeedServiceFeedArgs, newFeedServiceFeedResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName":     "feed",
@@ -36,22 +36,22 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	return svcInfo
 }
 
-func getVideoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
-	realArg := arg.(*feed.FeedServiceGetVideoArgs)
-	realResult := result.(*feed.FeedServiceGetVideoResult)
-	success, err := handler.(feed.FeedService).GetVideo(ctx, realArg.Req)
+func feedHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*feed.FeedServiceFeedArgs)
+	realResult := result.(*feed.FeedServiceFeedResult)
+	success, err := handler.(feed.FeedService).Feed(ctx, realArg.Req)
 	if err != nil {
 		return err
 	}
 	realResult.Success = success
 	return nil
 }
-func newFeedServiceGetVideoArgs() interface{} {
-	return feed.NewFeedServiceGetVideoArgs()
+func newFeedServiceFeedArgs() interface{} {
+	return feed.NewFeedServiceFeedArgs()
 }
 
-func newFeedServiceGetVideoResult() interface{} {
-	return feed.NewFeedServiceGetVideoResult()
+func newFeedServiceFeedResult() interface{} {
+	return feed.NewFeedServiceFeedResult()
 }
 
 type kClient struct {
@@ -64,11 +64,11 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) GetVideo(ctx context.Context, req *feed.DouyinFeedRequest) (r *feed.DouyinFeedResponse, err error) {
-	var _args feed.FeedServiceGetVideoArgs
+func (p *kClient) Feed(ctx context.Context, req *feed.DouyinFeedRequest) (r *feed.DouyinFeedResponse, err error) {
+	var _args feed.FeedServiceFeedArgs
 	_args.Req = req
-	var _result feed.FeedServiceGetVideoResult
-	if err = p.c.Call(ctx, "GetVideo", &_args, &_result); err != nil {
+	var _result feed.FeedServiceFeedResult
+	if err = p.c.Call(ctx, "Feed", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

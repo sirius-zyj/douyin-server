@@ -51,7 +51,9 @@ func Login(username string, password string) (resp *user.DouyinUserLoginResponse
 
 func UserInfo(user_id int64) (resp *user.User, err error) {
 	resp = new(user.User)
-	resp, err = userClient.UserInfo(context.Background(), user_id)
+	resp, err = userClient.UserInfo(context.Background(), &user.DouyinUserInfoRequest{
+		UserId: user_id,
+	})
 
 	if err != nil {
 		log.Println(err)

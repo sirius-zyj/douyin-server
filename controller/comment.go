@@ -17,7 +17,7 @@ type CommentListResponse struct {
 
 type CommentActionResponse struct {
 	Response
-	Comment Comment `json:"comment,omitempty"`
+	Comment *Comment `json:"comment,omitempty"`
 }
 
 // CommentAction 发表或者删除评论
@@ -29,13 +29,12 @@ func CommentAction(c *gin.Context) {
 	commentId, _ := strconv.ParseInt(c.Query("comment_id"), 10, 64)
 
 	if respClient, err := client.CommentAction(token, videoId, int32(actionType), &commentText, commentId); err == nil {
-		log.Println("CommentAction:  ", *respClient)
 		if respClient.Comment != nil {
 			c.JSON(http.StatusOK, CommentActionResponse{
 				Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
-				Comment: Comment{
+				Comment: &Comment{
 					Id:         respClient.Comment.Id,
-					User:       User{Id: respClient.Comment.User.Id, Name: respClient.Comment.User.Name},
+					User:       *RPCUser2ControlUser(respClient.Comment.User),
 					Content:    respClient.Comment.Content,
 					CreateDate: respClient.Comment.CreateDate,
 				},
@@ -61,7 +60,7 @@ func CommentList(c *gin.Context) {
 		for _, tmp := range respClient.CommentList {
 			CommentResq = append(CommentResq, Comment{
 				Id:         tmp.Id,
-				User:       User{Id: tmp.User.Id, Name: tmp.User.Name},
+				User:       *RPCUser2ControlUser(tmp.User),
 				Content:    tmp.Content,
 				CreateDate: tmp.CreateDate,
 			})

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"douyin-server/dao"
 	"douyin-server/rpc/client"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +18,8 @@ type VideoListResponse struct {
 
 // Publish 视频投稿
 func Publish(c *gin.Context) {
-	token, video_title := c.PostForm("token"), c.Query("title")
+	token, video_title := c.PostForm("token"), c.PostForm("title")
+	log.Println("token: ", token, "video_title: ", video_title)
 
 	file, _ := c.FormFile("data")
 	// 打开上传的文件
@@ -42,16 +42,15 @@ func PublishList(c *gin.Context) {
 	token := c.PostForm("token")
 
 	if respClient, err := client.PublishList(userID, token); err == nil {
-		log.Println("PublishList: ", *respClient)
-		var videoList VideoSlice
-		for _, video := range respClient.VideoList {
-			V := dao.Dvideo{
-				Id:        video.Id,
-				Play_url:  video.PlayUrl,
-				Cover_url: *video.CoverUrl,
-				Title:     *video.Title,
+		var videoList []Video
+		for _, tmp := range respClient.VideoList {
+			//------还有获取点赞数，获取评论数
+			if video, err := RPCVideo2ControllerVideo(tmp); err == nil {
+				videoList = append(videoList, *video)
+			} else {
+				c.JSON(http.StatusExpectationFailed, VideoListResponse{})
+				return
 			}
-			videoList.Append(Video{V, 0, 0, false})
 		}
 		c.JSON(http.StatusOK, VideoListResponse{
 			Response:  Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
