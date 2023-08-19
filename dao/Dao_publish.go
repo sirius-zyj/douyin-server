@@ -20,13 +20,13 @@ func UploadVideo(video *[]byte) (playUrl, coverUrl string, err error) {
 	if err != nil {
 		return "", "", err
 	}
+	defer os.Remove(videoName)
 
 	imageData, _ := GetSnapshot(videoName, 1)
 	if err != nil {
 		return "", "", err
 	}
 	//delete local video
-	// os.Remove(videoName)
 
 	err = VideoBucket.PutObject(videoName, bytes.NewReader(*video))
 	if err != nil {

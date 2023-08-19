@@ -19,7 +19,7 @@ func initFavoriteClient() {
 	favoriteClient = c
 }
 
-func ActionFavorite(token string, video_id int64, action_type int32) (resp *favorite.DouyinFavoriteActionResponse, err error) {
+func ActionFavorite(token string, video_id int64, action_type string) (resp *favorite.DouyinFavoriteActionResponse, err error) {
 	resp = new(favorite.DouyinFavoriteActionResponse)
 	resp, err = favoriteClient.FavoriteAction(context.Background(), &favorite.DouyinFavoriteActionRequest{
 		Token:      token,

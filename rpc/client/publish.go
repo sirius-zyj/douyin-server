@@ -20,7 +20,6 @@ func initPublishClient() {
 }
 
 func Publish(token string, videoData []byte, title string) (resp *publish.DouyinPublishActionResponse, err error) {
-	log.Println("Publish: ", token, title)
 	resp = new(publish.DouyinPublishActionResponse)
 	resp, err = publishClient.Publish(context.Background(), &publish.DouyinPublishActionRequest{
 		Token: token,

@@ -10,9 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CommentListResponse struct {
-	Response
-	CommentList []Comment `json:"comment_list,omitempty"`
+type CommentActionRequest struct {
+	ActionType  string  `form:"action_type"`            // 1-发布评论，2-删除评论
+	CommentID   *string `form:"comment_id,omitempty"`   // 要删除的评论id，在action_type=2的时候使用
+	CommentText *string `form:"comment_text,omitempty"` // 用户填写的评论内容，在action_type=1的时候使用
+	Token       string  `form:"token"`                  // 用户鉴权token
+	VideoID     string  `form:"video_id"`               // 视频id
 }
 
 type CommentActionResponse struct {
@@ -20,21 +23,30 @@ type CommentActionResponse struct {
 	Comment *Comment `json:"comment,omitempty"`
 }
 
+type CommentListResponse struct {
+	Response
+	CommentList []Comment `json:"comment_list,omitempty"`
+}
+
 // CommentAction 发表或者删除评论
 func CommentAction(c *gin.Context) {
-	token := c.Query("token")
-	videoId, _ := strconv.ParseInt(c.Query("video_id"), 10, 64)
-	actionType, _ := strconv.ParseInt(c.Query("action_type"), 10, 64)
-	commentText := c.Query("comment_text")
-	commentId, _ := strconv.ParseInt(c.Query("comment_id"), 10, 64)
+	var req CommentActionRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Println("CommentActionRequest Err : ", err)
+		c.JSON(http.StatusBadRequest, CommentActionResponse{Response: Response{StatusCode: 404}})
+		return
+	}
 
-	if respClient, err := client.CommentAction(token, videoId, int32(actionType), &commentText, commentId); err == nil {
+	videoId, _ := strconv.ParseInt(req.VideoID, 10, 64)
+	actionType, _ := strconv.ParseInt(req.ActionType, 10, 64)
+
+	if respClient, err := client.CommentAction(req.Token, videoId, int32(actionType), req.CommentText, req.CommentID); err == nil {
 		if respClient.Comment != nil {
 			c.JSON(http.StatusOK, CommentActionResponse{
 				Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 				Comment: &Comment{
 					Id:         respClient.Comment.Id,
-					User:       *RPCUser2ControlUser(respClient.Comment.User),
+					User:       *RPCUser2ControllerUser(respClient.Comment.User),
 					Content:    respClient.Comment.Content,
 					CreateDate: respClient.Comment.CreateDate,
 				},
@@ -55,12 +67,12 @@ func CommentList(c *gin.Context) {
 	videoId, _ := strconv.ParseInt(videoid, 10, 64)
 
 	if respClient, err := client.CommentList("", videoId); err == nil {
-		log.Println("CommentList:  ", *respClient)
+		log.Println("respClient.CommentList", respClient.CommentList)
 		var CommentResq []Comment
 		for _, tmp := range respClient.CommentList {
 			CommentResq = append(CommentResq, Comment{
 				Id:         tmp.Id,
-				User:       *RPCUser2ControlUser(tmp.User),
+				User:       *RPCUser2ControllerUser(tmp.User),
 				Content:    tmp.Content,
 				CreateDate: tmp.CreateDate,
 			})

@@ -25,7 +25,7 @@ CREATE TABLE `favorite`(
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NULL DEFAULT NULL,
   `video_id` bigint(20) NULL DEFAULT NULL,
-  `cancel` tinyint(1) NULL DEFAULT NULL,
+  `action_type` varchar(2)  DEFAULT NULL,
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   `deleted_at` datetime(3) NULL DEFAULT NULL,

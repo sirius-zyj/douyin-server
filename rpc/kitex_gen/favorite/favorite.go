@@ -17,7 +17,7 @@ type Int64 = int64
 type DouyinFavoriteActionRequest struct {
 	Token      string `thrift:"token,1,required" frugal:"1,required,string" json:"token"`
 	VideoId    Int64  `thrift:"video_id,2,required" frugal:"2,required,i64" json:"video_id"`
-	ActionType Int32  `thrift:"action_type,3,required" frugal:"3,required,i32" json:"action_type"`
+	ActionType string `thrift:"action_type,3,required" frugal:"3,required,string" json:"action_type"`
 }
 
 func NewDouyinFavoriteActionRequest() *DouyinFavoriteActionRequest {
@@ -36,7 +36,7 @@ func (p *DouyinFavoriteActionRequest) GetVideoId() (v Int64) {
 	return p.VideoId
 }
 
-func (p *DouyinFavoriteActionRequest) GetActionType() (v Int32) {
+func (p *DouyinFavoriteActionRequest) GetActionType() (v string) {
 	return p.ActionType
 }
 func (p *DouyinFavoriteActionRequest) SetToken(val string) {
@@ -45,7 +45,7 @@ func (p *DouyinFavoriteActionRequest) SetToken(val string) {
 func (p *DouyinFavoriteActionRequest) SetVideoId(val Int64) {
 	p.VideoId = val
 }
-func (p *DouyinFavoriteActionRequest) SetActionType(val Int32) {
+func (p *DouyinFavoriteActionRequest) SetActionType(val string) {
 	p.ActionType = val
 }
 
@@ -100,7 +100,7 @@ func (p *DouyinFavoriteActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.I32 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -175,7 +175,7 @@ func (p *DouyinFavoriteActionRequest) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *DouyinFavoriteActionRequest) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.ActionType = v
@@ -255,10 +255,10 @@ WriteFieldEndError:
 }
 
 func (p *DouyinFavoriteActionRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("action_type", thrift.I32, 3); err != nil {
+	if err = oprot.WriteFieldBegin("action_type", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI32(p.ActionType); err != nil {
+	if err := oprot.WriteString(p.ActionType); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -310,9 +310,9 @@ func (p *DouyinFavoriteActionRequest) Field2DeepEqual(src Int64) bool {
 	}
 	return true
 }
-func (p *DouyinFavoriteActionRequest) Field3DeepEqual(src Int32) bool {
+func (p *DouyinFavoriteActionRequest) Field3DeepEqual(src string) bool {
 
-	if p.ActionType != src {
+	if strings.Compare(p.ActionType, src) != 0 {
 		return false
 	}
 	return true

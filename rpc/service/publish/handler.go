@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"douyin-server/dao"
-	"douyin-server/rpc/kitex_gen/feed"
 	publish "douyin-server/rpc/kitex_gen/publish"
 	"log"
 	"strconv"
@@ -47,6 +46,7 @@ func (s *PublishServiceImpl) Publish(ctx context.Context, req *publish.DouyinPub
 		return
 	}
 	//---------------------------
+	dao.UpdateUser("id", user_id, "work_count", 1) //作品数+1
 	setPublishActionResp(resp, 0, "上传成功")
 	return
 }
@@ -61,20 +61,14 @@ func setPublishListResp(resp *publish.DouyinPublishListResponse, statusCode int3
 func (s *PublishServiceImpl) PublishList(ctx context.Context, req *publish.DouyinPublishListRequest) (resp *publish.DouyinPublishListResponse, err error) {
 	resp = new(publish.DouyinPublishListResponse)
 
-	userID := req.UserId
 	//获取目标用户的所有作品将其传递给APP
-	if videoList, err := dao.GetVideoByUserId(userID); err != nil {
+	if videoList, err := dao.GetVideoByUserId(req.UserId); err != nil {
 		setPublishListResp(resp, 404, err.Error())
 		return resp, err
 	} else {
 		setPublishListResp(resp, 0, "success")
 		for _, tmp := range videoList {
-			resp.VideoList = append(resp.VideoList, &feed.Video{
-				Id:       tmp.Id,
-				PlayUrl:  tmp.Play_url,
-				CoverUrl: tmp.Cover_url,
-				Title:    tmp.Title,
-			})
+			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&tmp))
 		}
 	}
 	return

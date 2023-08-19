@@ -7,6 +7,8 @@ import (
 
 	"log"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func (Dvideo) TableName() string {
@@ -64,6 +66,33 @@ func GetVideoByTime(time time.Time) ([]Dvideo, error) {
 	}
 	return resp, nil
 }
+
+func UpdateFeed(where string, where_count int64, what string, what_count int64) error {
+	err := db.Model(&Dvideo{}).Where(where+" = ?", where_count).Update(what, gorm.Expr(what+" + ?", what_count)).Error
+	if err != nil {
+		log.Println("更新失败")
+		return err
+	}
+	return nil
+}
+
+// func UpdateVideoFavoritedCount(video_id int64, count int64) error {
+// 	err := db.Model(&Dvideo{}).Where("id = ?", video_id).UpdateColumn("favorite_count", gorm.Expr("favorite_count + ?", count)).Error
+// 	if err != nil {
+// 		log.Println("更新失败")
+// 		return err
+// 	}
+// 	return nil
+// }
+
+// func UpdateCommentCount(video_id int64, count int64) error {
+// 	err := db.Model(&Dvideo{}).Where("id = ?", video_id).UpdateColumn("comment_count", gorm.Expr("comment_count + ?", count)).Error
+// 	if err != nil {
+// 		log.Println("更新失败")
+// 		return err
+// 	}
+// 	return nil
+// }
 
 //通过ftp服务将视频传入服务器
 

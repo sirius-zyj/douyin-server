@@ -19,7 +19,7 @@ struct douyin_feed_response {
 
 struct Video {
   1: required int64 id; // 视频唯一标识
-  2: required int64 author_id; // 视频作者信息
+  2: required user.User author; // 视频作者信息
   3: required string play_url; // 视频播放地址
   4: required string cover_url; // 视频封面地址
   5: required int64 upload_time; // 视频上传时间，精确到秒

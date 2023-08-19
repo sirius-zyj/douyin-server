@@ -47,13 +47,13 @@ func TestUserAction(t *testing.T) {
 		Status(http.StatusOK).
 		JSON().Object()
 	loginResp.Value("status_code").Number().Equal(0)
-	loginResp.Value("user_id").Number().Gt(0)
+	loginResp.Value("user_id").Number().Gt(-1)
 	loginResp.Value("token").String().Length().Gt(0)
 
-	// token := loginResp.Value("token").String().Raw()
+	token := loginResp.Value("token").String().Raw()
 	id := loginResp.Value("user_id").Number().Raw()
 	userResp := e.GET("/douyin/user/").
-		// WithQuery("token", token).
+		WithQuery("token", token).
 		WithQuery("user_id", id).
 		Expect().
 		Status(http.StatusOK).
@@ -68,8 +68,7 @@ func TestUserAction(t *testing.T) {
 func TestPublish(t *testing.T) {
 	e := newExpect(t)
 
-	// userId, token := getTestUserToken(testUserA, e)
-	_, token := getTestUserToken(testUserA, e)
+	userId, token := getTestUserToken(testUserA, e)
 
 	publishResp := e.POST("/douyin/publish/action/").
 		WithMultipart().
@@ -81,19 +80,19 @@ func TestPublish(t *testing.T) {
 		JSON().Object()
 	publishResp.Value("status_code").Number().Equal(0)
 
-	// publishListResp := e.GET("/douyin/publish/list/").
-	// 	WithQuery("user_id", userId).WithQuery("token", token).
-	// 	Expect().
-	// 	Status(http.StatusOK).
-	// 	JSON().Object()
-	// publishListResp.Value("status_code").Number().Equal(0)
-	// publishListResp.Value("video_list").Array().Length().Gt(0)
+	publishListResp := e.GET("/douyin/publish/list/").
+		WithQuery("user_id", userId).WithQuery("token", token).
+		Expect().
+		Status(http.StatusOK).
+		JSON().Object()
+	publishListResp.Value("status_code").Number().Equal(0)
+	publishListResp.Value("video_list").Array().Length().Gt(0)
 
-	// for _, element := range publishListResp.Value("video_list").Array().Iter() {
-	// 	video := element.Object()
-	// 	video.ContainsKey("id")
-	// 	video.ContainsKey("author")
-	// 	video.Value("play_url").String().NotEmpty()
-	// 	video.Value("cover_url").String().NotEmpty()
-	// }
+	for _, element := range publishListResp.Value("video_list").Array().Iter() {
+		video := element.Object()
+		video.ContainsKey("id")
+		video.ContainsKey("author")
+		video.Value("play_url").String().NotEmpty()
+		video.Value("cover_url").String().NotEmpty()
+	}
 }

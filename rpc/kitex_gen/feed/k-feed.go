@@ -527,7 +527,7 @@ func (p *Video) FastRead(buf []byte) (int, error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetId bool = false
-	var issetAuthorId bool = false
+	var issetAuthor bool = false
 	var issetPlayUrl bool = false
 	var issetCoverUrl bool = false
 	var issetUploadTime bool = false
@@ -567,13 +567,13 @@ func (p *Video) FastRead(buf []byte) (int, error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRUCT {
 				l, err = p.FastReadField2(buf[offset:])
 				offset += l
 				if err != nil {
 					goto ReadFieldError
 				}
-				issetAuthorId = true
+				issetAuthor = true
 			} else {
 				l, err = bthrift.Binary.Skip(buf[offset:], fieldTypeId)
 				offset += l
@@ -711,7 +711,7 @@ func (p *Video) FastRead(buf []byte) (int, error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetAuthorId {
+	if !issetAuthor {
 		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
@@ -784,14 +784,13 @@ func (p *Video) FastReadField1(buf []byte) (int, error) {
 func (p *Video) FastReadField2(buf []byte) (int, error) {
 	offset := 0
 
-	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
+	tmp := user.NewUser()
+	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
-
-		p.AuthorId = v
-
 	}
+	p.Author = tmp
 	return offset, nil
 }
 
@@ -903,11 +902,11 @@ func (p *Video) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) i
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "Video")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
-		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField5(buf[offset:], binaryWriter)
 		offset += p.fastWriteField6(buf[offset:], binaryWriter)
 		offset += p.fastWriteField7(buf[offset:], binaryWriter)
 		offset += p.fastWriteField8(buf[offset:], binaryWriter)
+		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 		offset += p.fastWriteField3(buf[offset:], binaryWriter)
 		offset += p.fastWriteField4(buf[offset:], binaryWriter)
 		offset += p.fastWriteField9(buf[offset:], binaryWriter)
@@ -947,9 +946,8 @@ func (p *Video) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) i
 
 func (p *Video) fastWriteField2(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "author_id", thrift.I64, 2)
-	offset += bthrift.Binary.WriteI64(buf[offset:], p.AuthorId)
-
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "author", thrift.STRUCT, 2)
+	offset += p.Author.FastWriteNocopy(buf[offset:], binaryWriter)
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
 }
@@ -1028,9 +1026,8 @@ func (p *Video) field1Length() int {
 
 func (p *Video) field2Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("author_id", thrift.I64, 2)
-	l += bthrift.Binary.I64Length(p.AuthorId)
-
+	l += bthrift.Binary.FieldBeginLength("author", thrift.STRUCT, 2)
+	l += p.Author.BLength()
 	l += bthrift.Binary.FieldEndLength()
 	return l
 }

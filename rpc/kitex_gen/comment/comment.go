@@ -19,7 +19,7 @@ type DouyinCommentActionRequest struct {
 	VideoId     Int64   `thrift:"video_id,2,required" frugal:"2,required,i64" json:"video_id"`
 	ActionType  Int32   `thrift:"action_type,3,required" frugal:"3,required,i32" json:"action_type"`
 	CommentText *string `thrift:"comment_text,4,optional" frugal:"4,optional,string" json:"comment_text,omitempty"`
-	CommentId   *Int64  `thrift:"comment_id,5,optional" frugal:"5,optional,i64" json:"comment_id,omitempty"`
+	CommentId   *string `thrift:"comment_id,5,optional" frugal:"5,optional,string" json:"comment_id,omitempty"`
 }
 
 func NewDouyinCommentActionRequest() *DouyinCommentActionRequest {
@@ -51,9 +51,9 @@ func (p *DouyinCommentActionRequest) GetCommentText() (v string) {
 	return *p.CommentText
 }
 
-var DouyinCommentActionRequest_CommentId_DEFAULT Int64
+var DouyinCommentActionRequest_CommentId_DEFAULT string
 
-func (p *DouyinCommentActionRequest) GetCommentId() (v Int64) {
+func (p *DouyinCommentActionRequest) GetCommentId() (v string) {
 	if !p.IsSetCommentId() {
 		return DouyinCommentActionRequest_CommentId_DEFAULT
 	}
@@ -71,7 +71,7 @@ func (p *DouyinCommentActionRequest) SetActionType(val Int32) {
 func (p *DouyinCommentActionRequest) SetCommentText(val *string) {
 	p.CommentText = val
 }
-func (p *DouyinCommentActionRequest) SetCommentId(val *Int64) {
+func (p *DouyinCommentActionRequest) SetCommentId(val *string) {
 	p.CommentId = val
 }
 
@@ -157,7 +157,7 @@ func (p *DouyinCommentActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 5:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -249,7 +249,7 @@ func (p *DouyinCommentActionRequest) ReadField4(iprot thrift.TProtocol) error {
 }
 
 func (p *DouyinCommentActionRequest) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.CommentId = &v
@@ -374,10 +374,10 @@ WriteFieldEndError:
 
 func (p *DouyinCommentActionRequest) writeField5(oprot thrift.TProtocol) (err error) {
 	if p.IsSetCommentId() {
-		if err = oprot.WriteFieldBegin("comment_id", thrift.I64, 5); err != nil {
+		if err = oprot.WriteFieldBegin("comment_id", thrift.STRING, 5); err != nil {
 			goto WriteFieldBeginError
 		}
-		if err := oprot.WriteI64(*p.CommentId); err != nil {
+		if err := oprot.WriteString(*p.CommentId); err != nil {
 			return err
 		}
 		if err = oprot.WriteFieldEnd(); err != nil {
@@ -455,14 +455,14 @@ func (p *DouyinCommentActionRequest) Field4DeepEqual(src *string) bool {
 	}
 	return true
 }
-func (p *DouyinCommentActionRequest) Field5DeepEqual(src *Int64) bool {
+func (p *DouyinCommentActionRequest) Field5DeepEqual(src *string) bool {
 
 	if p.CommentId == src {
 		return true
 	} else if p.CommentId == nil || src == nil {
 		return false
 	}
-	if *p.CommentId != *src {
+	if strings.Compare(*p.CommentId, *src) != 0 {
 		return false
 	}
 	return true

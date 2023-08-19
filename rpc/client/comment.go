@@ -19,14 +19,14 @@ func initCommentClient() {
 	commentClient = c
 }
 
-func CommentAction(token string, videoId int64, actionType int32, commentText *string, commentId int64) (*comment.DouyinCommentActionResponse, error) {
+func CommentAction(token string, videoId int64, actionType int32, commentText *string, commentId *string) (*comment.DouyinCommentActionResponse, error) {
 	resp := new(comment.DouyinCommentActionResponse)
 	resp, err := commentClient.CommentAction(context.Background(), &comment.DouyinCommentActionRequest{
 		Token:       token,
 		VideoId:     videoId,
 		ActionType:  actionType,
 		CommentText: commentText,
-		CommentId:   &commentId,
+		CommentId:   commentId,
 	})
 	if err != nil {
 		log.Printf("CommentAction Client get err %v\n", err)

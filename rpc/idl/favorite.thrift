@@ -8,7 +8,7 @@ typedef i64 int64
 struct douyin_favorite_action_request {
   1: required string token; // 用户鉴权token
   2: required int64 video_id; // 视频id
-  3: required int32 action_type; // 1-点赞，2-取消点赞
+  3: required string action_type; // 1-点赞，2-取消点赞
 }
 
 struct douyin_favorite_action_response {

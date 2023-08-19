@@ -10,59 +10,60 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type FavoriteActionRequest struct {
+	ActionType string `form:"action_type"` // 1-点赞，2-取消点赞
+	Token      string `form:"token"`       // 用户鉴权token
+	VideoID    string `form:"video_id"`    // 视频id
+}
+
+type FavoriteListRequest struct {
+	Token  string `form:"token"`   // 用户鉴权token
+	UserID string `form:"user_id"` // 用户id
+}
+
 // FavoriteAction 点赞或者取消点赞
 func FavoriteAction(c *gin.Context) {
-	token := c.Query("token")
-	video_id, _ := strconv.ParseInt(c.Query("video_id"), 10, 64)
-	action_type, _ := strconv.ParseInt(c.Query("action_type"), 10, 32)
+	var req FavoriteActionRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Println("FavoriteActionRequest Err : ", err)
+		c.JSON(http.StatusBadRequest, UserResponse{Response: Response{StatusCode: 404}})
+		return
+	}
+	video_id, _ := strconv.ParseInt(req.VideoID, 10, 64)
 
-	if respClient, err := client.ActionFavorite(token, video_id, int32(action_type)); err == nil {
-		c.JSON(http.StatusOK, Response{
-			StatusCode: respClient.StatusCode,
-			StatusMsg: func() string {
-				if respClient.StatusMsg != nil {
-					return *respClient.StatusMsg
-				}
-				return ""
-			}(),
-		})
+	if respClient, err := client.ActionFavorite(req.Token, video_id, req.ActionType); err == nil {
+		c.JSON(http.StatusOK, Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)})
 	} else {
-		c.JSON(http.StatusExpectationFailed, Response{})
+		c.JSON(http.StatusInternalServerError, Response{})
 	}
 }
 
 // FavoriteList 获取点赞列表
 func FavoriteList(c *gin.Context) {
-	userid := c.Query("user_id")
-	userID, err := strconv.ParseInt(userid, 10, 64)
-	if err != nil {
-		log.Println("数据转换错误")
+	var req FavoriteListRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Println("FavoriteListRequest Err : ", err)
+		c.JSON(http.StatusBadRequest, UserResponse{Response: Response{StatusCode: 404}})
+		return
 	}
+	userID, _ := strconv.ParseInt(req.UserID, 10, 64)
 
 	if respClient, err := client.FavoriteList(userID); err == nil {
-		log.Println(*respClient.StatusMsg)
 		var videoList []Video
 		for _, tmp := range respClient.VideoList {
-			//------还有获取点赞数，获取评论数
-			videoList = append(videoList, Video{
-				ID:            tmp.Id,
-				PlayURL:       tmp.PlayUrl,
-				CoverURL:      tmp.CoverUrl,
-				FavoriteCount: tmp.FavoriteCount,
-				CommentCount:  tmp.CommentCount,
-				Title:         tmp.Title,
-				// TODO is Favorite and Author
-			})
+			if video, err := RPCVideo2ControllerVideo(tmp); err == nil {
+				videoList = append(videoList, *video)
+			} else {
+				c.JSON(http.StatusServiceUnavailable, FeedResponse{Response: Response{StatusCode: 404, StatusMsg: "RPC Video2ControllerVideo错误"}})
+				return
+			}
 		}
 		c.JSON(http.StatusOK, VideoListResponse{
-			Response: Response{
-				StatusCode: respClient.StatusCode,
-				StatusMsg:  StatusMsg(respClient.StatusMsg),
-			},
+			Response:  Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 			VideoList: videoList,
 		})
 
 	} else {
-		c.JSON(http.StatusExpectationFailed, VideoListResponse{})
+		c.JSON(http.StatusInternalServerError, VideoListResponse{})
 	}
 }

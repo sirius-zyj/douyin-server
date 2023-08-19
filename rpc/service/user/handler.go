@@ -34,16 +34,14 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.DouyinUserRegi
 			Name:     username,
 			Password: password,
 		}
-		ID := dao.CreateUser(newUser)
-		if ID == -1 {
+		if err := dao.CreateUser(&newUser); err != nil {
 			log.Println("注册失败")
 			setRegisterResp(resp, 404, "User register failed", -1, "")
 			return resp, nil
 		}
 		log.Println("注册成功")
-		newUser.ID = ID
-		token := username + password + "*" + strconv.FormatInt(ID, 10)
-		setRegisterResp(resp, 0, "User register success", ID, token)
+		token := username + password + "*" + strconv.FormatInt(newUser.ID, 10)
+		setRegisterResp(resp, 0, "User register success", newUser.ID, token)
 		return resp, nil
 	}
 

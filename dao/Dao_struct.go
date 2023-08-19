@@ -13,6 +13,7 @@ type Dvideo struct {
 	Title          string `json:"title"`
 	Favorite_count int64  `json:"favorite_count"`
 	Comment_count  int64  `json:"comment_count"`
+	Is_favorited   bool
 }
 
 type Duser struct {
@@ -31,10 +32,10 @@ type Duser struct {
 }
 
 type Dfavorite struct {
-	Id       int64 `gorm:"primaryKey;autoIncrement"`
-	User_id  int64
-	Video_id int64
-	Cancel   bool
+	Id          int64  `gorm:"primaryKey;autoIncrement"`
+	User_id     int64  `json:"user_id"`
+	Video_id    int64  `json:"video_id"`
+	Action_type string `json:"action_type"`
 }
 
 type Dcomments struct {
