@@ -68,7 +68,7 @@ func (s *PublishServiceImpl) PublishList(ctx context.Context, req *publish.Douyi
 	} else {
 		setPublishListResp(resp, 0, "success")
 		for _, tmp := range videoList {
-			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&tmp))
+			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&req.Token, &tmp))
 		}
 	}
 	return

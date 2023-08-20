@@ -6,4 +6,5 @@ func InitRpcClient() {
 	initFavoriteClient() //8882
 	initCommentClient()  //8883
 	initPublishClient()  //8884
+	initRelationClient() //8885
 }

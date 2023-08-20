@@ -41,7 +41,7 @@ func RPCUser2ControllerUser(userUser *user.User) (resp *User) {
 		Signature:       *userUser.Signature,
 		TotalFavorited:  strconv.FormatInt(*userUser.TotalFavorited, 10),
 		WorkCount:       *userUser.WorkCount,
-		// IsFollow:        *userUser.IsFollow,
+		IsFollow:        userUser.IsFollow,
 	}
 
 	return

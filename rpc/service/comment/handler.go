@@ -46,7 +46,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 		tmp, _ := dao.GetUserById(user_id)
 		resp.Comment = &comment.Comment{
 			Id:         dComment.Id,
-			User:       dao.DaoUser2RPCUser(&tmp),
+			User:       dao.DaoUser2RPCUser(&req.Token, &tmp),
 			Content:    dComment.Comment_text,
 			CreateDate: dComment.Created_at.Format("01-02"),
 		}
@@ -88,7 +88,7 @@ func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.Douyi
 			temp_user, _ := dao.GetUserById(tmp.User_id)
 			resp.CommentList = append(resp.CommentList, &comment.Comment{
 				Id:         tmp.Id,
-				User:       dao.DaoUser2RPCUser(&temp_user),
+				User:       dao.DaoUser2RPCUser(&req.Token, &temp_user),
 				Content:    tmp.Comment_text,
 				CreateDate: tmp.Created_at.Format("01-02"),
 			})

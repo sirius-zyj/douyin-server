@@ -67,7 +67,6 @@ func CommentList(c *gin.Context) {
 	videoId, _ := strconv.ParseInt(videoid, 10, 64)
 
 	if respClient, err := client.CommentList("", videoId); err == nil {
-		log.Println("respClient.CommentList", respClient.CommentList)
 		var CommentResq []Comment
 		for _, tmp := range respClient.CommentList {
 			CommentResq = append(CommentResq, Comment{

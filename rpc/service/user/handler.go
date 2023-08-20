@@ -76,19 +76,7 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.DouyinUserLoginRe
 func (s *UserServiceImpl) UserInfo(ctx context.Context, req *user.DouyinUserInfoRequest) (resp *user.User, err error) {
 	resp = new(user.User)
 	if tmp, err := dao.GetUserById(req.UserId); err == nil {
-		resp = &user.User{
-			Id:              tmp.ID,
-			Name:            tmp.Name,
-			FollowCount:     &tmp.FollowCount,
-			FollowerCount:   &tmp.FollowerCount,
-			Avatar:          &tmp.Avatar,
-			BackgroundImage: &tmp.BackgroundImage,
-			Signature:       &tmp.Signature,
-			TotalFavorited:  &tmp.TotalFavorited,
-			WorkCount:       &tmp.WorkCount,
-			FavoriteCount:   &tmp.FavoriteCount,
-			// IsFollow: true, // TODO
-		}
+		resp = dao.DaoUser2RPCUser(req.Token, &tmp)
 		return resp, nil
 	}
 	return resp, err

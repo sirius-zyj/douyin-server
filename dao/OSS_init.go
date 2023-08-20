@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	OSSAK          = "1"
-	OSSSK          = "2"
+	OSSAK          = "LTAI5t5uqtTbKX5dUkmZJzfH"
+	OSSSK          = "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
 	OSSEndPoint    = "oss-cn-hangzhou.aliyuncs.com"
 	OSSVideoBucket = "douyin-server-hust"
 	OSSImageBucket = "douyin-server-hust-image"

@@ -35,4 +35,5 @@ func Init() {
 	db.AutoMigrate(&Duser{})
 	db.AutoMigrate(&Dfavorite{})
 	db.AutoMigrate(&Dcomments{})
+	db.AutoMigrate(&Dfollow{})
 }

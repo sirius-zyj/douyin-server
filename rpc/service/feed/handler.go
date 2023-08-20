@@ -4,8 +4,6 @@ import (
 	"context"
 	"douyin-server/dao"
 	feed "douyin-server/rpc/kitex_gen/feed"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -23,14 +21,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *feed.DouyinFeedRequest)
 	} else {
 		resp.StatusCode = 0
 		for _, tmp := range respVideo {
-			if req.Token != nil {
-				index := strings.Index(*req.Token, "*")
-				user_id, _ := strconv.ParseInt((*req.Token)[index+1:], 10, 64)
-				if fa, err := dao.GetFavoriteData(user_id, tmp.Id); err == nil && fa.Id != 0 && fa.Action_type == "1" {
-					tmp.Is_favorited = true
-				}
-			}
-			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&tmp))
+			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(req.Token, &tmp))
 		}
 	}
 

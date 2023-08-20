@@ -13,7 +13,6 @@ type Dvideo struct {
 	Title          string `json:"title"`
 	Favorite_count int64  `json:"favorite_count"`
 	Comment_count  int64  `json:"comment_count"`
-	Is_favorited   bool
 }
 
 type Duser struct {
@@ -24,11 +23,10 @@ type Duser struct {
 	FollowerCount   int64  `json:"follower_count"`   // 粉丝总数
 	ID              int64  `json:"id"`               // 用户id
 	Password        string `json:"password"`         // 用户密码
-	// IsFollow        bool   `json:"is_follow"`        // true-已关注，false-未关注
-	Name           string `json:"name"`            // 用户名称
-	Signature      string `json:"signature"`       // 个人简介
-	TotalFavorited int64  `json:"total_favorited"` // 获赞数量
-	WorkCount      int64  `json:"work_count"`      // 作品数
+	Name            string `json:"name"`             // 用户名称
+	Signature       string `json:"signature"`        // 个人简介
+	TotalFavorited  int64  `json:"total_favorited"`  // 获赞数量
+	WorkCount       int64  `json:"work_count"`       // 作品数量
 }
 
 type Dfavorite struct {
@@ -44,4 +42,11 @@ type Dcomments struct {
 	Video_id     int64
 	Comment_text string
 	Created_at   time.Time
+}
+
+type Dfollow struct {
+	Id          int64  `gorm:"primaryKey;autoIncrement"`
+	User_id     int64  `json:"user_id"`
+	Follow_id   int64  `json:"follow_id"`
+	Action_type string `json:"action_type"`
 }

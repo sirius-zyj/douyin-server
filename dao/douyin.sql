@@ -39,8 +39,8 @@ DROP TABLE IF EXISTS `follows`;
 CREATE TABLE `follows`(
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NULL DEFAULT NULL,
-  `followr_id` bigint(20) NULL DEFAULT NULL,
-  `cancel` tinyint(1) NULL DEFAULT NULL,
+  `follow_id` bigint(20) NULL DEFAULT NULL,
+  `action_type` varchar(2) NULL DEFAULT NULL,
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   `deleted_at` datetime(3) NULL DEFAULT NULL,

@@ -52,13 +52,13 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 					setFavoriteActionResponse(resp, 404, "点赞数据更新失败")
 				} else {
 					if action_type == "1" {
-						dao.UpdateFeed("id", video_id, "favorite_count", 1) //点赞数+1
-						log.Println("video.Author_id", video.Author_id)
+						dao.UpdateFeed("id", video_id, "favorite_count", 1)         //点赞数+1
 						dao.UpdateUser("id", video.Author_id, "total_favorited", 1) //video Author total_favorited+1
 						dao.UpdateUser("id", user_id, "favorite_count", 1)          //用户favorite+1
 					} else {
 						dao.UpdateFeed("id", video_id, "favorite_count", -1)         //点赞数-1
 						dao.UpdateUser("id", video.Author_id, "total_favorited", -1) //video Author total_favorited+1
+						dao.UpdateUser("id", user_id, "favorite_count", -1)          //用户favorite+1
 					}
 					setFavoriteActionResponse(resp, 0, "点赞数据更新成功")
 				}
@@ -95,7 +95,7 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Do
 		}
 		setFavoriteListResponse(resp, 0, "视频数据查询成功")
 		for _, tmp := range VideoList {
-			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&tmp))
+			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&req.Token, &tmp))
 		}
 	}
 	return
