@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"douyin-server/dao"
+	"douyin-server/database"
+	"douyin-server/database/dao"
 	user "douyin-server/rpc/kitex_gen/user"
 	"log"
 	"strconv"
@@ -75,8 +76,10 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.DouyinUserLoginRe
 // UserInfo implements the UserServiceImpl interface.
 func (s *UserServiceImpl) UserInfo(ctx context.Context, req *user.DouyinUserInfoRequest) (resp *user.User, err error) {
 	resp = new(user.User)
-	if tmp, err := dao.GetUserById(req.UserId); err == nil {
-		resp = dao.DaoUser2RPCUser(req.Token, &tmp)
+
+	// if tmp, err := dao.GetUserById(req.UserId); err == nil {
+	if tmp, err := database.GetUserById(req.UserId); err == nil {
+		resp = database.DaoUser2RPCUser(req.Token, &tmp)
 		return resp, nil
 	}
 	return resp, err

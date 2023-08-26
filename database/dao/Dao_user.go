@@ -16,7 +16,7 @@ func (Duser) TableName() string {
 func GetUsersByUserName(userName string) (Duser, error) {
 	var userlist = make([]Duser, 0)
 	var user Duser
-	if err := db.Where("name = ?", userName).Find(&userlist).Error; err != nil {
+	if err := db.Model(&Duser{}).Where("name = ?", userName).Find(&userlist).Error; err != nil {
 		return user, errors.New("查询出错")
 	}
 
@@ -30,7 +30,7 @@ func GetUsersByUserName(userName string) (Duser, error) {
 // 通过用户id查找用户
 func GetUserById(userid int64) (Duser, error) {
 	var user Duser
-	err := db.Where("id = ?", userid).Find(&user).Error
+	err := db.Model(&Duser{}).Where("id = ?", userid).Find(&user).Error
 	if err != nil {
 		log.Println(err.Error())
 		return user, err
@@ -39,9 +39,9 @@ func GetUserById(userid int64) (Duser, error) {
 }
 
 // 通过用户id查找一系列用户
-func GetUsersByIds(userid []int64) ([]Duser, error) {
+func GetUsersByIds(userids []int64) ([]Duser, error) {
 	var resp []Duser
-	err := db.Where("id = ?", userid).Find(&resp).Error
+	err := db.Model(&Duser{}).Where("id in ?", userids).Find(&resp).Error
 	if err != nil {
 		log.Println(err.Error())
 		return resp, err
@@ -51,7 +51,7 @@ func GetUsersByIds(userid []int64) ([]Duser, error) {
 
 // 创建用户
 func CreateUser(user *Duser) (err error) {
-	if err := db.Create(user).Error; err != nil {
+	if err := db.Model(&Duser{}).Create(user).Error; err != nil {
 		log.Println("CreateUser Err : ", err.Error())
 		return err
 	}

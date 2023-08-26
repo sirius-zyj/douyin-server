@@ -1,7 +1,8 @@
 package main
 
 import (
-	"douyin-server/dao"
+	"douyin-server/database/dao"
+	"douyin-server/database/redis"
 	relation "douyin-server/rpc/kitex_gen/relation/relationservice"
 	"log"
 	"net"
@@ -16,6 +17,7 @@ func main() {
 	svr := relation.NewServer(new(RelationServiceImpl), opts...)
 
 	dao.Init()
+	redis.InitRedis()
 
 	err := svr.Run()
 

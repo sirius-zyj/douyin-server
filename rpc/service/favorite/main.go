@@ -1,7 +1,8 @@
 package main
 
 import (
-	"douyin-server/dao"
+	"douyin-server/database/dao"
+	"douyin-server/database/redis"
 	favorite "douyin-server/rpc/kitex_gen/favorite/favoriteservice"
 	"log"
 	"net"
@@ -16,6 +17,7 @@ func main() {
 	svr := favorite.NewServer(new(FavoriteServiceImpl), opts...)
 
 	dao.Init()
+	redis.InitRedis()
 
 	err := svr.Run()
 

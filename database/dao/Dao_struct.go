@@ -5,14 +5,14 @@ import (
 )
 
 type Dvideo struct {
-	Id             int64 `gorm:"primaryKey;autoIncrement" json:"id,omitempty"`
-	Author_id      int64
-	Play_url       string `json:"play_url"`
-	Cover_url      string `json:"cover_url"`
-	Upload_time    time.Time
-	Title          string `json:"title"`
-	Favorite_count int64  `json:"favorite_count"`
-	Comment_count  int64  `json:"comment_count"`
+	Id             int64     `gorm:"primaryKey;autoIncrement" json:"id,omitempty"`
+	Author_id      int64     `json:"author_id"`
+	Play_url       string    `json:"play_url"`
+	Cover_url      string    `json:"cover_url"`
+	Upload_time    time.Time `json:"upload_time"`
+	Title          string    `json:"title"`
+	Favorite_count int64     `json:"favorite_count"`
+	Comment_count  int64     `json:"comment_count"`
 }
 
 type Duser struct {
@@ -37,11 +37,11 @@ type Dfavorite struct {
 }
 
 type Dcomments struct {
-	Id           int64 `gorm:"primaryKey;autoIncrement"`
-	User_id      int64
-	Video_id     int64
-	Comment_text string
-	Created_at   time.Time
+	Id           int64     `gorm:"primaryKey;autoIncrement"`
+	User_id      int64     `json:"user_id"`
+	Video_id     int64     `json:"video_id"`
+	Comment_text string    `json:"comment_text"`
+	Created_at   time.Time `json:"created_at"`
 }
 
 type Dfollow struct {
@@ -49,4 +49,12 @@ type Dfollow struct {
 	User_id     int64  `json:"user_id"`
 	Follow_id   int64  `json:"follow_id"`
 	Action_type string `json:"action_type"`
+}
+
+type Dmessage struct {
+	Id           int64     `gorm:"primaryKey;autoIncrement"`
+	To_user_id   int64     `json:"to_user_id"`
+	From_user_id int64     `json:"from_user_id"`
+	Content      string    `json:"content"`
+	Created_at   time.Time `json:"created_at"`
 }

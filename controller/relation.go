@@ -15,9 +15,9 @@ type RelationActionRequest struct {
 	Token      string `form:"token"`       // 用户鉴权token
 }
 
-type RelationListRequest struct {
-	Token  string `json:"token"`   // 用户鉴权token
-	UserID string `json:"user_id"` // 用户id
+type UserListRequest struct {
+	Token  string `form:"token"`   // 用户鉴权token
+	UserID string `form:"user_id"` // 用户id
 }
 
 type UserListResponse struct {
@@ -30,7 +30,7 @@ func RelationAction(c *gin.Context) {
 	var req RelationActionRequest
 	if err := c.ShouldBind(&req); err != nil {
 		log.Println("RelationActionRequest Err : ", err)
-		c.JSON(http.StatusBadRequest, FeedResponse{Response: Response{StatusCode: 404, StatusMsg: "参数错误"}})
+		c.JSON(http.StatusBadRequest, UserListResponse{Response: Response{StatusCode: 404, StatusMsg: "参数错误"}})
 		return
 	}
 
@@ -45,39 +45,75 @@ func RelationAction(c *gin.Context) {
 
 // FollowList 获取关注列表
 func FollowList(c *gin.Context) {
-	// var req RelationListRequest
-	// if err := c.ShouldBind(&req); err != nil {
-	// 	log.Println("RelationListRequest Err : ", err)
-	// 	c.JSON(http.StatusBadRequest, FeedResponse{Response: Response{StatusCode: 404, StatusMsg: "参数错误"}})
-	// 	return
-	// }
+	var req UserListRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Println("FollowListRequest Err : ", err)
+		c.JSON(http.StatusBadRequest, UserListResponse{Response: Response{StatusCode: 404, StatusMsg: "参数错误"}})
+		return
+	}
 
-	// user_id, _ := strconv.ParseInt(req.UserID, 10, 64)
+	user_id, _ := strconv.ParseInt(req.UserID, 10, 64)
 
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	if respClient, err := client.RelationFollowList(req.Token, user_id); err == nil {
+		var userList []User
+		for _, tmp := range respClient.UserList {
+			userList = append(userList, *RPCUser2ControllerUser(tmp))
+		}
+		c.JSON(http.StatusOK, UserListResponse{
+			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			UserList: userList,
+		})
+	} else {
+		c.JSON(http.StatusInternalServerError, Response{})
+	}
 }
 
 // FollowerList 获取粉丝列表
 func FollowerList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	var req UserListRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Println("FollowerListRequest Err : ", err)
+		c.JSON(http.StatusBadRequest, UserListResponse{Response: Response{StatusCode: 404, StatusMsg: "参数错误"}})
+		return
+	}
+
+	user_id, _ := strconv.ParseInt(req.UserID, 10, 64)
+
+	if respClient, err := client.RelationFollowerList(req.Token, user_id); err == nil {
+		var userList []User
+		for _, tmp := range respClient.UserList {
+			userList = append(userList, *RPCUser2ControllerUser(tmp))
+		}
+		c.JSON(http.StatusOK, UserListResponse{
+			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			UserList: userList,
+		})
+	} else {
+		c.JSON(http.StatusInternalServerError, Response{})
+	}
 }
 
 // FriendList 获取朋友列表
 func FriendList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	var req UserListRequest
+	if err := c.ShouldBind(&req); err != nil {
+		log.Println("FriendListRequest Err : ", err)
+		c.JSON(http.StatusBadRequest, UserListResponse{Response: Response{StatusCode: 404, StatusMsg: "参数错误"}})
+		return
+	}
+
+	user_id, _ := strconv.ParseInt(req.UserID, 10, 64)
+
+	if respClient, err := client.RelationFriendList(req.Token, user_id); err == nil {
+		var userList []User
+		for _, tmp := range respClient.UserList {
+			userList = append(userList, *RPCUser2ControllerUser(tmp))
+		}
+		c.JSON(http.StatusOK, UserListResponse{
+			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+			UserList: userList,
+		})
+	} else {
+		c.JSON(http.StatusInternalServerError, Response{})
+	}
 }

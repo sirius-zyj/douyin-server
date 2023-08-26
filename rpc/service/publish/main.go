@@ -1,7 +1,8 @@
 package main
 
 import (
-	"douyin-server/dao"
+	"douyin-server/database/dao"
+	"douyin-server/database/redis"
 	publish "douyin-server/rpc/kitex_gen/publish/publishservice"
 	"log"
 	"net"
@@ -17,6 +18,7 @@ func main() {
 
 	dao.Init()
 	dao.Oss_init()
+	redis.InitRedis()
 
 	err := svr.Run()
 

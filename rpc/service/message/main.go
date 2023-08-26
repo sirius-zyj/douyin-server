@@ -3,7 +3,7 @@ package main
 import (
 	"douyin-server/database/dao"
 	"douyin-server/database/redis"
-	user "douyin-server/rpc/kitex_gen/user/userservice"
+	message "douyin-server/rpc/kitex_gen/message/messageservice"
 	"log"
 	"net"
 
@@ -11,10 +11,10 @@ import (
 )
 
 func main() {
-	addr, _ := net.ResolveTCPAddr("tcp", ":8881")
+	addr, _ := net.ResolveTCPAddr("tcp", ":8886")
 	var opts []server.Option
 	opts = append(opts, server.WithServiceAddr(addr))
-	svr := user.NewServer(new(UserServiceImpl), opts...)
+	svr := message.NewServer(new(MessageServiceImpl), opts...)
 
 	dao.Init()
 	redis.InitRedis()

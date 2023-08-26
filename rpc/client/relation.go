@@ -47,3 +47,31 @@ func RelationFollowList(token string, user_id int64) (resp *relation.DouyinRelat
 	}
 	return
 }
+
+func RelationFollowerList(token string, user_id int64) (resp *relation.DouyinRelationFollowerListResponse, err error) {
+	resp = new(relation.DouyinRelationFollowerListResponse)
+
+	resp, err = relationClient.RelationFollowerList(context.Background(), &relation.DouyinRelationFollowerListRequest{
+		Token:  token,
+		UserId: user_id,
+	})
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return
+}
+
+func RelationFriendList(token string, user_id int64) (resp *relation.DouyinRelationFriendListResponse, err error) {
+	resp = new(relation.DouyinRelationFriendListResponse)
+
+	resp, err = relationClient.RelationFriendList(context.Background(), &relation.DouyinRelationFriendListRequest{
+		Token:  token,
+		UserId: user_id,
+	})
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return
+}

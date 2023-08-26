@@ -12,9 +12,9 @@ func (Dfavorite) TableName() string {
 	return "favorite"
 }
 
-// 点赞更新操作  根据点赞用户和视频id进行访问
-func ActionFavorite(user_id int64, video_id int64, action_type string) error {
-	err := db.Model(&Dfavorite{}).Where("user_id = ? AND video_id = ?", user_id, video_id).Update("action_type", action_type).Error
+// Erase更新操作  根据点赞用户和视频id进行访问
+func EraseFavorite(user_id int64, video_id int64) error {
+	err := db.Model(&Dfavorite{}).Where("user_id = ? AND video_id = ?", user_id, video_id).Delete(&Dfavorite{}).Error
 
 	if err != nil {
 		log.Println("点赞更新错误")
@@ -24,8 +24,8 @@ func ActionFavorite(user_id int64, video_id int64, action_type string) error {
 }
 
 // 插入点赞数据
-func InsertFavorite(faDate Dfavorite) error {
-	err := db.Model(&Dfavorite{}).Create(&faDate).Error
+func InsertFavorite(faDate *Dfavorite) error {
+	err := db.Model(&Dfavorite{}).Create(faDate).Error
 	if err != nil {
 		log.Println("点赞数据插入失败")
 		return errors.New("点赞数据插入失败")

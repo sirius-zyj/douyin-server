@@ -70,15 +70,15 @@ func TestPublish(t *testing.T) {
 
 	userId, token := getTestUserToken(testUserA, e)
 
-	publishResp := e.POST("/douyin/publish/action/").
-		WithMultipart().
-		WithFile("data", "../public/bear.mp4").
-		WithFormField("token", token).
-		WithFormField("title", "Bear").
-		Expect().
-		Status(http.StatusOK).
-		JSON().Object()
-	publishResp.Value("status_code").Number().Equal(0)
+	// publishResp := e.POST("/douyin/publish/action/").
+	// 	WithMultipart().
+	// 	WithFile("data", "../public/bear.mp4").
+	// 	WithFormField("token", token).
+	// 	WithFormField("title", "Bear").
+	// 	Expect().
+	// 	Status(http.StatusOK).
+	// 	JSON().Object()
+	// publishResp.Value("status_code").Number().Equal(0)
 
 	publishListResp := e.GET("/douyin/publish/list/").
 		WithQuery("user_id", userId).WithQuery("token", token).

@@ -65,8 +65,9 @@ func CommentAction(c *gin.Context) {
 func CommentList(c *gin.Context) {
 	videoid := c.Query("video_id")
 	videoId, _ := strconv.ParseInt(videoid, 10, 64)
+	token := c.Query("token")
 
-	if respClient, err := client.CommentList("", videoId); err == nil {
+	if respClient, err := client.CommentList(token, videoId); err == nil {
 		var CommentResq []Comment
 		for _, tmp := range respClient.CommentList {
 			CommentResq = append(CommentResq, Comment{

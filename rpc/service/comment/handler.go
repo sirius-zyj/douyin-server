@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"douyin-server/dao"
+	"douyin-server/database"
+	"douyin-server/database/dao"
 	comment "douyin-server/rpc/kitex_gen/comment"
 	"log"
 	"strconv"
@@ -43,10 +44,12 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 			return
 		}
 		dao.UpdateFeed("id", videoId, "comment_count", 1) //评论数+1
-		tmp, _ := dao.GetUserById(user_id)
+
+		tmp, _ := database.GetUserById(user_id)
+
 		resp.Comment = &comment.Comment{
 			Id:         dComment.Id,
-			User:       dao.DaoUser2RPCUser(&req.Token, &tmp),
+			User:       database.DaoUser2RPCUser(&req.Token, &tmp),
 			Content:    dComment.Comment_text,
 			CreateDate: dComment.Created_at.Format("01-02"),
 		}
@@ -77,18 +80,20 @@ func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.Douyi
 	resp = new(comment.DouyinCommentListResponse)
 
 	videoId := req.VideoId
-	CommentList, err := dao.GetAllComments(videoId)
+
+	CommentList, err := database.GetAllComments(videoId)
+
 	if err != nil {
 		log.Println("拉取评论失败")
 		setCommentListResp(resp, 404, "拉取评论失败,请重试")
 	} else {
-		log.Println("拉取评论成功")
 		for _, tmp := range CommentList {
 			//---------获取评论的用户-------------
-			temp_user, _ := dao.GetUserById(tmp.User_id)
+			temp_user, _ := database.GetUserById(tmp.User_id)
+
 			resp.CommentList = append(resp.CommentList, &comment.Comment{
 				Id:         tmp.Id,
-				User:       dao.DaoUser2RPCUser(&req.Token, &temp_user),
+				User:       database.DaoUser2RPCUser(&req.Token, &temp_user),
 				Content:    tmp.Comment_text,
 				CreateDate: tmp.Created_at.Format("01-02"),
 			})

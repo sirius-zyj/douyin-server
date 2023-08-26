@@ -1,7 +1,8 @@
 package main
 
 import (
-	"douyin-server/dao"
+	"douyin-server/database/dao"
+	"douyin-server/database/redis"
 	feed "douyin-server/rpc/kitex_gen/feed/feedservice"
 	"log"
 	"net"
@@ -16,6 +17,7 @@ func main() {
 	svr := feed.NewServer(new(FeedServiceImpl), opts...)
 
 	dao.Init()
+	redis.InitRedis()
 
 	err := svr.Run()
 

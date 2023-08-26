@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"douyin-server/dao"
+	"douyin-server/database"
+	"douyin-server/database/dao"
 	feed "douyin-server/rpc/kitex_gen/feed"
 	"time"
 )
@@ -21,7 +22,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *feed.DouyinFeedRequest)
 	} else {
 		resp.StatusCode = 0
 		for _, tmp := range respVideo {
-			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(req.Token, &tmp))
+			resp.VideoList = append(resp.VideoList, database.DaoVideo2RPCVideo(req.Token, &tmp))
 		}
 	}
 

@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"douyin-server/dao"
+	"douyin-server/database"
+	"douyin-server/database/dao"
 	publish "douyin-server/rpc/kitex_gen/publish"
 	"log"
 	"strconv"
@@ -62,13 +63,13 @@ func (s *PublishServiceImpl) PublishList(ctx context.Context, req *publish.Douyi
 	resp = new(publish.DouyinPublishListResponse)
 
 	//获取目标用户的所有作品将其传递给APP
-	if videoList, err := dao.GetVideoByUserId(req.UserId); err != nil {
+	if videoList, err := database.GetVideoByAuthorId(req.UserId); err != nil {
 		setPublishListResp(resp, 404, err.Error())
 		return resp, err
 	} else {
 		setPublishListResp(resp, 0, "success")
 		for _, tmp := range videoList {
-			resp.VideoList = append(resp.VideoList, dao.DaoVideo2RPCVideo(&req.Token, &tmp))
+			resp.VideoList = append(resp.VideoList, database.DaoVideo2RPCVideo(&req.Token, &tmp))
 		}
 	}
 	return

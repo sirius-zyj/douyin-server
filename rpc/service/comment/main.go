@@ -1,7 +1,8 @@
 package main
 
 import (
-	"douyin-server/dao"
+	"douyin-server/database/dao"
+	"douyin-server/database/redis"
 	comment "douyin-server/rpc/kitex_gen/comment/commentservice"
 	"log"
 	"net"
@@ -16,6 +17,7 @@ func main() {
 	svr := comment.NewServer(new(CommentServiceImpl), opts...)
 
 	dao.Init()
+	redis.InitRedis()
 
 	err := svr.Run()
 

@@ -1,14 +1,14 @@
-package dao
+package database
 
 import (
+	"douyin-server/database/dao"
 	"douyin-server/rpc/kitex_gen/feed"
 	"douyin-server/rpc/kitex_gen/user"
-	"log"
 	"strconv"
 	"strings"
 )
 
-func DaoVideo2RPCVideo(token *string, daoVideo *Dvideo) (resp *feed.Video) {
+func DaoVideo2RPCVideo(token *string, daoVideo *dao.Dvideo) (resp *feed.Video) {
 	resp = new(feed.Video)
 	authorInfo, _ := GetUserById(daoVideo.Author_id)
 	resp = &feed.Video{
@@ -25,7 +25,7 @@ func DaoVideo2RPCVideo(token *string, daoVideo *Dvideo) (resp *feed.Video) {
 	return
 }
 
-func DaoUser2RPCUser(token *string, daoUser *Duser) (resp *user.User) {
+func DaoUser2RPCUser(token *string, daoUser *dao.Duser) (resp *user.User) {
 	resp = new(user.User)
 	resp = &user.User{
 		Id:              daoUser.ID,
@@ -40,7 +40,6 @@ func DaoUser2RPCUser(token *string, daoUser *Duser) (resp *user.User) {
 		WorkCount:       &daoUser.WorkCount,
 	}
 	resp.IsFollow = CheckWhetherFollow(token, daoUser.ID)
-	log.Println("resp.IsFollow: ", resp.IsFollow)
 	return
 }
 
@@ -57,12 +56,12 @@ func CheckWhetherFavorite(token *string, video_id int64) bool {
 	return false
 }
 
-func CheckWhetherFollow(token *string, follow_id int64) bool {
+func CheckWhetherFollow(token *string, followId int64) bool {
 	if token != nil {
 		index := strings.Index(*token, "*")
-		user_id, _ := strconv.ParseInt((*token)[index+1:], 10, 64)
+		userId, _ := strconv.ParseInt((*token)[index+1:], 10, 64)
 		// 判断是否已经关注
-		followData, err := GetFollowData(user_id, follow_id)
+		followData, err := GetFollowData(userId, followId)
 		if err == nil && followData.Id != 0 && followData.Action_type == "1" {
 			return true
 		}

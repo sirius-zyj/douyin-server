@@ -38,7 +38,7 @@ func GetVideosByIds(ids []int64) ([]Dvideo, error) {
 }
 
 // 根据作者的id查询他发布的所有视频
-func GetVideoByUserId(id int64) ([]Dvideo, error) {
+func GetVideoByAuthorId(id int64) ([]Dvideo, error) {
 	var resp []Dvideo
 	err := db.Model(&Dvideo{}).Where("author_id = ?", id).Find(&resp).Error
 	if err != nil {
