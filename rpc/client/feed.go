@@ -20,12 +20,12 @@ func initFeedClient() {
 	feedClient = c
 }
 
-func Feed(time time.Time, token string) (resp *feed.DouyinFeedResponse, err error) {
+func Feed(time time.Time, token *string) (resp *feed.DouyinFeedResponse, err error) {
 	resp = new(feed.DouyinFeedResponse)
 	latestTime := time.Unix()
 	resp, err = feedClient.Feed(context.Background(), &feed.DouyinFeedRequest{
 		LatestTime: &latestTime,
-		Token:      &token,
+		Token:      token,
 	})
 	if err != nil {
 		log.Printf("FeedClient get err %v\n", err)

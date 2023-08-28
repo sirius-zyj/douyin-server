@@ -4,10 +4,10 @@ import (
 	"context"
 	"douyin-server/database"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/jwt"
 	comment "douyin-server/rpc/kitex_gen/comment"
 	"log"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -26,13 +26,13 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 
 	token, videoId, actionType := req.Token, req.VideoId, req.ActionType
 
-	index := strings.Index(token, "*")
-	user_id, _ := strconv.ParseInt(token[index+1:], 10, 64)
+	userId := jwt.GetUserIdByToken(token)
+
 	//最好有一个用户身份验证过程 TODO
 	if actionType == 1 {
 		dComment := dao.Dcomments{
 			Comment_text: *req.CommentText,
-			User_id:      user_id,
+			User_id:      userId,
 			Video_id:     videoId,
 			Created_at:   time.Now(),
 		}
@@ -45,7 +45,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 		}
 		dao.UpdateFeed("id", videoId, "comment_count", 1) //评论数+1
 
-		tmp, _ := database.GetUserById(user_id)
+		tmp, _ := database.GetUserById(userId)
 
 		resp.Comment = &comment.Comment{
 			Id:         dComment.Id,

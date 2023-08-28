@@ -82,7 +82,7 @@ func UserInfo(c *gin.Context) {
 	}
 	id, _ := strconv.ParseInt(req.UserID, 10, 64)
 	//TODO token is unknown used
-	if respClient, err := client.UserInfo(id); err == nil {
+	if respClient, err := client.UserInfo(id, req.Token); err == nil {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0, StatusMsg: "success"},
 			User:     *RPCUser2ControllerUser(respClient),

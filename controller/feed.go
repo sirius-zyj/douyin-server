@@ -33,16 +33,12 @@ func Feed(c *gin.Context) {
 	var latestTime time.Time
 	if req.LatestTime != nil && *req.LatestTime != "0" && *req.LatestTime != "" {
 		s, _ := strconv.ParseInt(*req.LatestTime, 10, 64)
-		latestTime = time.Unix(s, 0)
+		latestTime = time.Unix(s/1000, s%1000)
 	} else {
 		latestTime = time.Now()
 	}
-	var token string
-	if req.Token != nil {
-		token = *req.Token
-	}
 
-	if respClient, err := client.Feed(latestTime, token); err == nil {
+	if respClient, err := client.Feed(latestTime, req.Token); err == nil {
 		var videoList []Video
 		for _, tmp := range respClient.VideoList {
 			if video, err := RPCVideo2ControllerVideo(tmp); err == nil {

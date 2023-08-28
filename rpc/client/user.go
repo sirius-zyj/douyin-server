@@ -49,10 +49,11 @@ func Login(username string, password string) (resp *user.DouyinUserLoginResponse
 	return
 }
 
-func UserInfo(user_id int64) (resp *user.User, err error) {
+func UserInfo(user_id int64, token *string) (resp *user.User, err error) {
 	resp = new(user.User)
 	resp, err = userClient.UserInfo(context.Background(), &user.DouyinUserInfoRequest{
 		UserId: user_id,
+		Token:  token,
 	})
 
 	if err != nil {

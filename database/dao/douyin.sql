@@ -1,4 +1,4 @@
-SET NAMES utf8mb4
+SET NAMES utf8mb4;
 
 -- ------------------------------
 -- Table structure for comments
@@ -74,10 +74,10 @@ CREATE TABLE `users`  (
   `follower_count` int(20) NULL DEFAULT NULL,
   `favorite_count` int(20) NULL DEFAULT NULL,
   `avatar` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  'background_image'longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  'background_image' longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  'work_count' int(20) NULL DEFAULT NULL,
-  'total_favorited' int(20) NULL DEFAULT NULL,
+  `background_image` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `signature` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `work_count` int(20) NULL DEFAULT NULL,
+  `total_favorited` int(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 

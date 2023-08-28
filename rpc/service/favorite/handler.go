@@ -4,10 +4,9 @@ import (
 	"context"
 	"douyin-server/database"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/jwt"
 	favorite "douyin-server/rpc/kitex_gen/favorite"
 	"log"
-	"strconv"
-	"strings"
 )
 
 // FavoriteServiceImpl implements the last service interface defined in the IDL.
@@ -25,15 +24,14 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 
 	token, video_id, action_type := req.Token, req.VideoId, req.ActionType
 
-	index := strings.Index(token, "*")
-	user_id, _ := strconv.ParseInt(token[index+1:], 10, 64)
+	userId := jwt.GetUserIdByToken(token)
 
 	video, _ := dao.GetVideoById(video_id) //unnecessary beacaues there is an updation in the end, which will make it delete
-	fa, err := database.GetFavoriteData(user_id, video_id)
+	fa, err := database.GetFavoriteData(userId, video_id)
 	if err == nil {
 		//获取到的表数据ID为0时代表没有该条点赞数据
 		if fa.Id == 0 {
-			fa.User_id = user_id
+			fa.User_id = userId
 			fa.Action_type = action_type
 			fa.Video_id = video_id
 			//创建时间
@@ -43,22 +41,22 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 			} else {
 				dao.UpdateFeed("id", video_id, "favorite_count", 1)         //点赞数+1
 				dao.UpdateUser("id", video.Author_id, "total_favorited", 1) //video Author total_favorited+1
-				dao.UpdateUser("id", user_id, "favorite_count", 1)          //用户favorite+1
+				dao.UpdateUser("id", userId, "favorite_count", 1)           //用户favorite+1
 				setFavoriteActionResponse(resp, 0, "点赞成功")
 			}
 		} else {
 			if fa.Action_type != action_type {
-				if err := dao.EraseFavorite(user_id, video_id); err != nil {
+				if err := dao.EraseFavorite(userId, video_id); err != nil {
 					setFavoriteActionResponse(resp, 404, "点赞数据Erase失败")
 				} else {
 					dao.UpdateFeed("id", video_id, "favorite_count", -1)         //点赞数-1
 					dao.UpdateUser("id", video.Author_id, "total_favorited", -1) //video Author total_favorited+1
-					dao.UpdateUser("id", user_id, "favorite_count", -1)          //用户favorite+1
+					dao.UpdateUser("id", userId, "favorite_count", -1)           //用户favorite+1
 					setFavoriteActionResponse(resp, 0, "点赞数据Erase成功")
 				}
 			} else {
 				if action_type != "1" {
-					dao.EraseFavorite(user_id, video_id)
+					dao.EraseFavorite(userId, video_id)
 				}
 				setFavoriteActionResponse(resp, 0, "Action_type 与数据库中的数据相同")
 			}

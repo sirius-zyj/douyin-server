@@ -50,6 +50,7 @@ func Publish(c *gin.Context) {
 	if respClient, err := client.Publish(token, video_Data, video_title); err == nil {
 		c.JSON(http.StatusOK, Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)})
 	} else {
+		log.Println(err)
 		c.JSON(http.StatusInternalServerError, Response{})
 	}
 }
@@ -60,6 +61,10 @@ func PublishList(c *gin.Context) {
 	if err := c.ShouldBind(&req); err != nil {
 		log.Println("PublishListRequest Err : ", err)
 		c.JSON(http.StatusBadRequest, UserResponse{Response: Response{StatusCode: 404}})
+		return
+	}
+	if req.Token == "" {
+		c.JSON(http.StatusOK, VideoListResponse{Response: Response{StatusCode: 200}})
 		return
 	}
 	userID, _ := strconv.ParseInt(req.UserID, 10, 64)

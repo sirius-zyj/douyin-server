@@ -4,10 +4,9 @@ import (
 	"context"
 	"douyin-server/database"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/jwt"
 	relation "douyin-server/rpc/kitex_gen/relation"
 	"log"
-	"strconv"
-	"strings"
 )
 
 // RelationServiceImpl implements the last service interface defined in the IDL.
@@ -25,35 +24,34 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 
 	token, follow_id, action_type := req.Token, req.FollowId, req.ActionType
 
-	index := strings.Index(token, "*")
-	user_id, _ := strconv.ParseInt(token[index+1:], 10, 64)
+	userId := jwt.GetUserIdByToken(token)
 
-	if fo, err := database.GetFollowData(user_id, follow_id); err == nil {
+	if fo, err := database.GetFollowData(userId, follow_id); err == nil {
 		//获取到的表数据ID为0时代表没有该条关注数据
 		if fo.Id == 0 {
-			fo.User_id = user_id
+			fo.User_id = userId
 			fo.Follow_id = follow_id
 			fo.Action_type = action_type
 			err = database.InsertFollow(&fo)
 			if err != nil {
 				setFollowActionResponse(resp, 404, "关注失败")
 			} else {
-				dao.UpdateUser("id", user_id, "follow_count", 1)     //follow_count+1
+				dao.UpdateUser("id", userId, "follow_count", 1)      //follow_count+1
 				dao.UpdateUser("id", follow_id, "follower_count", 1) //用户follower_count+1
 				setFollowActionResponse(resp, 0, "关注成功")
 			}
 		} else {
 			if action_type != fo.Action_type {
-				if err := dao.EraseFollow(user_id, follow_id); err != nil {
+				if err := dao.EraseFollow(userId, follow_id); err != nil {
 					setFollowActionResponse(resp, 404, "关注数据erase失败")
 				} else {
-					dao.UpdateUser("id", user_id, "follow_count", -1)     //follow_count-1
+					dao.UpdateUser("id", userId, "follow_count", -1)      //follow_count-1
 					dao.UpdateUser("id", follow_id, "follower_count", -1) //用户follower_count-1
 					setFollowActionResponse(resp, 0, "关注数据erase成功")
 				}
 			} else {
 				if action_type != "1" {
-					dao.EraseFollow(user_id, follow_id)
+					dao.EraseFollow(userId, follow_id)
 				}
 				setFollowActionResponse(resp, 0, "Action_type 与数据库中的数据相同")
 			}

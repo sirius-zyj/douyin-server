@@ -2,10 +2,9 @@ package database
 
 import (
 	"douyin-server/database/dao"
+	"douyin-server/middleware/jwt"
 	"douyin-server/rpc/kitex_gen/feed"
 	"douyin-server/rpc/kitex_gen/user"
-	"strconv"
-	"strings"
 )
 
 func DaoVideo2RPCVideo(token *string, daoVideo *dao.Dvideo) (resp *feed.Video) {
@@ -43,12 +42,11 @@ func DaoUser2RPCUser(token *string, daoUser *dao.Duser) (resp *user.User) {
 	return
 }
 
-func CheckWhetherFavorite(token *string, video_id int64) bool {
+func CheckWhetherFavorite(token *string, videoId int64) bool {
 	if token != nil {
-		index := strings.Index(*token, "*")
-		user_id, _ := strconv.ParseInt((*token)[index+1:], 10, 64)
+		userId := jwt.GetUserIdByToken(*token)
 		// 判断是否已经点赞
-		favoriteData, err := GetFavoriteData(user_id, video_id)
+		favoriteData, err := GetFavoriteData(userId, videoId)
 		if err == nil && favoriteData.Id != 0 && favoriteData.Action_type == "1" {
 			return true
 		}
@@ -58,8 +56,7 @@ func CheckWhetherFavorite(token *string, video_id int64) bool {
 
 func CheckWhetherFollow(token *string, followId int64) bool {
 	if token != nil {
-		index := strings.Index(*token, "*")
-		userId, _ := strconv.ParseInt((*token)[index+1:], 10, 64)
+		userId := jwt.GetUserIdByToken(*token)
 		// 判断是否已经关注
 		followData, err := GetFollowData(userId, followId)
 		if err == nil && followData.Id != 0 && followData.Action_type == "1" {

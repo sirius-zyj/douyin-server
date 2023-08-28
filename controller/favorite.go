@@ -46,9 +46,13 @@ func FavoriteList(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, UserResponse{Response: Response{StatusCode: 404}})
 		return
 	}
+	if req.Token == "" {
+		c.JSON(http.StatusOK, VideoListResponse{Response: Response{StatusCode: 200}})
+		return
+	}
 	userID, _ := strconv.ParseInt(req.UserID, 10, 64)
 
-	if respClient, err := client.FavoriteList(userID); err == nil {
+	if respClient, err := client.FavoriteList(userID, req.Token); err == nil {
 		var videoList []Video
 		for _, tmp := range respClient.VideoList {
 			if video, err := RPCVideo2ControllerVideo(tmp); err == nil {

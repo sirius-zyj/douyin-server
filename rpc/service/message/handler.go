@@ -3,9 +3,8 @@ package main
 import (
 	"context"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/jwt"
 	message "douyin-server/rpc/kitex_gen/message"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -27,8 +26,7 @@ func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.Dou
 		return
 	}
 
-	index := strings.Index(req.Token, "*")
-	fromUserId, _ := strconv.ParseInt(req.Token[index+1:], 10, 64)
+	fromUserId := jwt.GetUserIdByToken(req.Token)
 
 	if err = dao.InsertMessage(&dao.Dmessage{
 		From_user_id: fromUserId,
@@ -53,8 +51,8 @@ func setMessageChatResponse(resp *message.DouyinMessageChatResponse, statusCode 
 func (s *MessageServiceImpl) MessageChat(ctx context.Context, req *message.DouyinMessageChatRequest) (resp *message.DouyinMessageChatResponse, err error) {
 	resp = new(message.DouyinMessageChatResponse)
 
-	index := strings.Index(req.Token, "*")
-	fromUserId, _ := strconv.ParseInt(req.Token[index+1:], 10, 64)
+	fromUserId := jwt.GetUserIdByToken(req.Token)
+
 	seconds := req.PreMsgTime / 1000
 	nanoseconds := (req.PreMsgTime % 1000) * 1000000
 	preMsgTime := time.Unix(seconds, nanoseconds)
