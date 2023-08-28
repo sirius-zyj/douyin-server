@@ -2,17 +2,28 @@ package client
 
 import (
 	"context"
+	"douyin-server/config"
 	"douyin-server/rpc/kitex_gen/user"
 	"douyin-server/rpc/kitex_gen/user/userservice"
 	"log"
 
 	"github.com/cloudwego/kitex/client"
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var userClient userservice.Client
 
 func initUserClient() {
-	c, err := userservice.NewClient("user", client.WithHostPorts("0.0.0.0:8881"))
+	// 服务发现
+	r, err := etcd.NewEtcdResolver([]string{config.EtcdAddr})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c, err := userservice.NewClient(config.UserServiceName,
+		// client.WithHostPorts(config.UserAddr),
+		client.WithResolver(r))
+
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -2,18 +2,28 @@ package client
 
 import (
 	"context"
+	"douyin-server/config"
 	"douyin-server/rpc/kitex_gen/feed"
 	"douyin-server/rpc/kitex_gen/feed/feedservice"
 	"log"
 	"time"
 
 	"github.com/cloudwego/kitex/client"
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var feedClient feedservice.Client
 
 func initFeedClient() {
-	c, err := feedservice.NewClient("feed", client.WithHostPorts("0.0.0.0:8880"))
+	// 服务发现
+	r, err := etcd.NewEtcdResolver([]string{config.EtcdAddr})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c, err := feedservice.NewClient(config.FeedServiceName,
+		// client.WithHostPorts(config.FeedAddr),
+		client.WithResolver(r))
 	if err != nil {
 		log.Fatal(err)
 	}

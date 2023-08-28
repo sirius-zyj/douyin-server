@@ -2,17 +2,27 @@ package client
 
 import (
 	"context"
+	"douyin-server/config"
 	"douyin-server/rpc/kitex_gen/favorite"
 	"douyin-server/rpc/kitex_gen/favorite/favoriteservice"
 	"log"
 
 	"github.com/cloudwego/kitex/client"
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var favoriteClient favoriteservice.Client
 
 func initFavoriteClient() {
-	c, err := favoriteservice.NewClient("favorite", client.WithHostPorts("0.0.0.0:8882"))
+	// 服务发现
+	r, err := etcd.NewEtcdResolver([]string{config.EtcdAddr})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c, err := favoriteservice.NewClient(config.FavoriteServiceName,
+		// client.WithHostPorts(config.FavoriteAddr),
+		client.WithResolver(r))
 	if err != nil {
 		log.Fatal(err)
 	}

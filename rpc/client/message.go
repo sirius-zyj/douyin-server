@@ -2,17 +2,27 @@ package client
 
 import (
 	"context"
+	"douyin-server/config"
 	"douyin-server/rpc/kitex_gen/message"
 	"douyin-server/rpc/kitex_gen/message/messageservice"
 	"log"
 
 	"github.com/cloudwego/kitex/client"
+	etcd "github.com/kitex-contrib/registry-etcd"
 )
 
 var messageClient messageservice.Client
 
 func initMessageClient() {
-	c, err := messageservice.NewClient("MessageService", client.WithHostPorts("0.0.0.0:8886"))
+	// 服务发现
+	r, err := etcd.NewEtcdResolver([]string{config.EtcdAddr})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c, err := messageservice.NewClient(config.MessageServiceName,
+		// client.WithHostPorts(config.MessageAddr),
+		client.WithResolver(r))
 	if err != nil {
 		log.Fatal(err)
 	}

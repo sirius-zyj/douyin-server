@@ -34,3 +34,26 @@ var (
 	FollowDataPrefix   = "follow{user_id:%d; follow_id:%d}"  //redis中关注信息的前缀
 	Exipretime         = time.Second * 120                   //redis数据的热度消散时间
 )
+
+//etcd
+
+const (
+	// etcd 端口
+	EtcdAddr     = "127.0.0.1:2379"
+	FeedAddr     = "0.0.0.0:8880"
+	UserAddr     = "0.0.0.0:8881"
+	FavoriteAddr = "0.0.0.0:8882"
+	CommentAddr  = "0.0.0.0:8883"
+	PublishAddr  = "0.0.0.0:8884"
+	RelationAddr = "0.0.0.0:8885"
+	MessageAddr  = "0.0.0.0:8886"
+
+	// kitex 服务名
+	FeedServiceName     = "douyin-server-etcd-feed"
+	UserServiceName     = "douyin-server-etcd-user"
+	FavoriteServiceName = "douyin-server-etcd-favorite"
+	CommentServiceName  = "douyin-server-etcd-comment"
+	PublishServiceName  = "douyin-server-etcd-publish"
+	RelationServiceName = "douyin-server-etcd-relation"
+	MessageServiceName  = "douyin-server-etcd-message"
+)
