@@ -28,10 +28,14 @@ func GetFollowData(userId int64, followId int64) (res dao.Dfollow, err error) {
 		return
 	}
 	//将获取到的结果写入redis
-	if res.Id != 0 {
-		if err = AddRedisFollowData(&key, res); err != nil {
-			log.Println("写入缓存失败")
-		}
+	if res.Id == 0 {
+		res.User_id = userId
+		res.Follow_id = followId
+		res.Action_type = "2"
+	}
+
+	if err = AddRedisFollowData(&key, res); err != nil {
+		log.Println("写入缓存失败")
 	}
 	return res, err
 }

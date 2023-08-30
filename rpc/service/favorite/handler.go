@@ -35,28 +35,21 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 			fa.Action_type = action_type
 			fa.Video_id = video_id
 			//创建时间
-			err = database.InsertFavorite(&fa)
-			if err != nil {
+			if err = database.InsertFavorite(&fa, video.Author_id); err != nil {
 				setFavoriteActionResponse(resp, 404, "点赞失败")
 			} else {
-				dao.UpdateFeed("id", video_id, "favorite_count", 1)         //点赞数+1
-				dao.UpdateUser("id", video.Author_id, "total_favorited", 1) //video Author total_favorited+1
-				dao.UpdateUser("id", userId, "favorite_count", 1)           //用户favorite+1
 				setFavoriteActionResponse(resp, 0, "点赞成功")
 			}
 		} else {
 			if fa.Action_type != action_type {
-				if err := dao.EraseFavorite(userId, video_id); err != nil {
+				if err := dao.Tran_EraseFavorite(userId, video_id, video.Author_id); err != nil {
 					setFavoriteActionResponse(resp, 404, "点赞数据Erase失败")
 				} else {
-					dao.UpdateFeed("id", video_id, "favorite_count", -1)         //点赞数-1
-					dao.UpdateUser("id", video.Author_id, "total_favorited", -1) //video Author total_favorited+1
-					dao.UpdateUser("id", userId, "favorite_count", -1)           //用户favorite+1
 					setFavoriteActionResponse(resp, 0, "点赞数据Erase成功")
 				}
 			} else {
 				if action_type != "1" {
-					dao.EraseFavorite(userId, video_id)
+					dao.Tran_EraseFavorite(userId, video_id, video.Author_id)
 				}
 				setFavoriteActionResponse(resp, 0, "Action_type 与数据库中的数据相同")
 			}

@@ -26,12 +26,14 @@ func GetFavoriteData(userId int64, videoId int64) (res dao.Dfavorite, err error)
 		log.Println("Get FavoriteData失败")
 		return
 	}
-	if res.Id != 0 {
-		log.Println("Get FavoriteData res.Id != 0")
-		//将获取到的结果写入redis
-		if err = AddRedisFavoriteData(key, res); err != nil {
-			log.Println("写入缓存失败")
-		}
+	if res.Id == 0 {
+		res.User_id = userId
+		res.Video_id = videoId
+		res.Action_type = "2"
+	}
+	//将获取到的结果写入redis
+	if err = AddRedisFavoriteData(key, res); err != nil {
+		log.Println("写入缓存失败")
 	}
 	return res, err
 }

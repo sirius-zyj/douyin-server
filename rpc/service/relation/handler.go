@@ -32,26 +32,21 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 			fo.User_id = userId
 			fo.Follow_id = follow_id
 			fo.Action_type = action_type
-			err = database.InsertFollow(&fo)
-			if err != nil {
+			if err = database.InsertFollow(&fo); err != nil {
 				setFollowActionResponse(resp, 404, "关注失败")
 			} else {
-				dao.UpdateUser("id", userId, "follow_count", 1)      //follow_count+1
-				dao.UpdateUser("id", follow_id, "follower_count", 1) //用户follower_count+1
 				setFollowActionResponse(resp, 0, "关注成功")
 			}
 		} else {
 			if action_type != fo.Action_type {
-				if err := dao.EraseFollow(userId, follow_id); err != nil {
+				if err := dao.Tran_EraseFollow(userId, follow_id); err != nil {
 					setFollowActionResponse(resp, 404, "关注数据erase失败")
 				} else {
-					dao.UpdateUser("id", userId, "follow_count", -1)      //follow_count-1
-					dao.UpdateUser("id", follow_id, "follower_count", -1) //用户follower_count-1
 					setFollowActionResponse(resp, 0, "关注数据erase成功")
 				}
 			} else {
 				if action_type != "1" {
-					dao.EraseFollow(userId, follow_id)
+					dao.Tran_EraseFollow(userId, follow_id)
 				}
 				setFollowActionResponse(resp, 0, "Action_type 与数据库中的数据相同")
 			}

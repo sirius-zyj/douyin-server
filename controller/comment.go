@@ -63,25 +63,26 @@ func CommentAction(c *gin.Context) {
 
 // CommentList 查看评论列表
 func CommentList(c *gin.Context) {
-	videoid := c.Query("video_id")
-	videoId, _ := strconv.ParseInt(videoid, 10, 64)
-	token := c.Query("token")
+	c.JSON(http.StatusOK, CommentListResponse{})
+	// videoid := c.Query("video_id")
+	// videoId, _ := strconv.ParseInt(videoid, 10, 64)
+	// token := c.Query("token")
 
-	if respClient, err := client.CommentList(token, videoId); err == nil {
-		var CommentResq []Comment
-		for _, tmp := range respClient.CommentList {
-			CommentResq = append(CommentResq, Comment{
-				Id:         tmp.Id,
-				User:       *RPCUser2ControllerUser(tmp.User),
-				Content:    tmp.Content,
-				CreateDate: tmp.CreateDate,
-			})
-		}
-		c.JSON(http.StatusOK, CommentListResponse{
-			Response:    Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
-			CommentList: CommentResq,
-		})
-	} else {
-		c.JSON(http.StatusExpectationFailed, CommentListResponse{})
-	}
+	// if respClient, err := client.CommentList(token, videoId); err == nil {
+	// 	var CommentResq []Comment
+	// 	for _, tmp := range respClient.CommentList {
+	// 		CommentResq = append(CommentResq, Comment{
+	// 			Id:         tmp.Id,
+	// 			User:       *RPCUser2ControllerUser(tmp.User),
+	// 			Content:    tmp.Content,
+	// 			CreateDate: tmp.CreateDate,
+	// 		})
+	// 	}
+	// 	c.JSON(http.StatusOK, CommentListResponse{
+	// 		Response:    Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
+	// 		CommentList: CommentResq,
+	// 	})
+	// } else {
+	// 	c.JSON(http.StatusExpectationFailed, CommentListResponse{})
+	// }
 }

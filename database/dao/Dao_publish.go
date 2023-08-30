@@ -62,11 +62,3 @@ func GetSnapshot(videoPath string, frameNum int) (cover io.Reader, err error) {
 	}
 	return bytes.NewReader(buf.Bytes()), nil
 }
-
-func InsertVideo(video Dvideo) (err error) {
-	err = db.Model(&Dvideo{}).Create(&video).Error
-	if err != nil {
-		return
-	}
-	return nil
-}

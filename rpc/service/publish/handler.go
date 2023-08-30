@@ -40,13 +40,12 @@ func (s *PublishServiceImpl) Publish(ctx context.Context, req *publish.DouyinPub
 		Upload_time: time.Now(),
 		Title:       video_title,
 	}
-	if err = dao.InsertVideo(video); err != nil {
+	if err = dao.Tran_InsertVideo(video); err != nil {
 		log.Println("Insert_error: ", err)
 		setPublishActionResp(resp, 404, err.Error())
 		return
 	}
 	//---------------------------
-	dao.UpdateUser("id", userId, "work_count", 1) //作品数+1
 	setPublishActionResp(resp, 0, "上传成功")
 	return
 }

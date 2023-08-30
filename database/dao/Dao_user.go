@@ -4,8 +4,6 @@ import (
 	// "gorm.io/gorm"
 	"errors"
 	"log"
-
-	"gorm.io/gorm"
 )
 
 func (Duser) TableName() string {
@@ -61,28 +59,3 @@ func CreateUser(user *Duser) (err error) {
 	}
 	return
 }
-
-func UpdateUser(where string, where_count int64, what string, what_count int64) error {
-	err := db.Model(&Duser{}).Where(where+" = ?", where_count).Update(what, gorm.Expr(what+" + ?", what_count)).Error
-	if err != nil {
-		log.Println("更新失败")
-		return err
-	}
-	return nil
-}
-
-// func UpdateWorkCount(user_id, count int64) (err error) {
-// 	if err := db.Model(&Duser{}).Where("id = ?", user_id).Update("work_count", gorm.Expr("work_count + ?", count)).Error; err != nil {
-// 		log.Println("UpdateWorkCount Err : ", err.Error())
-// 		return err
-// 	}
-// 	return
-// }
-
-// func UpdateUserFavoriteCount(user_id, count int64) (err error) {
-// 	if err := db.Model(&Duser{}).Where("id = ?", user_id).Update("favorite_count", gorm.Expr("favorite_count + ?", count)).Error; err != nil {
-// 		log.Println("UpdateFavoriteCount Err : ", err.Error())
-// 		return err
-// 	}
-// 	return
-// }

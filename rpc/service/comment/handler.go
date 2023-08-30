@@ -37,13 +37,11 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 			Created_at:   time.Now(),
 		}
 
-		err = dao.InsertComment(dComment)
-		if err != nil {
+		if err = dao.Tran_InsertComment(dComment); err != nil {
 			log.Println("插入评论失败")
 			setCommentActionResp(resp, 404, "插入评论失败")
 			return
 		}
-		dao.UpdateFeed("id", videoId, "comment_count", 1) //评论数+1
 
 		tmp, _ := database.GetUserById(userId)
 
@@ -56,13 +54,10 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 		setCommentActionResp(resp, 0, "插入评论成功")
 	} else {
 		commentId, _ := strconv.ParseInt(*req.CommentId, 10, 64)
-		err := dao.EraseComment(commentId, videoId)
-		if err != nil {
+		if err := dao.Tran_EraseComment(commentId, videoId); err != nil {
 			log.Println("删除评论失败")
 			setCommentActionResp(resp, 404, "删除评论失败")
 		} else {
-			dao.UpdateFeed("id", videoId, "comment_count", -1) //评论数-1
-			log.Println("删除评论成功")
 			setCommentActionResp(resp, 0, "删除评论成功")
 		}
 	}

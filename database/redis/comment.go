@@ -56,13 +56,14 @@ func AddRedisComment(key string, commentList []dao.Dcomments) error {
 		}
 		commentMap[id] = content
 	}
+
 	if len(commentMap) == 0 {
 		return nil
 	}
-	err := RedisClient.HMSet(Ctx, key, commentMap).Err()
-	if err != nil {
-		log.Println("评论写入redis失败")
-		return nil
+
+	if err := RedisClient.HMSet(Ctx, key, commentMap).Err(); err != nil {
+		log.Println("评论写入redis失败: ", err)
+		return err
 	}
 	RedisClient.Expire(Ctx, key, config.Exipretime)
 	return nil
