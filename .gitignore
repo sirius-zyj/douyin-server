@@ -1,5 +1,13 @@
 
-simple-demo
 douyin-server
 
-douyin-server/rpc/output/*
+rpc/output/
+
+docker/gateway/douyin-server
+docker/microservices/feed/feed
+docker/microservices/user/user
+docker/microservices/favorite/favorite
+docker/microservices/comment/comment
+docker/microservices/relation/relation
+docker/microservices/publish/publish
+docker/microservices/message/message
