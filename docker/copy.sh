@@ -1,5 +1,5 @@
 #gateway
-cp ../douyin-server ./gateway/
+# cp ../douyin-server ./gateway/
 
 #microservices
 BIN_DIR="../rpc/output/bin/*"
@@ -14,4 +14,4 @@ for d in $BIN_DIR ; do
 done
 
 #mysql2redis
-cp ../database/mysql2redis ./mysql2redis/mysql2rediss
+# cp ../database/mysql2redis ./mysql2redis/mysql2rediss
