@@ -1,6 +1,7 @@
 
 douyin-server
 
+public/
 rpc/output/
 
 docker/gateway/douyin-server

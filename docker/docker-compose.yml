@@ -33,8 +33,7 @@ services:
       - "8880:8880"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -50,8 +49,7 @@ services:
       - "8881:8881"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -67,8 +65,7 @@ services:
       - "8882:8882"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -84,8 +81,7 @@ services:
       - "8883:8883"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -101,8 +97,7 @@ services:
       - "8884:8884"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -118,8 +113,7 @@ services:
       - "8885:8885"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -135,8 +129,7 @@ services:
       - "8886:8886"
     depends_on:
       - microservices-etcd
-      - mysql
-      - redis
+      - mysql2redis
     links:
       - microservices-etcd
       - mysql
@@ -181,6 +174,6 @@ services:
     links:
       - mysql
       - redis
-    command: ["./main"]
+    command: sh -c "sleep 10 && ./main"
 
   
