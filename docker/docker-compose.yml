@@ -1,0 +1,186 @@
+version: '3'
+services:
+  gateway:
+    container_name: gateway
+    image: gateways
+    build: 
+      context: ./gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - microservices-etcd
+    links:
+      - microservices-etcd
+
+  microservices-etcd:
+    container_name: microservices-etcd
+    image: microservices-etcd
+    build:
+      context: ./microservices/etcd
+    volumes:
+      - ./microservices/etcd/data:/etcd-data
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    command: ["etcd"]
+
+  microservices-feed:
+    container_name: microservices-feed
+    image: microservices-feed
+    build:
+      context: ./microservices/feed
+    ports:
+      - "8880:8880"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./feed"]
+  
+  microservices-user:
+    container_name: microservices-user
+    image: microservices-user
+    build:
+      context: ./microservices/user
+    ports:
+      - "8881:8881"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./user"]
+
+  microservices-favorite:
+    container_name: microservices-favorite
+    image: microservices-favorite
+    build:
+      context: ./microservices/favorite
+    ports:
+      - "8882:8882"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./favorite"]
+
+  microservices-comment:
+    container_name: microservices-comment
+    image: microservices-comment
+    build:
+      context: ./microservices/comment
+    ports:
+      - "8883:8883"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./comment"]
+
+  microservices-publish:
+    container_name: microservices-publish
+    image: microservices-publish
+    build:
+      context: ./microservices/publish
+    ports:
+      - "8884:8884"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./publish"]
+
+  microservices-relation:
+    container_name: microservices-relation
+    image: microservices-relation
+    build:
+      context: ./microservices/relation
+    ports:
+      - "8885:8885"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./relation"]
+  
+  microservices-message:
+    container_name: microservices-message
+    image: microservices-message
+    build:
+      context: ./microservices/message
+    ports:
+      - "8886:8886"
+    depends_on:
+      - microservices-etcd
+      - mysql
+      - redis
+    links:
+      - microservices-etcd
+      - mysql
+      - redis
+    command: ["./message"]
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    build:
+      context: ./mysql2redis/mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql2redis/mysql/data:/var/lib/mysql
+      - ./mysql2redis/mysql/conf:/etc/mysql/conf.d
+      - ./mysql2redis/mysql/logs:/logs
+    environment:
+      MYSQL_DATABASE: 'douyin'
+      MYSQL_ROOT_PASSWORD: 'zyj1314520'
+
+  redis:
+    container_name: redis
+    image: redis
+    build:
+      context: ./mysql2redis/redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./mysql2redis/redis/data:/data
+
+  mysql2redis:
+    container_name: mysql2redis
+    image: mysql2redis
+    build:
+      context: ./mysql2redis/mysql2redis
+    volumes:
+      - /usr/bin/mysqldump:/usr/bin/mysqldump
+    depends_on:
+      - mysql
+      - redis
+    links:
+      - mysql
+      - redis
+    command: ["./main"]
+
+  
