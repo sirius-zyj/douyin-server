@@ -1,0 +1,26 @@
+[canal]
+	[canal.database1]
+    cancalconfigpath = "./database1.toml"
+	posconfigfile = ""
+    bulksize = 1
+    flushbulktime = 2500
+	cachesize = 1000
+	[canal.database1.redis]
+		address = "redis:6379"
+		password = ""
+		[canal.database1.redis.tables.videos]
+			db = 0
+			tablename = "videos"
+		[canal.database1.redis.tables.users]
+			db = 0
+			tablename = "users"
+		[canal.database1.redis.tables.favorite]
+			db = 0
+			tablename = "favorite"
+		[canal.database1.redis.tables.comments]
+			db = 0
+			tablename = "comments"
+		[canal.database1.redis.tables.follows]
+			db = 0
+			tablename = "follows"
+		

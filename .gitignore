@@ -1,10 +1,12 @@
 
 douyin-server
 
-rpc/
 rpc/output/
 
-docker/
+docker/database/mysql/data
+docker/database/mysql/conf
+docker/database/mysql/logs
+docker/database/redis/data
 docker/gateway/douyin-server
 docker/microservices/feed/feed
 docker/microservices/user/user

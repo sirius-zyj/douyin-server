@@ -1,0 +1,26 @@
+addr = "mysql:3306"
+user = "root"
+password = "zyj1314520"
+charset = "utf8"
+server_id = 2001
+flavor = "mysql"
+heartbeat_period = 0
+read_timeout = 0
+include_table_regex = []
+exclude_table_regex = []
+discard_no_meta_row_event = false
+use_decimal = false
+parse_time = false
+semi_sync_enabled = false
+max_reconnect_attempts = 0
+[dump]
+    mysqldump = "mysqldump"
+    tables = ["videos", "users", "favorite", "comments", "follows"]
+    table_db = "douyin"
+    dbs = []
+    ignore_tables = []
+    where = ""
+    discard_err = true
+    skip_master_data = false
+    max_allowed_packet_mb = 0
+    protocol = ""
