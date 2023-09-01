@@ -1,10 +1,10 @@
 version: '3'
 services:
-  gateway:
-    container_name: gateway
-    image: gateways
+  router:
+    container_name: router
+    image: router
     build: 
-      context: ./gateway
+      context: ./router
     ports:
       - "8080:8080"
     depends_on:

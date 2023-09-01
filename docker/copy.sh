@@ -1,5 +1,5 @@
-#gateway
-cp ../douyin-server ./gateway/
+#router
+cp ../douyin-server ./router/
 
 #microservices
 # BIN_DIR="../rpc/output/bin/*"
