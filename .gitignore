@@ -1,9 +1,10 @@
 
 douyin-server
 
-public/
+rpc/
 rpc/output/
 
+docker/
 docker/gateway/douyin-server
 docker/microservices/feed/feed
 docker/microservices/user/user

@@ -9,7 +9,7 @@ var Secret = "douyin"
 
 // mysql配置数据
 var (
-	Dsn = "root:SgIopgnq@tcp(172.16.32.35:51007)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+	Dsn = "root:zyj1314520@tcp(mysql:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 // OneDayOfHours 时间
@@ -22,7 +22,7 @@ var USE_REDIS = true
 
 // redis的配置数据
 var (
-	Addr               = "127.0.0.1:6379"
+	Addr               = "redis:6379"
 	Password           = ""
 	PoolSize           = 30
 	MinConns           = 30
@@ -39,7 +39,7 @@ var (
 
 const (
 	// etcd 端口
-	EtcdAddr     = "127.0.0.1:2379"
+	EtcdAddr     = "microservices-etcd:2379"
 	FeedAddr     = "0.0.0.0:8880"
 	UserAddr     = "0.0.0.0:8881"
 	FavoriteAddr = "0.0.0.0:8882"

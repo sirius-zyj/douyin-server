@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"douyin-server/config"
 	"log"
 	"os"
 	"time"
@@ -23,7 +24,7 @@ func Init() {
 		},
 	)
 
-	dsn := "root:zyj1314520@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := config.Dsn
 	var err error
 	db, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,

@@ -168,6 +168,7 @@ services:
       context: ./mysql2redis/mysql2redis
     volumes:
       - /usr/bin/mysqldump:/usr/bin/mysqldump
+      
     depends_on:
       - mysql
       - redis
