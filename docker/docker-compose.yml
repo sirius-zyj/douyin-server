@@ -140,13 +140,13 @@ services:
     container_name: mysql
     image: mysql
     build:
-      context: ./mysql2redis/mysql
+      context: ./database/mysql
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql2redis/mysql/data:/var/lib/mysql
-      - ./mysql2redis/mysql/conf:/etc/mysql/conf.d
-      - ./mysql2redis/mysql/logs:/logs
+      - ./database/mysql/data:/var/lib/mysql
+      - ./database/mysql/conf:/etc/mysql/conf.d
+      - ./database/mysql/logs:/logs
     environment:
       MYSQL_DATABASE: 'douyin'
       MYSQL_ROOT_PASSWORD: 'zyj1314520'
@@ -155,17 +155,17 @@ services:
     container_name: redis
     image: redis
     build:
-      context: ./mysql2redis/redis
+      context: ./database/redis
     ports:
       - "6379:6379"
     volumes:
-      - ./mysql2redis/redis/data:/data
+      - ./database/redis/data:/data
 
   mysql2redis:
     container_name: mysql2redis
     image: mysql2redis
     build:
-      context: ./mysql2redis/mysql2redis
+      context: ./database/mysql2redis
     volumes:
       - /usr/bin/mysqldump:/usr/bin/mysqldump
       

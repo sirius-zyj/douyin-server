@@ -14,4 +14,4 @@ cp ../douyin-server ./gateway/
 # done
 
 #mysql2redis
-# cp ../database/mysql2redis ./mysql2redis/mysql2rediss
+# cp ../database/mysql2redis ./database/mysql2rediss
