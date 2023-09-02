@@ -11,6 +11,7 @@ services:
       - microservices-etcd
     links:
       - microservices-etcd
+    command: sh -c "sleep 4 && ./douyin-server"
 
   microservices-etcd:
     container_name: microservices-etcd
@@ -21,8 +22,7 @@ services:
       - ./microservices/etcd/data:/etcd-data
     ports:
       - "2379:2379"
-      - "2380:2380"
-    command: ["etcd"]
+    command: ["/bin/bash", "/run.sh"]
 
   microservices-feed:
     container_name: microservices-feed
@@ -38,7 +38,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./feed"]
+    command: sh -c "sleep 4 && ./feed"
   
   microservices-user:
     container_name: microservices-user
@@ -54,7 +54,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./user"]
+    command: sh -c "sleep 4 && ./user"
 
   microservices-favorite:
     container_name: microservices-favorite
@@ -70,7 +70,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./favorite"]
+    command: sh -c "sleep 4 && ./favorite"
 
   microservices-comment:
     container_name: microservices-comment
@@ -86,7 +86,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./comment"]
+    command: sh -c "sleep 4 && ./comment"
 
   microservices-publish:
     container_name: microservices-publish
@@ -102,7 +102,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./publish"]
+    command: sh -c "sleep 4 && ./publish"
 
   microservices-relation:
     container_name: microservices-relation
@@ -118,7 +118,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./relation"]
+    command: sh -c "sleep 4 && ./relation"
   
   microservices-message:
     container_name: microservices-message
@@ -134,7 +134,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
-    command: ["./message"]
+    command: sh -c "sleep 4 && ./message"
 
   mysql:
     container_name: mysql

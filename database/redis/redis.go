@@ -14,7 +14,7 @@ var (
 )
 
 func InitRedis() {
-	addr := config.Addr
+	addr := config.RedisAddr
 	password := config.Password
 	poolSize := config.PoolSize
 	minConns := config.MinConns

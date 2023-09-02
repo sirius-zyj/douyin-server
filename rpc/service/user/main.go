@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+	config.Init()
 	addr, _ := net.ResolveTCPAddr("tcp", config.UserAddr)
 	// 服务注册
 	r, err := etcd.NewEtcdRegistry([]string{config.EtcdAddr})

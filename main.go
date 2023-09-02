@@ -1,6 +1,7 @@
 package main
 
 import (
+	"douyin-server/config"
 	"douyin-server/controller"
 	"douyin-server/rpc/client"
 
@@ -8,8 +9,7 @@ import (
 )
 
 func main() {
-	// go service.RunMessageServer()
-
+	config.Init()
 	client.InitRpcClient()
 
 	r := gin.Default()

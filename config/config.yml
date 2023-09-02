@@ -1,0 +1,49 @@
+version: '3'
+
+jwt:
+  Secret: "douyin"
+
+etcd:
+  EtcdAddr: "microservices-etcd:2379"
+
+microservices:
+  FeedAddr: "0.0.0.0:8880"
+  FeedServiceName: "douyin-server-etcd-feed"
+  UserAdd: "0.0.0.0:8881"
+  UserServiceName: "douyin-server-etcd-user"
+  FavoriteAddr: "0.0.0.0:8882"
+  FavoriteServiceName: "douyin-server-etcd-favorite"
+  CommentAddr: "0.0.0.0:8883"
+  CommentServiceName: "douyin-server-etcd-comment"
+  PublishAddr: "0.0.0.0:8884"
+  PublishServiceName: "douyin-server-etcd-publish"
+  RelationAddr: "0.0.0.0:8885"
+  RelationServiceName: "douyin-server-etcd-relation"
+  MessageAddr: "0.0.0.0:8886"
+  MessageServiceName: "douyin-server-etcd-message"
+
+redis:
+  RedisAddr: "redis:6379"
+  Password: ""
+  PoolSize: 30
+  MinConns: 30
+  FeedPrefix: "feed{id:%d}"                       #redis中视频的前缀
+  PublishPrefix: "publish{author_id:%d}"             #redis中视频发布的前缀
+  UserPrefix: "user{id:%d}"                       #redis中用户的前缀
+  FavoriteDataPrefix: "favorite{user_id:%d; video_id:%d}" #redis中收藏信息的前缀
+  CommentPrefix: "comment{video_id:%d}"              #redis中评论的前缀
+  FollowDataPrefix: "follow{user_id:%d; follow_id:%d}"  #redis中关注信息的前缀
+  Exipretime: "120s"                 #redis数据的热度消散时间
+  USE_REDIS: true
+
+mysql:
+  Dsn: "root:zyj1314520@tcp(mysql:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+
+OSS:
+  OSSAK: ""
+  OSSSK: ""
+  OSSEndPoint: "oss-cn-hangzhou.aliyuncs.com"
+  OSSVideoBucket: "douyin-server-hust"
+  OSSImageBucket: "douyin-server-hust-image"
+
+

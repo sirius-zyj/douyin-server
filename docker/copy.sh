@@ -12,6 +12,7 @@ for d in $BIN_DIR ; do
   fi
   cp ../rpc/output/bin/$SVR_NAME ./microservices/$SVR_NAME
 done
+cp ../config/config.yml ./microservices/etcd/
 
 #mysql2redis
 # cp ../database/mysql2redis ./database/mysql2rediss
