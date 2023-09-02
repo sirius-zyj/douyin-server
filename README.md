@@ -30,7 +30,7 @@ sh copy.sh
 
 3. Deploy
 
-+ Make sure that ports 3306, 2379, 6379, 8080, and 8880-8886 are not occupied on your local machine.
++ Make sure that ports **3306, 2379, 6379, 8080, and 8880-8886 are not occupied** on your local machine.
  <br />3306:mysql
  <br />2379:redis
  <br />6370:etcd
