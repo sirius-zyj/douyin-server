@@ -1,26 +1,45 @@
-# simple-demo
+douyin-server
+===
 
-## 抖音项目服务端简单示例
+# Structure
 
-具体功能内容参考飞书说明文档
+![structure](https://img1.imgtp.com/2023/09/02/uvwQZlfp.png)
 
-工程无其他依赖，直接编译运行即可
 
-```shell
-go build && ./simple-demo
+# How to take a quick start?
+
+
+**We strongly recommend deploying using Docker.**
+***
+
+1. Download
+```
+git clone https://github.com/sirius-zyj/douyin-server.git
 ```
 
-### 功能说明
+2. Generate binary file
+```
+sh run.sh
 
-接口功能不完善，仅作为示例
+cd rpc
+sh build_all_service.sh
 
-* 用户登录数据保存在内存中，单次运行过程中有效
-* 视频上传后会保存到本地 public 目录中，访问时用 127.0.0.1:8080/static/video_name 即可
+cd docker
+sh copy.sh
+```
 
-### 测试
+3. Deploy
 
-test 目录下为不同场景的功能测试case，可用于验证功能实现正确性
++ Make sure that ports 3306, 2379, 6379, 8080, and 8880-8886 are not occupied on your local machine.
+ <br />3306:mysql
+ <br />2379:redis
+ <br />6370:etcd
+ <br />8080:router
+ <br />8880-8886:microservices
 
-其中 common.go 中的 _serverAddr_ 为服务部署的地址，默认为本机地址，可以根据实际情况修改
+ + Make suer that you have set up **docker** and **docker-compose**
 
-测试数据写在 demo_data.go 中，用于列表接口的 mock 测试
+ ```
+ cd docker
+ sudo docker-compose up -d
+ ```

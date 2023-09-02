@@ -40,7 +40,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	if respClient, err := client.Register(req.Username, req.Username); err == nil {
+	if respClient, err := client.Register(req.Username, req.Password); err == nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 			UserId:   respClient.UserId,

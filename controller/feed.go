@@ -4,7 +4,6 @@ import (
 	"douyin-server/rpc/client"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -32,8 +31,9 @@ func Feed(c *gin.Context) {
 
 	var latestTime time.Time
 	if req.LatestTime != nil && *req.LatestTime != "0" && *req.LatestTime != "" {
-		s, _ := strconv.ParseInt(*req.LatestTime, 10, 64)
-		latestTime = time.Unix(s/1000, s%1000)
+		// s, _ := strconv.ParseInt(*req.LatestTime, 10, 64)
+		// latestTime = time.Unix(s/1000, s%1000)
+		latestTime = time.Now()
 	} else {
 		latestTime = time.Now()
 	}
@@ -48,6 +48,7 @@ func Feed(c *gin.Context) {
 				return
 			}
 		}
+		log.Println(videoList)
 		c.JSON(http.StatusOK, FeedResponse{
 			Response:  Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 			VideoList: videoList,
