@@ -15,3 +15,5 @@ docker/microservices/comment/comment
 docker/microservices/relation/relation
 docker/microservices/publish/publish
 docker/microservices/message/message
+
+middleware/etcd/default.etcd
