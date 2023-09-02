@@ -18,9 +18,8 @@ git clone https://github.com/sirius-zyj/douyin-server.git
 ```
 
 2. Generate binary file
-+ Take your own aliyun OSS and set **OSSAK\OSSSK** in config/config.go
-![OSS](https://img1.imgtp.com/2023/09/02/aZ065aFw.png)
-
++ Take your own aliyun OSS and set **OSSAK\OSSSK** in config/config.yml and docker/microservices/etcd/config.yml
+![1693657047972.png](https://img1.imgtp.com/2023/09/02/tWo2r4r9.png)
 ```
 sh run.sh
 
