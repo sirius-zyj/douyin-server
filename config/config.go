@@ -12,6 +12,15 @@ var (
 	Dsn = "root:zyj1314520@tcp(mysql:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
+// OSS
+const (
+	OSSAK          = ""
+	OSSSK          = ""
+	OSSEndPoint    = "oss-cn-hangzhou.aliyuncs.com"
+	OSSVideoBucket = "douyin-server-hust"
+	OSSImageBucket = "douyin-server-hust-image"
+)
+
 // OneDayOfHours 时间
 var OneDayOfHours = 60 * 60 * 24
 var OneMinute = 60 * 1

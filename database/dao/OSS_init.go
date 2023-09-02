@@ -1,19 +1,12 @@
 package dao
 
 import (
+	"douyin-server/config"
 	"fmt"
 	"log"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-)
-
-const (
-	OSSAK          = "LTAI5t5uqtTbKX5dUkmZJzfH"
-	OSSSK          = "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
-	OSSEndPoint    = "oss-cn-hangzhou.aliyuncs.com"
-	OSSVideoBucket = "douyin-server-hust"
-	OSSImageBucket = "douyin-server-hust-image"
 )
 
 var (
@@ -24,25 +17,25 @@ var (
 )
 
 func Oss_init() {
-	ossClient, err := oss.New(OSSEndPoint, OSSAK, OSSSK)
+	ossClient, err := oss.New(config.OSSEndPoint, config.OSSAK, config.OSSSK)
 	if err != nil {
 		log.Fatalf("OSS Init Failed")
 		panic(err)
 	}
 
-	VideoBucket, err = ossClient.Bucket(OSSVideoBucket)
+	VideoBucket, err = ossClient.Bucket(config.OSSVideoBucket)
 	if err != nil {
 		log.Println("VideoBucket Init Failed")
 		panic(err)
 	}
 	VideoBucketLinkPrefix = fmt.Sprintf(
-		"https://%s.%s/", OSSVideoBucket, OSSEndPoint)
+		"https://%s.%s/", config.OSSVideoBucket, config.OSSEndPoint)
 
-	ImageBucket, err = ossClient.Bucket(OSSImageBucket)
+	ImageBucket, err = ossClient.Bucket(config.OSSImageBucket)
 	if err != nil {
 		hlog.Fatalf("ImageBucket Init Failed")
 		panic(err)
 	}
 	ImageBucketLinkPrefix = fmt.Sprintf(
-		"https://%s.%s/", OSSImageBucket, OSSEndPoint)
+		"https://%s.%s/", config.OSSImageBucket, config.OSSEndPoint)
 }
