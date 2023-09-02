@@ -18,6 +18,9 @@ git clone https://github.com/sirius-zyj/douyin-server.git
 ```
 
 2. Generate binary file
++ Take your own aliyun OSS and set **OSSAK\OSSSK** in config/config.go
+![OSS](https://img1.imgtp.com/2023/09/02/aZ065aFw.png)
+
 ```
 sh run.sh
 
@@ -29,9 +32,6 @@ sh copy.sh
 ```
 
 3. Deploy
-
-+ Take your own aliyun OSS
-
 
 + Make sure that ports **3306, 2379, 6379, 8080, and 8880-8886 are not occupied** on your local machine.
  <br />3306:mysql
