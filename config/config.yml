@@ -40,8 +40,8 @@ mysql:
   Dsn: "root:zyj1314520@tcp(mysql:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 
 OSS:
-  OSSAK: "LTAI5t5uqtTbKX5dUkmZJzfH"
-  OSSSK: "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
+  OSSAK: ""
+  OSSSK: ""
   OSSEndPoint: "oss-cn-hangzhou.aliyuncs.com"
   OSSVideoBucket: "douyin-server-hust"
   OSSImageBucket: "douyin-server-hust-image"
