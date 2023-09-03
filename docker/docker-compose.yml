@@ -38,6 +38,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./feed"
   
   microservices-user:
@@ -54,6 +55,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./user"
 
   microservices-favorite:
@@ -70,6 +72,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./favorite"
 
   microservices-comment:
@@ -86,6 +89,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./comment"
 
   microservices-publish:
@@ -102,6 +106,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./publish"
 
   microservices-relation:
@@ -118,6 +123,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./relation"
   
   microservices-message:
@@ -134,6 +140,7 @@ services:
       - microservices-etcd
       - mysql
       - redis
+      - jaeger
     command: sh -c "sleep 4 && ./message"
 
   mysql:
@@ -177,4 +184,18 @@ services:
       - redis
     command: sh -c "sleep 10 && ./main"
 
-  
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one
+    build:
+      context: ./jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - COLLECTOR_OTLP_HTTP_TLS=true
+    ports:
+      - "4318:4318"
+      - "16686:16686"
+    depends_on:
+      - microservices-etcd
+    
+    

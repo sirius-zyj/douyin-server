@@ -40,10 +40,23 @@ mysql:
   Dsn: "root:zyj1314520@tcp(mysql:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 
 OSS:
-  OSSAK: ""
-  OSSSK: ""
+  OSSAK: "LTAI5t5uqtTbKX5dUkmZJzfH"
+  OSSSK: "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
   OSSEndPoint: "oss-cn-hangzhou.aliyuncs.com"
   OSSVideoBucket: "douyin-server-hust"
   OSSImageBucket: "douyin-server-hust-image"
+
+OTEL:
+  RouterOtelName: "router"
+  FeedOtelName: "microservices-feed"
+  UserOtelName: "microservices-user"
+  FavoriteOtelName: "microservices-favorite"
+  CommentOtelName: "microservices-comment"
+  PublishOtelName: "microservices-publish"
+  RelationOtelName: "microservices-relation"
+  MessageOtelName: "microservices-message"
+  JaegerAddr: "jaeger:4318"
+  
+
 
 

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"time"
 
 	"github.com/spf13/viper"
@@ -13,6 +12,8 @@ var Secret string
 
 // etcd
 var EtcdAddr string = "microservices-etcd:2379"
+
+// var EtcdAddr string = "microservices-etcd:2379"
 
 var (
 	FeedAddr     string
@@ -65,6 +66,19 @@ var (
 	OSSImageBucket string
 )
 
+// OTEL
+var (
+	RouterOtelName   string
+	FeedOtelName     string
+	UserOtelName     string
+	FavoriteOtelName string
+	CommentOtelName  string
+	PublishOtelName  string
+	RelationOtelName string
+	MessageOtelName  string
+	JaegerAddr       string
+)
+
 func Init() {
 	viper.AddRemoteProvider("etcd3", EtcdAddr, "/config/config.yml")
 	viper.SetConfigType("yaml")
@@ -75,7 +89,7 @@ func Init() {
 	// jwt
 	Secret = viper.GetString("jwt.Secret")
 	// etcd
-	EtcdAddr = viper.GetString("etcd.EtcdAddr")
+	// EtcdAddr = viper.GetString("etcd.EtcdAddr")
 	// microservices
 	FeedAddr = viper.GetString("microservices.FeedAddr")
 	FeedServiceName = viper.GetString("microservices.FeedServiceName")
@@ -111,5 +125,14 @@ func Init() {
 	OSSEndPoint = viper.GetString("OSS.OSSEndPoint")
 	OSSVideoBucket = viper.GetString("OSS.OSSVideoBucket")
 	OSSImageBucket = viper.GetString("OSS.OSSImageBucket")
-	log.Println(Dsn)
+	//OTEL
+	RouterOtelName = viper.GetString("OTEL.RouterOtelName")
+	FeedOtelName = viper.GetString("OTEL.FeedOtelName")
+	UserOtelName = viper.GetString("OTEL.UserOtelName")
+	FavoriteOtelName = viper.GetString("OTEL.FavoriteOtelName")
+	CommentOtelName = viper.GetString("OTEL.CommentOtelName")
+	PublishOtelName = viper.GetString("OTEL.PublishOtelName")
+	RelationOtelName = viper.GetString("OTEL.RelationOtelName")
+	MessageOtelName = viper.GetString("OTEL.MessageOtelName")
+	JaegerAddr = viper.GetString("OTEL.JaegerAddr")
 }

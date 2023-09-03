@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"douyin-server/config"
 	"douyin-server/database/dao"
 	"douyin-server/database/redis"
+	"douyin-server/middleware/otel"
 	feed "douyin-server/rpc/kitex_gen/feed/feedservice"
 	"log"
 	"net"
@@ -15,6 +17,10 @@ import (
 
 func main() {
 	config.Init()
+
+	otel.Init(context.Background(), config.FeedOtelName)
+	defer otel.Close()
+
 	addr, _ := net.ResolveTCPAddr("tcp", config.FeedAddr)
 	// 服务注册
 	r, err := etcd.NewEtcdRegistry([]string{config.EtcdAddr})

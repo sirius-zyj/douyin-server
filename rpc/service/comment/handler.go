@@ -2,13 +2,16 @@ package main
 
 import (
 	"context"
+	"douyin-server/config"
 	"douyin-server/database"
 	"douyin-server/database/dao"
 	"douyin-server/middleware/jwt"
 	comment "douyin-server/rpc/kitex_gen/comment"
-	"log"
 	"strconv"
 	"time"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 )
 
 // CommentServiceImpl implements the last service interface defined in the IDL.
@@ -22,6 +25,9 @@ func setCommentActionResp(resp *comment.DouyinCommentActionResponse, statusCode 
 
 // CommentAction implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.DouyinCommentActionRequest) (resp *comment.DouyinCommentActionResponse, err error) {
+	_, span := otel.Tracer(config.CommentOtelName).Start(ctx, "CommentAction")
+	defer span.End()
+
 	resp = new(comment.DouyinCommentActionResponse)
 
 	token, videoId, actionType := req.Token, req.VideoId, req.ActionType
@@ -38,7 +44,9 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 		}
 
 		if err = dao.Tran_InsertComment(dComment); err != nil {
-			log.Println("插入评论失败")
+			span.RecordError(err)
+			span.SetStatus(codes.Error, "插入评论失败")
+
 			setCommentActionResp(resp, 404, "插入评论失败")
 			return
 		}
@@ -55,7 +63,9 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 	} else {
 		commentId, _ := strconv.ParseInt(*req.CommentId, 10, 64)
 		if err := dao.Tran_EraseComment(commentId, videoId); err != nil {
-			log.Println("删除评论失败")
+			span.RecordError(err)
+			span.SetStatus(codes.Error, "删除评论失败")
+
 			setCommentActionResp(resp, 404, "删除评论失败")
 		} else {
 			setCommentActionResp(resp, 0, "删除评论成功")
@@ -72,14 +82,18 @@ func setCommentListResp(resp *comment.DouyinCommentListResponse, statusCode int3
 
 // CommentList implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.DouyinCommentListRequest) (resp *comment.DouyinCommentListResponse, err error) {
+	_, span := otel.Tracer(config.CommentOtelName).Start(ctx, "CommentList")
+	defer span.End()
+
 	resp = new(comment.DouyinCommentListResponse)
 
 	videoId := req.VideoId
 
 	CommentList, err := database.GetAllComments(videoId)
-
 	if err != nil {
-		log.Println("拉取评论失败")
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "拉取评论失败")
+
 		setCommentListResp(resp, 404, "拉取评论失败,请重试")
 	} else {
 		for _, tmp := range CommentList {
