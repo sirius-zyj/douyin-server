@@ -7,6 +7,7 @@ docker/database/mysql/data
 docker/database/mysql/conf
 docker/database/mysql/logs
 docker/database/redis/data
+docker/database/mysql2redis/main
 docker/router/douyin-server
 docker/microservices/feed/feed
 docker/microservices/user/user
@@ -17,3 +18,4 @@ docker/microservices/publish/publish
 docker/microservices/message/message
 
 middleware/etcd/default.etcd/
+database/mysql2redis/main
