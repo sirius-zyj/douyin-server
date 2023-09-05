@@ -23,7 +23,7 @@ func setRegisterResp(resp *user.DouyinUserRegisterResponse, statusCode int32, st
 // Register implements the UserServiceImpl interface.
 func (s *UserServiceImpl) Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
 	resp = new(user.DouyinUserRegisterResponse)
-	username, password := req.Username, req.Password
+	username, password := req.Username, jwt.EnCoder(req.Password)
 	//验证用户名是否已存在
 	if _, err = dao.GetUsersByUserName(username); err == nil {
 		//该用户名已存在
@@ -64,8 +64,8 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.DouyinUserLoginRe
 	username, password := req.Username, req.Password
 	if user, err := dao.GetUsersByUserName(username); err == nil {
 		//找到了用户信息
-		token := jwt.GenerateToken(username)
-		if password == user.Password {
+		if jwt.EnCoder(password) == user.Password {
+			token := jwt.GenerateToken(username)
 			setLoginResp(resp, 0, "User login success", user.ID, token)
 		} else {
 			setLoginResp(resp, 404, "User password error", -1, "")

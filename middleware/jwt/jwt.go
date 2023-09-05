@@ -52,6 +52,7 @@ func NewToken(u dao.Duser) string {
 func EnCoder(password string) string {
 	h := hmac.New(sha256.New, []byte(password))
 	sha := hex.EncodeToString(h.Sum(nil))
+
 	log.Println("Result: " + sha)
 	return sha
 }

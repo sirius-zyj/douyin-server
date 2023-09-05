@@ -11,7 +11,7 @@ import (
 var Secret string
 
 // etcd
-var EtcdAddr string = "microservices-etcd:2379"
+var EtcdAddr string = "127.0.0.1:2379"
 
 // var EtcdAddr string = "microservices-etcd:2379"
 

@@ -15,5 +15,5 @@ done
 cp ../config/config.yml ./microservices/etcd/
 
 #mysql2redis
-cp ../database/dao/douyin.sql ./database/mysql/
-# cp ../database/mysql2redis ./database/mysql2rediss
+# cp ../database/dao/douyin.sql ./database/mysql/
+# cp ../database/mysql2redis ./database/mysql2redis -r
