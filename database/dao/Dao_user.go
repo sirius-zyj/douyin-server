@@ -17,7 +17,6 @@ func GetUsersByUserName(userName string) (Duser, error) {
 	if err := db.Model(&Duser{}).Where("name = ?", userName).Find(&userlist).Error; err != nil {
 		return user, errors.New("查询出错")
 	}
-	log.Println(userlist)
 	if len(userlist) == 0 {
 		return user, errors.New("没有匹配的用户")
 	}

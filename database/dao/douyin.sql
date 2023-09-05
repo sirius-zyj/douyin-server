@@ -78,7 +78,8 @@ CREATE TABLE `users`  (
   `signature` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `work_count` int(20) NULL DEFAULT NULL,
   `total_favorited` int(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique_name` (`name`(20))
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
