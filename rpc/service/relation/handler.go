@@ -29,6 +29,7 @@ func (s *RelationServiceImpl) RelationAction(ctx context.Context, req *relation.
 	if fo, err := database.GetFollowData(userId, follow_id); err == nil {
 		//获取到的表数据ID为0时代表没有该条关注数据
 		if fo.Id == 0 {
+			fo.Id = dao.SnowFlakeNode.Generate().Int64()
 			fo.User_id = userId
 			fo.Follow_id = follow_id
 			fo.Action_type = action_type

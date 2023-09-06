@@ -2,8 +2,7 @@ package main
 
 import (
 	"douyin-server/config"
-	"douyin-server/database/dao"
-	"douyin-server/database/redis"
+	"douyin-server/database"
 	relation "douyin-server/rpc/kitex_gen/relation/relationservice"
 	"log"
 	"net"
@@ -28,8 +27,7 @@ func main() {
 		server.WithRegistry(r))
 	// ----------------------------
 
-	dao.Init()
-	redis.InitRedis()
+	database.Init()
 
 	if err = svr.Run(); err != nil {
 		log.Println(err.Error())

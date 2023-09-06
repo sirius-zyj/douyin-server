@@ -3,8 +3,7 @@ package main
 import (
 	"context"
 	"douyin-server/config"
-	"douyin-server/database/dao"
-	"douyin-server/database/redis"
+	"douyin-server/database"
 	"douyin-server/middleware/otel"
 	feed "douyin-server/rpc/kitex_gen/feed/feedservice"
 	"log"
@@ -34,8 +33,7 @@ func main() {
 		server.WithRegistry(r))
 	// ----------------------------
 
-	dao.Init()
-	redis.InitRedis()
+	database.Init()
 
 	if err := svr.Run(); err != nil {
 		log.Println(err.Error())

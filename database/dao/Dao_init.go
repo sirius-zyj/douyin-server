@@ -2,6 +2,7 @@ package dao
 
 import (
 	"douyin-server/config"
+	"douyin-server/middleware/snowflake"
 	"log"
 	"os"
 	"time"
@@ -12,8 +13,15 @@ import (
 )
 
 var db *gorm.DB
+var SnowFlakeNode *snowflake.Node
 
 func Init() {
+	//雪花算法
+	var err error
+	if SnowFlakeNode, err = snowflake.NewNode(1); err != nil {
+		log.Panicln("雪花算法初始化错误：", err)
+	}
+
 	//日志系统
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -25,7 +33,6 @@ func Init() {
 	)
 
 	dsn := config.Dsn
-	var err error
 	db, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})

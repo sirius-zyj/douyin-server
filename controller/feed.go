@@ -48,7 +48,6 @@ func Feed(c *gin.Context) {
 				return
 			}
 		}
-		log.Println(videoList)
 		c.JSON(http.StatusOK, FeedResponse{
 			Response:  Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)},
 			VideoList: videoList,

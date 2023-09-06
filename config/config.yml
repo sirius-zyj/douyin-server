@@ -23,7 +23,7 @@ microservices:
   MessageServiceName: "douyin-server-etcd-message"
 
 redis:
-  RedisAddr: "redis:6379"
+  RedisAddr: "127.0.0.1:6379"
   Password: ""
   PoolSize: 30
   MinConns: 30
@@ -37,7 +37,7 @@ redis:
   USE_REDIS: true
 
 mysql:
-  Dsn: "root:zyj1314520@tcp(mysql:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+  Dsn: "root:zyj1314520@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 
 OSS:
   OSSAK: "LTAI5t5uqtTbKX5dUkmZJzfH"
@@ -55,7 +55,7 @@ OTEL:
   PublishOtelName: "microservices-publish"
   RelationOtelName: "microservices-relation"
   MessageOtelName: "microservices-message"
-  JaegerAddr: "jaeger:4318"
+  JaegerAddr: "127.0.0.1:4318"
   
 
 

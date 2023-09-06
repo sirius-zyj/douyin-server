@@ -31,6 +31,7 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 	if err == nil {
 		//获取到的表数据ID为0时代表没有该条点赞数据
 		if fa.Id == 0 {
+			fa.Id = dao.SnowFlakeNode.Generate().Int64()
 			fa.User_id = userId
 			fa.Action_type = action_type
 			fa.Video_id = video_id

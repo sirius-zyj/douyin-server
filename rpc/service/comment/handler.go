@@ -37,6 +37,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Dou
 	//最好有一个用户身份验证过程 TODO
 	if actionType == 1 {
 		dComment := dao.Dcomments{
+			Id:           dao.SnowFlakeNode.Generate().Int64(),
 			Comment_text: *req.CommentText,
 			User_id:      userId,
 			Video_id:     videoId,

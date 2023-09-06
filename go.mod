@@ -80,11 +80,13 @@ require (
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
+	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b // indirect
 	github.com/jhump/protoreflect v1.8.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/juju/ratelimit v1.0.2 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -122,6 +124,7 @@ require (
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/yalp/jsonpath v0.0.0-20180802001716-5cc68e5049a0 // indirect
+	github.com/yangwenmai/ratelimit v0.0.0-20180104140304-44221c2292e1 // indirect
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.9 // indirect

@@ -1,3 +1,3 @@
-FROM mysql:8.0
+FROM mysql
 
 ADD ./*.sql /docker-entrypoint-initdb.d/

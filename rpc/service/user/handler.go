@@ -32,6 +32,7 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.DouyinUserRegi
 	} else {
 		//成功注册
 		newUser := dao.Duser{
+			ID:       dao.SnowFlakeNode.Generate().Int64(),
 			Name:     username,
 			Password: password,
 		}

@@ -34,6 +34,7 @@ func (s *PublishServiceImpl) Publish(ctx context.Context, req *publish.DouyinPub
 	userId := jwt.GetUserIdByToken(token)
 
 	video := dao.Dvideo{
+		Id:          dao.SnowFlakeNode.Generate().Int64(),
 		Author_id:   userId,
 		Play_url:    playUrl,
 		Cover_url:   coverUrl,

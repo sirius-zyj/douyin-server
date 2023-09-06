@@ -7,6 +7,11 @@ import (
 	"fmt"
 )
 
+func Init() {
+	dao.Init()
+	redis.InitRedis()
+}
+
 func GetVideoById(videoId int64) (dao.Dvideo, error) {
 	if config.USE_REDIS {
 		return redis.GetVideoById(videoId)
