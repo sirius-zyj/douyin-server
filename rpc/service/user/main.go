@@ -3,6 +3,7 @@ package main
 import (
 	"douyin-server/config"
 	"douyin-server/database"
+	"douyin-server/database/dao"
 	user "douyin-server/rpc/kitex_gen/user/userservice"
 	"log"
 	"net"
@@ -28,6 +29,7 @@ func main() {
 	// ----------------------------
 
 	database.Init()
+	dao.Oss_init()
 
 	if err := svr.Run(); err != nil {
 		log.Println(err.Error())

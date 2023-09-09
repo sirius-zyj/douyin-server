@@ -16,13 +16,13 @@ type Response struct {
 
 func InitSensitive() {
 	filter = sensitive.New()
-	// filter.LoadWordDict("./sensitive_words.txt")
-	filter.AddWord("fuck")
-	filter.AddWord("垃圾")
+	filter.LoadWordDict("./dict.txt")
+	// filter.AddWord("fuck")
+	// filter.AddWord("垃圾")
 }
 
 func RegisterWordsFilter(c *gin.Context) {
-	text := c.PostForm("username")
+	text := c.Query("username")
 	if v, _ := filter.Validate(text); !v {
 		c.JSON(http.StatusOK, Response{StatusCode: 404, StatusMsg: "detected seneitive word"})
 		c.Abort()
@@ -32,7 +32,7 @@ func RegisterWordsFilter(c *gin.Context) {
 }
 
 func CommentActionWordsFilter(c *gin.Context) {
-	text := c.PostForm("comment_text")
+	text := c.Query("comment_text")
 	if v, _ := filter.Validate(text); !v {
 		c.JSON(http.StatusOK, Response{StatusCode: 404, StatusMsg: "detected seneitive word"})
 		c.Abort()
@@ -42,7 +42,7 @@ func CommentActionWordsFilter(c *gin.Context) {
 }
 
 func PublishActionWordsFilter(c *gin.Context) {
-	text := c.PostForm("title")
+	text := c.Query("title")
 	if v, _ := filter.Validate(text); !v {
 		c.JSON(http.StatusOK, Response{StatusCode: 404, StatusMsg: "detected seneitive word"})
 		c.Abort()
@@ -52,7 +52,7 @@ func PublishActionWordsFilter(c *gin.Context) {
 }
 
 func MessageActionWordsFilter(c *gin.Context) {
-	text := c.PostForm("content")
+	text := c.Query("content")
 	if v, _ := filter.Validate(text); !v {
 		c.JSON(http.StatusOK, Response{StatusCode: 404, StatusMsg: "detected seneitive word"})
 		c.Abort()

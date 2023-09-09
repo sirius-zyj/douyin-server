@@ -42,8 +42,7 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.DouyinUserRegi
 			return resp, nil
 		}
 
-		// token := username + password + "*" + strconv.FormatInt(newUser.ID, 10)
-		token := jwt.GenerateToken(username)
+		token := jwt.GenerateToken(username, 1)
 
 		setRegisterResp(resp, 0, "User register success", newUser.ID, token)
 		return resp, nil
@@ -66,7 +65,8 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.DouyinUserLoginRe
 	if user, err := dao.GetUsersByUserName(username); err == nil {
 		//找到了用户信息
 		if jwt.EnCoder(password) == user.Password {
-			token := jwt.GenerateToken(username)
+			token := jwt.GenerateToken(username, 0)
+
 			setLoginResp(resp, 0, "User login success", user.ID, token)
 		} else {
 			setLoginResp(resp, 404, "User password error", -1, "")

@@ -2,8 +2,15 @@ package dao
 
 import (
 	// "gorm.io/gorm"
+
+	"bytes"
 	"errors"
+	"image/color"
+	"image/jpeg"
 	"log"
+
+	"github.com/issue9/identicon/v2"
+	uuid "github.com/satori/go.uuid"
 )
 
 func (Duser) TableName() string {
@@ -48,6 +55,20 @@ func GetUsersByIds(userids []int64) ([]Duser, error) {
 
 // 创建用户
 func CreateUser(user *Duser) (err error) {
+	imageName := uuid.NewV4().String() + ".jpeg"
+	ii := identicon.New(identicon.Style2, 128, color.NRGBA{R: 255, G: 255, A: 125}, color.NRGBA{R: 255}, color.NRGBA{G: 255}, color.NRGBA{B: 255})
+	image := ii.Make([]byte(user.Name))
+
+	var buf bytes.Buffer
+	if err = jpeg.Encode(&buf, image, nil); err != nil {
+		log.Println(err)
+	}
+	imageData := bytes.NewReader(buf.Bytes())
+
+	if err = ImageBucket.PutObject(imageName, imageData); err != nil {
+		log.Println(err)
+	}
+	user.Avatar = ImageBucketLinkPrefix + imageName
 	if err := db.Model(&Duser{}).Create(user).Error; err != nil {
 		log.Println("CreateUser Err : ", err.Error())
 		return err

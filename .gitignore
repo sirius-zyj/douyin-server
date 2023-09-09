@@ -6,6 +6,9 @@ rpc/output/
 docker/database/mysql/data
 docker/database/mysql/conf
 docker/database/mysql/logs
+docker/database/mysql_slave/data
+docker/database/mysql_slave/conf
+docker/database/mysql_slave/logs
 docker/database/redis/data
 docker/database/mysql2redis/main
 docker/router/douyin-server

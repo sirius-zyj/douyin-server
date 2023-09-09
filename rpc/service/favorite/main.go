@@ -3,6 +3,7 @@ package main
 import (
 	"douyin-server/config"
 	"douyin-server/database"
+	"douyin-server/middleware/rabbitmq"
 	favorite "douyin-server/rpc/kitex_gen/favorite/favoriteservice"
 	"log"
 	"net"
@@ -20,6 +21,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	rabbitmq.CreateRabbitMQ(config.FavoriteServiceName)
+	defer rabbitmq.DestoryRabbitMQ()
 
 	svr := favorite.NewServer(new(FavoriteServiceImpl),
 		server.WithServiceAddr(addr),

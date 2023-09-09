@@ -4,10 +4,10 @@ import (
 	"context"
 	"douyin-server/database"
 	"douyin-server/database/dao"
-	"douyin-server/middleware/jwt"
+	"douyin-server/middleware/rabbitmq"
 	publish "douyin-server/rpc/kitex_gen/publish"
-	"log"
-	"time"
+	"io/ioutil"
+	"os"
 )
 
 // PublishServiceImpl implements the last service interface defined in the IDL.
@@ -23,30 +23,22 @@ func setPublishActionResp(resp *publish.DouyinPublishActionResponse, statusCode 
 func (s *PublishServiceImpl) Publish(ctx context.Context, req *publish.DouyinPublishActionRequest) (resp *publish.DouyinPublishActionResponse, err error) {
 	resp = new(publish.DouyinPublishActionResponse)
 
-	token, video_title := req.Token, req.Title
-	playUrl, coverUrl, err := dao.UploadVideo(&req.Data)
-	if err != nil {
-		log.Println("上传视频失败")
-		setPublishActionResp(resp, 404, "上传视频失败")
+	fileName := dao.SnowFlakeNode.Generate().String()
+	if err = ioutil.WriteFile(fileName, req.Data, 0644); err != nil {
+		setPublishActionResp(resp, 404, "上传失败")
 		return
 	}
-	//------创建视频--------
-	userId := jwt.GetUserIdByToken(token)
 
-	video := dao.Dvideo{
-		Id:          dao.SnowFlakeNode.Generate().Int64(),
-		Author_id:   userId,
-		Play_url:    playUrl,
-		Cover_url:   coverUrl,
-		Upload_time: time.Now(),
-		Title:       video_title,
-	}
-	if err = dao.Tran_InsertVideo(video); err != nil {
-		log.Println("Insert_error: ", err)
-		setPublishActionResp(resp, 404, err.Error())
+	if err = rabbitmq.AddToMQ(rabbitmq.PublishActionMessage{
+		Filename: fileName,
+		Token:    req.Token,
+		Title:    req.Title,
+	}); err != nil {
+		os.Remove(fileName)
+		setPublishActionResp(resp, 404, "上传失败")
 		return
 	}
-	//---------------------------
+
 	setPublishActionResp(resp, 0, "上传成功")
 	return
 }

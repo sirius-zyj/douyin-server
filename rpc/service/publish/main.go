@@ -4,6 +4,7 @@ import (
 	"douyin-server/config"
 	"douyin-server/database"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/rabbitmq"
 	publish "douyin-server/rpc/kitex_gen/publish/publishservice"
 	"log"
 	"net"
@@ -21,6 +22,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	rabbitmq.CreateRabbitMQ(config.PublishServiceName)
+	defer rabbitmq.DestoryRabbitMQ()
 
 	svr := publish.NewServer(new(PublishServiceImpl),
 		server.WithServiceAddr(addr),

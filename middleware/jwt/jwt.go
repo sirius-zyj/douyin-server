@@ -14,7 +14,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func GenerateToken(username string) string {
+func GenerateToken(username string, delaytime int) string {
+	time.Sleep(time.Second * time.Duration(delaytime))
 	user, err := dao.GetUsersByUserName(username)
 	if err != nil {
 		log.Println("获取用户失败")

@@ -37,7 +37,9 @@ redis:
   USE_REDIS: true
 
 mysql:
-  Dsn: "root:zyj1314520@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+  MasterDsn: "root:123456@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+  SlaveDsn: "root:123456@tcp(127.0.0.1:3307)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+
 
 OSS:
   OSSAK: "LTAI5t5uqtTbKX5dUkmZJzfH"

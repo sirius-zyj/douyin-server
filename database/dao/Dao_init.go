@@ -10,6 +10,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/plugin/dbresolver"
 )
 
 var db *gorm.DB
@@ -32,17 +33,29 @@ func Init() {
 		},
 	)
 
-	dsn := config.Dsn
-	db, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: newLogger,
-	})
-	if err != nil {
+	if db, err = gorm.Open(mysql.New(mysql.Config{DSN: config.MasterDsn}),
+		&gorm.Config{Logger: newLogger},
+	); err != nil {
 		log.Panicln("mysql 连接错误：", err)
 	}
-	db.AutoMigrate(&Dvideo{})
-	db.AutoMigrate(&Duser{})
-	db.AutoMigrate(&Dfavorite{})
-	db.AutoMigrate(&Dcomments{})
-	db.AutoMigrate(&Dfollow{})
-	db.AutoMigrate(&Dmessage{})
+	db.AutoMigrate(&Dvideo{}, &Duser{}, &Dfavorite{}, &Dcomments{}, &Dfollow{}, &Dmessage{})
+
+	replicas := []gorm.Dialector{
+		mysql.New(mysql.Config{
+			DSN: config.SlaveDsn,
+		}),
+	}
+	db.Use(
+		dbresolver.Register(dbresolver.Config{
+			Sources: []gorm.Dialector{mysql.New(mysql.Config{
+				DSN: config.MasterDsn,
+			})},
+			Replicas: replicas,
+			Policy:   dbresolver.RandomPolicy{},
+		}).
+			SetMaxIdleConns(10).
+			SetConnMaxLifetime(time.Hour).
+			SetMaxOpenConns(200),
+	)
+
 }

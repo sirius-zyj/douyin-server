@@ -11,9 +11,9 @@ import (
 var Secret string
 
 // etcd
-var EtcdAddr string = "127.0.0.1:2379"
+// var EtcdAddr string = "127.0.0.1:2379"
 
-// var EtcdAddr string = "microservices-etcd:2379"
+var EtcdAddr string = "microservices-etcd:2379"
 
 var (
 	FeedAddr     string
@@ -35,7 +35,10 @@ var (
 )
 
 // mysql配置数据
-var Dsn string
+var (
+	MasterDsn string
+	SlaveDsn  string
+)
 
 // redis的配置数据
 var (
@@ -118,7 +121,8 @@ func Init() {
 	Exipretime = viper.GetDuration("redis.Exipretime")
 	USE_REDIS = viper.GetBool("redis.USE_REDIS")
 	// mysql
-	Dsn = viper.GetString("mysql.Dsn")
+	MasterDsn = viper.GetString("mysql.MasterDsn")
+	SlaveDsn = viper.GetString("mysql.SlaveDsn")
 	// OSS
 	OSSAK = viper.GetString("OSS.OSSAK")
 	OSSSK = viper.GetString("OSS.OSSSK")

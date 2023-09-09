@@ -31,6 +31,7 @@ func Publish(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, Response{StatusCode: 404, StatusMsg: "参数错误"})
 		return
 	}
+
 	// 打开上传的文件
 	src, err := file.Open()
 	if err != nil {
@@ -48,6 +49,7 @@ func Publish(c *gin.Context) {
 	}
 
 	if respClient, err := client.Publish(token, video_Data, video_title); err == nil {
+		log.Println("Publish StatusCode : ", respClient.StatusCode, StatusMsg(respClient.StatusMsg))
 		c.JSON(http.StatusOK, Response{StatusCode: respClient.StatusCode, StatusMsg: StatusMsg(respClient.StatusMsg)})
 	} else {
 		log.Println(err)

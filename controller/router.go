@@ -22,7 +22,7 @@ func InitRouter(r *gin.Engine) {
 	apiRouter.GET("/user/", UserInfo)
 	apiRouter.POST("/user/register/", validate.RegisterWordsFilter, Register)
 	apiRouter.POST("/user/login/", Login)
-	apiRouter.POST("/publish/action/", validate.PublishActionWordsFilter, Publish)
+	apiRouter.POST("/publish/action/", validate.InitRateLimit(time.Minute, 10, 1), validate.PublishActionWordsFilter, validate.VideoFilter, Publish)
 	apiRouter.GET("/publish/list/", PublishList)
 
 	// extra apis - I
