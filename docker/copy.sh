@@ -1,5 +1,5 @@
 #router
-cp ../douyin-server ./router/
+# cp ../douyin-server ./router/
 
 #microservices
 BIN_DIR="../rpc/output/bin/*"

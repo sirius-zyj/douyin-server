@@ -4,6 +4,7 @@ import (
 	"douyin-server/config"
 	"douyin-server/database"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/rabbitmq"
 	user "douyin-server/rpc/kitex_gen/user/userservice"
 	"log"
 	"net"
@@ -21,6 +22,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	rabbitmq.CreateRabbitMQ(config.UserServiceName)
+	defer rabbitmq.DestoryRabbitMQ()
 
 	svr := user.NewServer(new(UserServiceImpl),
 		server.WithServiceAddr(addr),

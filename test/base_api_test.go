@@ -72,9 +72,9 @@ func TestPublish(t *testing.T) {
 
 	publishResp := e.POST("/douyin/publish/action/").
 		WithMultipart().
-		WithFile("data", "./public/bear.mp4").
+		WithFile("data", "./public/description.mp4").
 		WithFormField("token", token).
-		WithFormField("title", "Bear").
+		WithFormField("title", "Description").
 		Expect().
 		Status(http.StatusOK).
 		JSON().Object()

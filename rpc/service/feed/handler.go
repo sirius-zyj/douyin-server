@@ -5,6 +5,8 @@ import (
 	"douyin-server/config"
 	"douyin-server/database"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/gorse"
+	"douyin-server/middleware/jwt"
 	feed "douyin-server/rpc/kitex_gen/feed"
 	"time"
 
@@ -21,6 +23,25 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *feed.DouyinFeedRequest)
 	defer span.End()
 
 	resp = new(feed.DouyinFeedResponse) // 分配内存
+	if req.Token != nil {
+		userId := jwt.GetUserIdByToken(*req.Token)
+		if respVideo, err := gorse.GetUserRecommend(ctx, userId); err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, "GetUserRecommend err")
+
+			resp.StatusCode = 404
+			resp.StatusMsg = new(string)
+			*resp.StatusMsg = err.Error()
+		} else {
+			resp.StatusCode = 0
+			for _, tmp := range respVideo {
+				tmpV, _ := database.GetVideoById(tmp)
+				resp.VideoList = append(resp.VideoList, database.DaoVideo2RPCVideo(req.Token, &tmpV))
+			}
+		}
+		return
+	}
+
 	if respVideo, err := dao.GetVideoByTime(time.Unix(*req.LatestTime, 0)); err != nil {
 		span.RecordError(err)
 		span.SetStatus(codes.Error, "GetVideoByTime err")

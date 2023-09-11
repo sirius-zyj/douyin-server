@@ -1,7 +1,9 @@
 package rabbitmq
 
 import (
+	"context"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/gorse"
 	"douyin-server/middleware/jwt"
 	"encoding/json"
 	"io/ioutil"
@@ -50,6 +52,11 @@ func (dealer PublishDealer) DealWith(msg <-chan amqp.Delivery) error {
 			}
 
 			log.Println("上传视频成功, title: ", req.Title)
+
+			//------创建视频推荐--------
+			if err = gorse.PublishToGorse(context.Background(), &video); err != nil {
+				log.Println("推荐视频失败")
+			}
 		} else {
 			log.Println("上传视频失败")
 		}

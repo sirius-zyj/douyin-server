@@ -11,6 +11,7 @@ docker/database/mysql_slave/conf
 docker/database/mysql_slave/logs
 docker/database/redis/data
 docker/database/mysql2redis/main
+docker/database/mysql2redis/mysql2redis/main
 docker/router/douyin-server
 docker/microservices/feed/feed
 docker/microservices/user/user
@@ -22,3 +23,6 @@ docker/microservices/message/message
 
 middleware/etcd/default.etcd/
 database/mysql2redis/main
+
+test/public/description.mp4
+test/public/bear.mp4

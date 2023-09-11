@@ -5,6 +5,7 @@ import (
 	"douyin-server/database"
 	"douyin-server/database/dao"
 	"douyin-server/middleware/jwt"
+	"douyin-server/middleware/rabbitmq"
 	favorite "douyin-server/rpc/kitex_gen/favorite"
 	"log"
 )
@@ -40,6 +41,7 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 				setFavoriteActionResponse(resp, 404, "点赞失败")
 			} else {
 				setFavoriteActionResponse(resp, 0, "点赞成功")
+				rabbitmq.AddToMQ(fa)
 			}
 		} else {
 			if fa.Action_type != action_type {
@@ -47,6 +49,7 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 					setFavoriteActionResponse(resp, 404, "点赞数据Erase失败")
 				} else {
 					setFavoriteActionResponse(resp, 0, "点赞数据Erase成功")
+					rabbitmq.AddToMQ(fa)
 				}
 			} else {
 				if action_type != "1" {

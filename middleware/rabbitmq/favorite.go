@@ -1,7 +1,9 @@
 package rabbitmq
 
 import (
+	"context"
 	"douyin-server/database/dao"
+	"douyin-server/middleware/gorse"
 	"encoding/json"
 	"log"
 
@@ -11,7 +13,7 @@ import (
 type FavoriteDealer struct {
 }
 
-func (dealer FavoriteDealer) DealWith(msg <-chan amqp.Delivery) error {
+func (dealer FavoriteDealer) DealWith(msg <-chan amqp.Delivery) (err error) {
 	for d := range msg {
 		// 参数解析
 		fa := &dao.Dfavorite{}
@@ -19,10 +21,8 @@ func (dealer FavoriteDealer) DealWith(msg <-chan amqp.Delivery) error {
 			log.Println("json解析失败")
 		}
 
-		if fa.Action_type == "1" {
-			log.Println("点赞成功")
-		} else {
-			log.Println("取消点赞成功")
+		if err = gorse.FavoriteToGorse(context.Background(), fa); err != nil {
+			log.Println("FavoriteToGorse Err : ", err)
 		}
 	}
 	return nil

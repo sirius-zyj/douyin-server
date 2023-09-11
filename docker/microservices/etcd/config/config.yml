@@ -42,8 +42,8 @@ mysql:
 
 
 OSS:
-  OSSAK: "LTAI5t5uqtTbKX5dUkmZJzfH"
-  OSSSK: "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
+  OSSAK: ""
+  OSSSK: ""
   OSSEndPoint: "oss-cn-hangzhou.aliyuncs.com"
   OSSVideoBucket: "douyin-server-hust"
   OSSImageBucket: "douyin-server-hust-image"
@@ -58,6 +58,11 @@ OTEL:
   RelationOtelName: "microservices-relation"
   MessageOtelName: "microservices-message"
   JaegerAddr: "jaeger:4318"
+
+Gorse:
+  GorseAddr: "http://gorse:8088"
+  WXYYApiKey: ""
+  WXYYSecretKey: ""
   
 
 

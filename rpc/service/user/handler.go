@@ -5,6 +5,7 @@ import (
 	"douyin-server/database"
 	"douyin-server/database/dao"
 	"douyin-server/middleware/jwt"
+	"douyin-server/middleware/rabbitmq"
 	user "douyin-server/rpc/kitex_gen/user"
 	"log"
 )
@@ -40,6 +41,10 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.DouyinUserRegi
 			log.Println("注册失败")
 			setRegisterResp(resp, 404, "User register failed", -1, "")
 			return resp, nil
+		}
+
+		if err := rabbitmq.AddToMQ(newUser); err != nil {
+			log.Println("Register to MQ Err: ", err)
 		}
 
 		token := jwt.GenerateToken(username, 1)

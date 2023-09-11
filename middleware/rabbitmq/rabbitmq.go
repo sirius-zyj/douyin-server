@@ -62,6 +62,8 @@ func initRabbitMQ(queueName string) {
 		mq.dealer = FavoriteDealer{}
 	case config.PublishServiceName:
 		mq.dealer = PublishDealer{}
+	case config.UserServiceName:
+		mq.dealer = UserDealer{}
 	}
 
 }

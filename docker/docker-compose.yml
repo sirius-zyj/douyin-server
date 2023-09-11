@@ -47,6 +47,7 @@ services:
       - mysql-slave
       - redis
       - jaeger
+      - gorse
     command: sh -c "sleep 4 && ./feed"
   
   microservices-user:
@@ -68,6 +69,7 @@ services:
       - mysql-slave
       - redis
       - jaeger
+      - gorse
     command: sh -c "sleep 4 && ./user"
 
   microservices-favorite:
@@ -89,6 +91,7 @@ services:
       - mysql-slave
       - redis
       - jaeger
+      - gorse
     command: sh -c "sleep 4 && ./favorite"
 
   microservices-comment:
@@ -110,6 +113,7 @@ services:
       - mysql-slave
       - redis
       - jaeger
+      - gorse
     command: sh -c "sleep 4 && ./comment"
 
   microservices-publish:
@@ -119,6 +123,7 @@ services:
       context: ./microservices/publish
     volumes:
       - ./microservices/publish:/home
+      - /etc/ssl/certs:/etc/ssl/certs
     working_dir: /home
     ports:
       - "8884:8884"
@@ -131,6 +136,7 @@ services:
       - mysql-slave
       - redis
       - jaeger
+      - gorse
     command: sh -c "sleep 4 && ./publish"
 
   microservices-relation:
@@ -312,6 +318,23 @@ services:
       - "16686:16686"
     depends_on:
       - microservices-etcd
+
+  gorse:
+    container_name: gorse
+    image: zhenghaoz/gorse-in-one
+    build:
+      context: ./middleware/gorse
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./middleware/gorse/config/config.toml:/etc/gorse/config.toml
+    depends_on:
+      mysql-master:
+        condition: service_healthy
+      mysql-slave:
+        condition: service_healthy  
+    # command: --playground
+    
 
   # rabbitmq:
   #   container_name: rabbitmq

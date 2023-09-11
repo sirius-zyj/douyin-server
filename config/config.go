@@ -82,6 +82,12 @@ var (
 	JaegerAddr       string
 )
 
+var (
+	GorseAddr     string
+	WXYYApiKey    string
+	WXYYSecretKey string
+)
+
 func Init() {
 	viper.AddRemoteProvider("etcd3", EtcdAddr, "/config/config.yml")
 	viper.SetConfigType("yaml")
@@ -139,4 +145,8 @@ func Init() {
 	RelationOtelName = viper.GetString("OTEL.RelationOtelName")
 	MessageOtelName = viper.GetString("OTEL.MessageOtelName")
 	JaegerAddr = viper.GetString("OTEL.JaegerAddr")
+	// Gorse
+	GorseAddr = viper.GetString("Gorse.GorseAddr")
+	WXYYApiKey = viper.GetString("Gorse.WXYYApiKey")
+	WXYYSecretKey = viper.GetString("Gorse.WXYYSecretKey")
 }

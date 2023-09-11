@@ -1,6 +1,6 @@
 module douyin-server
 
-go 1.17
+go 1.20
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.8+incompatible
@@ -51,6 +51,7 @@ require (
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
+	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
@@ -71,6 +72,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.8.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect
+	github.com/hajimehoshi/go-mp3 v0.3.4 // indirect
 	github.com/hashicorp/consul/api v1.20.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.2.0 // indirect
@@ -107,7 +109,9 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sagikazarmark/crypt v0.10.0 // indirect
 	github.com/sanity-io/litter v1.5.5 // indirect
+	github.com/sashabaranov/go-openai v1.15.2 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -134,6 +138,7 @@ require (
 	go.etcd.io/etcd/client/pkg/v3 v3.5.9 // indirect
 	go.etcd.io/etcd/client/v2 v2.305.7 // indirect
 	go.opencensus.io v0.24.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.43.0 // indirect
 	go.opentelemetry.io/otel v1.17.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.17.0 // indirect
