@@ -30,8 +30,8 @@ func (dealer PublishDealer) DealWith(msg <-chan amqp.Delivery) error {
 		if err := json.Unmarshal(d.Body, req); err != nil {
 			log.Println("json解析失败")
 		}
-		defer os.Remove(req.Filename)
 		data, _ := ioutil.ReadFile(req.Filename)
+		os.Remove(req.Filename)
 
 		token, video_title := req.Token, req.Title
 		if playUrl, coverUrl, err := dao.UploadVideo(&data); err == nil {
