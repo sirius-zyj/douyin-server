@@ -17,6 +17,7 @@ func GetFavoriteData(userId int64, videoId int64) (res dao.Dfavorite, err error)
 				log.Println("反序列化失败")
 				return res, err
 			}
+			RedisClient.Expire(Ctx, key, GenExpireTime())
 			return res, nil
 		}
 	}
@@ -45,9 +46,14 @@ func AddRedisFavoriteData(key string, favoriteData dao.Dfavorite) error {
 		log.Println("FavoriteData序列化失败")
 		return err
 	}
-	if err = RedisClient.Set(Ctx, key, content, config.Exipretime).Err(); err != nil {
+	if err = RedisClient.Set(Ctx, key, content, GenExpireTime()).Err(); err != nil {
 		log.Println("FavoriteData写入redis失败")
 		return err
 	}
+	return nil
+}
+
+func EraseRedisFavoriteData(key string) (err error) {
+	RedisClient.Del(Ctx, key)
 	return nil
 }

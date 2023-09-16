@@ -22,6 +22,7 @@ func GetVideoByAuthorId(id int64) (videoList []dao.Dvideo, err error) {
 				}
 				videoList = append(videoList, video)
 			}
+			RedisClient.Expire(Ctx, key, GenExpireTime())
 			return videoList, nil
 		}
 	}
@@ -59,6 +60,11 @@ func AddRedisPublish(key string, videoList []dao.Dvideo) error {
 		log.Println("评论写入redis失败")
 		return nil
 	}
-	RedisClient.Expire(Ctx, key, config.Exipretime)
+	RedisClient.Expire(Ctx, key, GenExpireTime())
+	return nil
+}
+
+func EraseRedisPublish(key string) (err error) {
+	RedisClient.Del(Ctx, key)
 	return nil
 }

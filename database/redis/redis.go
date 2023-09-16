@@ -3,6 +3,8 @@ package redis
 import (
 	"context"
 	"douyin-server/config"
+	"math/rand"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -10,7 +12,8 @@ import (
 var (
 	RedisClient *redis.Client //key:videoId   value:commentInfo
 
-	Ctx = context.Background()
+	Ctx           = context.Background()
+	randGenerator *rand.Rand
 )
 
 func InitRedis() {
@@ -24,4 +27,14 @@ func InitRedis() {
 		PoolSize:     poolSize,
 		MinIdleConns: minConns,
 	})
+
+	randGenerator = rand.New(rand.NewSource(time.Now().Unix()))
+}
+
+func GenExpireTime() (expireTime time.Duration) {
+	// 生成随机数
+	randomSeconds := randGenerator.Intn(60) // 生成一个0~59之间的随机数
+
+	expireTime = config.Exipretime + time.Second*time.Duration(randomSeconds)
+	return
 }

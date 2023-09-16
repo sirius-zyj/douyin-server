@@ -18,6 +18,7 @@ func GetFollowData(userId int64, followId int64) (res dao.Dfollow, err error) {
 				log.Println("反序列化失败")
 				return res, err
 			}
+			RedisClient.Expire(Ctx, key, GenExpireTime())
 			return res, nil
 		}
 	}
@@ -47,9 +48,14 @@ func AddRedisFollowData(key *string, followData dao.Dfollow) error {
 		log.Println("FollowData序列化失败")
 		return err
 	}
-	if err = RedisClient.Set(Ctx, *key, content, config.Exipretime).Err(); err != nil {
+	if err = RedisClient.Set(Ctx, *key, content, GenExpireTime()).Err(); err != nil {
 		log.Println("FollowData写入redis失败")
 		return err
 	}
+	return nil
+}
+
+func EraseRedisFollowData(key string) (err error) {
+	RedisClient.Del(Ctx, key)
 	return nil
 }

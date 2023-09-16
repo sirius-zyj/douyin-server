@@ -17,6 +17,7 @@ func GetUserById(userId int64) (res dao.Duser, err error) {
 				log.Println("反序列化失败")
 				return res, err
 			}
+			RedisClient.Expire(Ctx, key, GenExpireTime())
 			return res, nil
 		}
 	}
@@ -40,9 +41,14 @@ func AddRedisUserId(key string, userInfo dao.Duser) error {
 		log.Println("User序列化失败")
 		return err
 	}
-	if err = RedisClient.Set(Ctx, key, content, config.Exipretime).Err(); err != nil {
+	if err = RedisClient.Set(Ctx, key, content, GenExpireTime()).Err(); err != nil {
 		log.Println("user写入redis失败")
 		return err
 	}
+	return nil
+}
+
+func EraseRedisUserId(key string) (err error) {
+	RedisClient.Del(Ctx, key)
 	return nil
 }

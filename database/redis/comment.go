@@ -27,6 +27,7 @@ func GetAllComments(videoId int64) (commentList []dao.Dcomments, err error) {
 				}
 				commentList = append(commentList, comment)
 			}
+			RedisClient.Expire(Ctx, key, GenExpireTime())
 			return commentList, nil
 		}
 	}
@@ -65,6 +66,11 @@ func AddRedisComment(key string, commentList []dao.Dcomments) error {
 		log.Println("评论写入redis失败: ", err)
 		return err
 	}
-	RedisClient.Expire(Ctx, key, config.Exipretime)
+	RedisClient.Expire(Ctx, key, GenExpireTime())
+	return nil
+}
+
+func EraseRedisComment(key string) (err error) {
+	RedisClient.Del(Ctx, key)
 	return nil
 }

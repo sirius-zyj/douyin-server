@@ -17,6 +17,7 @@ func GetVideoById(id int64) (res dao.Dvideo, err error) {
 				log.Println("反序列化失败")
 				return res, err
 			}
+			RedisClient.Expire(Ctx, key, GenExpireTime())
 			return res, nil
 		}
 	}
@@ -52,9 +53,14 @@ func AddRedisVideoId(key string, videoInfo dao.Dvideo) error {
 		log.Println("Video序列化失败")
 		return err
 	}
-	if err = RedisClient.Set(Ctx, key, content, config.Exipretime).Err(); err != nil {
+	if err = RedisClient.Set(Ctx, key, content, GenExpireTime()).Err(); err != nil {
 		log.Println("video写入redis失败")
 		return err
 	}
+	return nil
+}
+
+func EraseRedisVideoId(key string) (err error) {
+	RedisClient.Del(Ctx, key)
 	return nil
 }

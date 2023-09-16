@@ -48,9 +48,9 @@ func GetFavoriteData(userId int64, videoId int64) (dao.Dfavorite, error) {
 }
 
 func InsertFavorite(faDate *dao.Dfavorite, authorId int64) (err error) {
+	key := fmt.Sprintf(config.FavoriteDataPrefix, faDate.User_id, faDate.Video_id) //
 	err = dao.Tran_InsertFavorite(faDate, authorId)
 	if config.USE_REDIS && err == nil {
-		key := fmt.Sprintf(config.FavoriteDataPrefix, faDate.User_id, faDate.Video_id)
 		redis.AddRedisFavoriteData(key, *faDate)
 	}
 	return
@@ -71,9 +71,9 @@ func GetFollowData(userId int64, followId int64) (res dao.Dfollow, err error) {
 }
 
 func InsertFollow(foDate *dao.Dfollow) (err error) {
+	key := fmt.Sprintf(config.FollowDataPrefix, foDate.User_id, foDate.Follow_id)
 	err = dao.Tran_InsertFollow(foDate)
 	if config.USE_REDIS && err == nil {
-		key := fmt.Sprintf(config.FollowDataPrefix, foDate.User_id, foDate.Follow_id)
 		redis.AddRedisFollowData(&key, *foDate)
 	}
 	return
