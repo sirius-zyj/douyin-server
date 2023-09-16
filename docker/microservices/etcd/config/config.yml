@@ -42,8 +42,8 @@ mysql:
 
 
 OSS:
-  OSSAK: ""
-  OSSSK: ""
+  OSSAK: "LTAI5t5uqtTbKX5dUkmZJzfH"
+  OSSSK: "srq4tL5F7w8HKf1cDNMJssGAeqhkyi"
   OSSEndPoint: "oss-cn-hangzhou.aliyuncs.com"
   OSSVideoBucket: "douyin-server-hust"
   OSSImageBucket: "douyin-server-hust-image"
@@ -61,8 +61,8 @@ OTEL:
 
 Gorse:
   GorseAddr: "http://gorse:8088"
-  WXYYApiKey: ""
-  WXYYSecretKey: ""
+  WXYYApiKey: "SN7Floc182ieoakGdCXZOVo9"
+  WXYYSecretKey: "wWn8EtsvTafEsNnE21BesyFtong6K9Yb"
   
 
 
