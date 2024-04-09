@@ -23,7 +23,7 @@ func Init() {
 		},
 	)
 
-	dsn := "root:zyj1314520@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error
 	db, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
