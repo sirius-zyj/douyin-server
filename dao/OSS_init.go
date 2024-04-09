@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	OSSAK          = "LTAI5tPgCbMia8qwAy2xesdP"
-	OSSSK          = "5F3lX57hEguOpYXtM2C9fEGuyUQ4VP"
-	OSSEndPoint    = "oss-cn-beijing.aliyuncs.com"
-	OSSVideoBucket = "bytecampvideo"
-	OSSImageBucket = "bytecampimage"
+	OSSAK          = ""
+	OSSSK          = ""
+	OSSEndPoint    = ""
+	OSSVideoBucket = ""
+	OSSImageBucket = ""
 )
 
 
